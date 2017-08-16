@@ -1,0 +1,6 @@
+[submodule "sgscript"]
+	path = sgscript
+	url = https://github.com/snake5/sgscript.git
+[submodule "ouzel"]
+	path = ouzel
+	url = https://github.com/elnormous/ouzel.git

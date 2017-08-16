@@ -1,0 +1,5 @@
+
+println( "gogo!" );
+ouzel.setAppAndDeveloperNames( "Test App", "someone" );
+ouzel.setScreenSaverEnabled( false );
+ouzel.window.title = "This thing works!";

@@ -1,4 +1,5 @@
 
+#include <unordered_map>
 #include "sgs_ouzel.hpp"
 
 
@@ -7,12 +8,27 @@ sgs_Context* g_sgsCtx;
 string APPLICATION_NAME = "sgs-ouzel";
 string DEVELOPER_NAME = "org.sgscript";
 
+unordered_map< void*, sgsObjectBase* > g_PtrToSgsObj;
+
 
 template< class T > sgsHandle<T> CreateObj()
 {
 	sgsVariable v;
 	SGS_CREATECLASS( g_sgsCtx, &v.var, T, () );
 	return v.get_handle<T>();
+}
+
+template< class T > T* GetObj( void* ptr )
+{
+	auto it = g_PtrToSgsObj.find( ptr );
+	if( it != g_PtrToSgsObj.end() )
+		return static_cast<T*>( it->second );
+	return nullptr;
+}
+
+template< class T > sgsHandle<T> GetObjHandle( void* ptr )
+{
+	return sgsHandle<T>( GetObj<T>( ptr ) );
 }
 
 
@@ -68,6 +84,115 @@ bool sgsOuzelEventHandler::handleUI( Event::Type type, const UIEvent& event )
 }
 
 
+sgsOuzelNodeContainer::~sgsOuzelNodeContainer()
+{
+	g_PtrToSgsObj.erase( obj );
+	delete obj;
+}
+
+void sgsOuzelNodeContainer::addChild( sgsHandle< struct sgsOuzelNode > node )
+{
+	obj->addChild( node ? node->Item() : nullptr );
+}
+
+bool sgsOuzelNodeContainer::removeChild( sgsHandle< struct sgsOuzelNode > node )
+{
+	return obj->removeChild( node ? node->Item() : nullptr );
+}
+
+bool sgsOuzelNodeContainer::moveChildToBack( sgsHandle< struct sgsOuzelNode > node )
+{
+	return obj->moveChildToBack( node ? node->Item() : nullptr );
+}
+
+bool sgsOuzelNodeContainer::moveChildToFront( sgsHandle< struct sgsOuzelNode > node )
+{
+	return obj->moveChildToFront( node ? node->Item() : nullptr );
+}
+
+void sgsOuzelNodeContainer::removeAllChildren()
+{
+	obj->removeAllChildren();
+}
+
+bool sgsOuzelNodeContainer::hasChild( sgsHandle< struct sgsOuzelNode > node, bool recursive /* = false */ )
+{
+	return obj->hasChild( node ? node->Item() : nullptr, recursive );
+}
+
+sgsVariable sgsOuzelNodeContainer::getChildren()
+{
+	auto& children = obj->getChildren();
+	for( Node* node : children )
+	{
+		sgs_PushVar( C, GetObjHandle<sgsOuzelNode>( node ) );
+	}
+	sgsVariable var;
+	var.create_array( C, children.size() );
+	return var;
+}
+
+
+sgsOuzelNodeContainer::Handle sgsOuzelNode::getParent()
+{
+	return GetObjHandle<sgsOuzelNodeContainer>( Item()->getParent() );
+}
+
+void sgsOuzelNode::removeFromParent()
+{
+	Item()->removeFromParent();
+}
+
+
+sgsOuzelLayer::Handle sgsOuzelNodeContainer::getLayer()
+{
+	return GetObjHandle<sgsOuzelLayer>( obj->getLayer() );
+}
+
+sgsVariable sgsOuzelLayer::getCameras()
+{
+	auto& cameras = Item()->getCameras();
+	for( Camera* camera : cameras )
+	{
+		sgs_PushVar( C, GetObjHandle<sgsOuzelCamera>( camera ) );
+	}
+	sgsVariable var;
+	var.create_array( C, cameras.size() );
+	return var;
+}
+
+sgsOuzelScene::Handle sgsOuzelLayer::getScene()
+{
+	return sgsOuzelScene::Handle( static_cast<sgsOuzelScene*>( sharedEngine->getSceneManager()->getScene() ) );
+}
+
+
+void sgsOuzelScene::addLayer( sgsOuzelLayer::Handle layer )
+{
+	Scene::addLayer( layer->Item() );
+}
+
+void sgsOuzelScene::removeLayer( sgsOuzelLayer::Handle layer )
+{
+	Scene::removeLayer( layer->Item() );
+}
+
+
+void sgsOuzelSceneManager::setOrRemoveScene( sgsOuzelScene::Handle scene )
+{
+	if( scene )
+		setScene( scene );
+	else
+		sharedEngine->getSceneManager()->removeScene( sharedEngine->getSceneManager()->getScene() );
+}
+
+
+sgsHandle< struct sgsOuzelMenu > sgsOuzelWidget::getMenu()
+{
+	return GetObjHandle<sgsOuzelMenu>( Item()->getMenu() );
+}
+
+
 void sgsOuzel::exit()
 {
 	sharedEngine->exit();
@@ -89,6 +214,43 @@ sgsOuzelEventHandler::Handle sgsOuzel::createEventHandler( int priority )
 	sgsVariable out( g_sgsCtx );
 	SGS_CREATECLASS( g_sgsCtx, &out.var, sgsOuzelEventHandler, ( priority ) );
 	return out.get_handle<sgsOuzelEventHandler>();
+}
+
+sgsOuzelScene::Handle sgsOuzel::createScene()
+{
+	return CreateObj<sgsOuzelScene>();
+}
+
+sgsOuzelLayer::Handle sgsOuzel::createLayer()
+{
+	auto h = CreateObj<sgsOuzelLayer>();
+	h->obj = new Layer;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelNode::Handle sgsOuzel::createNode()
+{
+	auto h = CreateObj<sgsOuzelNode>();
+	h->obj = new Node;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelCamera::Handle sgsOuzel::createCamera()
+{
+	auto h = CreateObj<sgsOuzelCamera>();
+	h->obj = new Camera;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelMenu::Handle sgsOuzel::createMenu()
+{
+	auto h = CreateObj<sgsOuzelMenu>();
+	h->obj = new Menu;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
 }
 
 
@@ -277,8 +439,10 @@ void ouzelMain( const vector<string>& args )
 	g_sgsCtx = sgs_CreateEngine();
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Initializing bindings";
+	sgs_xgm_module_entry_point( g_sgsCtx );
 	
 	sgsVariable ouzel = sgs_GetClassInterface< sgsOuzel >( g_sgsCtx );
+	sgsEnv( g_sgsCtx ).setprop( "ouzel", ouzel );
 	
 	sgs_StoreIntConsts( g_sgsCtx, ouzel.var, g_ModifiersRIC, -1 );
 	sgsVariable input;
@@ -295,10 +459,17 @@ void ouzelMain( const vector<string>& args )
 	sgs_StoreIntConsts( g_sgsCtx, MouseButton.var, g_MouseButtonsRIC, -1 );
 	input.setprop( "MouseButton", MouseButton );
 	
-	sgsVariable ow( g_sgsCtx );
-	SGS_CREATECLASS( g_sgsCtx, &ow.var, sgsOuzelWindow, () );
-	ouzel.setprop( "window", ow );
-	sgsEnv( g_sgsCtx ).setprop( "ouzel", ouzel );
+	sgsVariable ouzel_window = CreateObj<sgsOuzelWindow>();
+	ouzel.setprop( "window", ouzel_window );
+	
+	sgsVariable ouzel_fileSys = CreateObj<sgsOuzelFileSystem>();
+	ouzel.setprop( "fileSystem", ouzel_fileSys );
+	
+	sgsVariable ouzel_renderer = CreateObj<sgsOuzelRenderer>();
+	ouzel.setprop( "renderer", ouzel_renderer );
+	
+	sgsVariable ouzel_sceneMgr = CreateObj<sgsOuzelSceneManager>();
+	ouzel.setprop( "sceneManager", ouzel_sceneMgr );
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Loading 'main'";
 	sgs_Include( g_sgsCtx, "main" );

@@ -3,3 +3,11 @@ println( "gogo!" );
 ouzel.setAppAndDeveloperNames( "Test App", "someone" );
 ouzel.setScreenSaverEnabled( false );
 ouzel.window.title = "This thing works!";
+
+printvar( ouzel.input );
+
+global eh = ouzel.createEventHandler();
+function eh.onKeyboardEvent( type, e )
+{
+	printvar( type, e );
+}

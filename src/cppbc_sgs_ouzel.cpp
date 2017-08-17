@@ -3,41 +3,53 @@
 
 #include "sgs_ouzel.hpp"
 
-int sgsOuzelEvent::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelEvent::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelEvent::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelEvent::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelEvent::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelEvent::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelEvent::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelEvent::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelEvent::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelEvent::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelEvent::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelEvent::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelEvent::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelEvent::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelKeyboardEvent::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelKeyboardEvent::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelKeyboardEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelKeyboardEvent::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelKeyboardEvent::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
 
-int sgsOuzelEvent::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelKeyboardEvent::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	C = callerCtx;
-	this->~sgsOuzelEvent();
+	this->~sgsOuzelKeyboardEvent();
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelEvent::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelKeyboardEvent::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelKeyboardEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "modifiers" ) ){ sgs_PushVar( callerCtx, modifiers ); return SGS_SUCCESS; }
+		if( !strcmp( str, "key" ) ){ sgs_PushVar( callerCtx, getKey() ); return SGS_SUCCESS; }
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelKeyboardEvent::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	char* str;
@@ -47,39 +59,31 @@ int sgsOuzelEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 	return SGS_ENOTFND;
 }
 
-int sgsOuzelEvent::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
-{
-	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	char* str;
-	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
-	{
-	}
-	return SGS_ENOTFND;
-}
-
-int sgsOuzelEvent::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelKeyboardEvent::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	sgs_Variable key;
 	(void) key;
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	if( obj->iface == _sgs_interface )
 	{
-		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelEvent" );
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelKeyboardEvent" );
 	}
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+int sgsOuzelKeyboardEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	char bfr[ 77 ];
-	sprintf( bfr, "sgsOuzelEvent (obj=%p, base=%p) %s",
-		static_cast< sgsOuzelEvent* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+	char bfr[ 85 ];
+	sprintf( bfr, "sgsOuzelKeyboardEvent (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelKeyboardEvent* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
 		obj->data, depth > 0 ? "\n{" : " ..." );
 	sgs_PushString( callerCtx, bfr );
 	if( depth > 0 )
 	{
-		sgs_StringConcat( callerCtx, 0 );
+		{ sgs_PushStringLit( callerCtx, "\nmodifiers = " ); sgs_DumpData( callerCtx, modifiers, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nkey = " ); sgs_DumpData( callerCtx, getKey(), depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 4 );
 		sgs_PadString( callerCtx );
 		sgs_PushStringLit( callerCtx, "\n}" );
 		sgs_StringConcat( callerCtx, 3 );
@@ -87,37 +91,297 @@ int sgsOuzelEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int d
 	return SGS_SUCCESS;
 }
 
-int sgsUnserialize_sgsOuzelEvent( SGS_CTX )
+int sgsUnserialize_sgsOuzelKeyboardEvent( SGS_CTX )
 {
-	SGS_CREATECLASS( C, NULL, sgsOuzelEvent, (  ) );
+	SGS_CREATECLASS( C, NULL, sgsOuzelKeyboardEvent, (  ) );
 	return 1;
 }
-static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelEvent[] =
-{ { "sgsUnserialize_sgsOuzelEvent", sgsUnserialize_sgsOuzelEvent } };
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelKeyboardEvent[] =
+{ { "sgsUnserialize_sgsOuzelKeyboardEvent", sgsUnserialize_sgsOuzelKeyboardEvent } };
 
-static sgs_RegFuncConst sgsOuzelEvent__sgs_funcs[] =
+static sgs_RegFuncConst sgsOuzelKeyboardEvent__sgs_funcs[] =
 {
 	{ NULL, NULL },
 };
 
-static int sgsOuzelEvent__sgs_ifn( SGS_CTX )
+static int sgsOuzelKeyboardEvent__sgs_ifn( SGS_CTX )
 {
 	sgs_CreateDict( C, NULL, 0 );
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
-		sgsOuzelEvent__sgs_funcs,
-		-1, "sgsOuzelEvent." );
-	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelEvent, 1 );
-	sgs_RegSymbol( C, "", "sgsOuzelEvent", sgs_StackItem( C, -1 ) );
+		sgsOuzelKeyboardEvent__sgs_funcs,
+		-1, "sgsOuzelKeyboardEvent." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelKeyboardEvent, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelKeyboardEvent", sgs_StackItem( C, -1 ) );
 	return 1;
 }
 
-static sgs_ObjInterface sgsOuzelEvent__sgs_interface =
+static sgs_ObjInterface sgsOuzelKeyboardEvent__sgs_interface =
 {
-	"sgsOuzelEvent",
-	sgsOuzelEvent::_sgslocal_destruct, sgsOuzelEvent::_sgslocal_gcmark, sgsOuzelEvent::_sgslocal_getindex, sgsOuzelEvent::_sgslocal_setindex, NULL, sgsOuzelEvent::_sgslocal_serialize, sgsOuzelEvent::_sgslocal_dump, NULL, NULL, NULL, 
+	"sgsOuzelKeyboardEvent",
+	sgsOuzelKeyboardEvent::_sgslocal_destruct, sgsOuzelKeyboardEvent::_sgslocal_gcmark, sgsOuzelKeyboardEvent::_sgslocal_getindex, sgsOuzelKeyboardEvent::_sgslocal_setindex, NULL, sgsOuzelKeyboardEvent::_sgslocal_serialize, sgsOuzelKeyboardEvent::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
 };
-_sgsInterface sgsOuzelEvent::_sgs_interface(sgsOuzelEvent__sgs_interface, sgsOuzelEvent__sgs_ifn);
+_sgsInterface sgsOuzelKeyboardEvent::_sgs_interface(sgsOuzelKeyboardEvent__sgs_interface, sgsOuzelKeyboardEvent__sgs_ifn);
+
+
+int sgsOuzelMouseEvent::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelMouseEvent::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelMouseEvent::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelMouseEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelMouseEvent::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelMouseEvent::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelMouseEvent::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelMouseEvent();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelMouseEvent::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelMouseEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "modifiers" ) ){ sgs_PushVar( callerCtx, modifiers ); return SGS_SUCCESS; }
+		if( !strcmp( str, "button" ) ){ sgs_PushVar( callerCtx, getButton() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "differenceX" ) ){ sgs_PushVar( callerCtx, difference.v[0] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "differenceY" ) ){ sgs_PushVar( callerCtx, difference.v[1] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "positionX" ) ){ sgs_PushVar( callerCtx, position.v[0] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "positionY" ) ){ sgs_PushVar( callerCtx, position.v[1] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "scrollX" ) ){ sgs_PushVar( callerCtx, scroll.v[0] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "scrollY" ) ){ sgs_PushVar( callerCtx, scroll.v[1] ); return SGS_SUCCESS; }
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelMouseEvent::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelMouseEvent::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelMouseEvent" );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelMouseEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 82 ];
+	sprintf( bfr, "sgsOuzelMouseEvent (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelMouseEvent* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		{ sgs_PushStringLit( callerCtx, "\nmodifiers = " ); sgs_DumpData( callerCtx, modifiers, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nbutton = " ); sgs_DumpData( callerCtx, getButton(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ndifferenceX = " ); sgs_DumpData( callerCtx, difference.v[0], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ndifferenceY = " ); sgs_DumpData( callerCtx, difference.v[1], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\npositionX = " ); sgs_DumpData( callerCtx, position.v[0], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\npositionY = " ); sgs_DumpData( callerCtx, position.v[1], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nscrollX = " ); sgs_DumpData( callerCtx, scroll.v[0], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nscrollY = " ); sgs_DumpData( callerCtx, scroll.v[1], depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 16 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelMouseEvent( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelMouseEvent, (  ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelMouseEvent[] =
+{ { "sgsUnserialize_sgsOuzelMouseEvent", sgsUnserialize_sgsOuzelMouseEvent } };
+
+static sgs_RegFuncConst sgsOuzelMouseEvent__sgs_funcs[] =
+{
+	{ NULL, NULL },
+};
+
+static int sgsOuzelMouseEvent__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelMouseEvent__sgs_funcs,
+		-1, "sgsOuzelMouseEvent." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelMouseEvent, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelMouseEvent", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelMouseEvent__sgs_interface =
+{
+	"sgsOuzelMouseEvent",
+	sgsOuzelMouseEvent::_sgslocal_destruct, sgsOuzelMouseEvent::_sgslocal_gcmark, sgsOuzelMouseEvent::_sgslocal_getindex, sgsOuzelMouseEvent::_sgslocal_setindex, NULL, sgsOuzelMouseEvent::_sgslocal_serialize, sgsOuzelMouseEvent::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+};
+_sgsInterface sgsOuzelMouseEvent::_sgs_interface(sgsOuzelMouseEvent__sgs_interface, sgsOuzelMouseEvent__sgs_ifn);
+
+
+int sgsOuzelTouchEvent::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelTouchEvent::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelTouchEvent::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelTouchEvent*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelTouchEvent::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelTouchEvent::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelTouchEvent::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelTouchEvent();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelTouchEvent::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelTouchEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "touchId" ) ){ sgs_PushVar( callerCtx, touchId ); return SGS_SUCCESS; }
+		if( !strcmp( str, "differenceX" ) ){ sgs_PushVar( callerCtx, difference.v[0] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "differenceY" ) ){ sgs_PushVar( callerCtx, difference.v[1] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "positionX" ) ){ sgs_PushVar( callerCtx, position.v[0] ); return SGS_SUCCESS; }
+		if( !strcmp( str, "positionY" ) ){ sgs_PushVar( callerCtx, position.v[1] ); return SGS_SUCCESS; }
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelTouchEvent::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelTouchEvent::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelTouchEvent" );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelTouchEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 82 ];
+	sprintf( bfr, "sgsOuzelTouchEvent (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelTouchEvent* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		{ sgs_PushStringLit( callerCtx, "\ntouchId = " ); sgs_DumpData( callerCtx, touchId, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ndifferenceX = " ); sgs_DumpData( callerCtx, difference.v[0], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ndifferenceY = " ); sgs_DumpData( callerCtx, difference.v[1], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\npositionX = " ); sgs_DumpData( callerCtx, position.v[0], depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\npositionY = " ); sgs_DumpData( callerCtx, position.v[1], depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 10 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelTouchEvent( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelTouchEvent, (  ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelTouchEvent[] =
+{ { "sgsUnserialize_sgsOuzelTouchEvent", sgsUnserialize_sgsOuzelTouchEvent } };
+
+static sgs_RegFuncConst sgsOuzelTouchEvent__sgs_funcs[] =
+{
+	{ NULL, NULL },
+};
+
+static int sgsOuzelTouchEvent__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelTouchEvent__sgs_funcs,
+		-1, "sgsOuzelTouchEvent." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelTouchEvent, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelTouchEvent", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelTouchEvent__sgs_interface =
+{
+	"sgsOuzelTouchEvent",
+	sgsOuzelTouchEvent::_sgslocal_destruct, sgsOuzelTouchEvent::_sgslocal_gcmark, sgsOuzelTouchEvent::_sgslocal_getindex, sgsOuzelTouchEvent::_sgslocal_setindex, NULL, sgsOuzelTouchEvent::_sgslocal_serialize, sgsOuzelTouchEvent::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+};
+_sgsInterface sgsOuzelTouchEvent::_sgs_interface(sgsOuzelTouchEvent__sgs_interface, sgsOuzelTouchEvent__sgs_ifn);
 
 
 int sgsOuzelEventHandler::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
@@ -165,7 +429,9 @@ int sgsOuzelEventHandler::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj*
 		if( !strcmp( str, "onTouchEvent" ) ){ sgs_PushVar( callerCtx, onTouchEvent ); return SGS_SUCCESS; }
 		if( !strcmp( str, "onGamepadEvent" ) ){ sgs_PushVar( callerCtx, onGamepadEvent ); return SGS_SUCCESS; }
 		if( !strcmp( str, "onUIEvent" ) ){ sgs_PushVar( callerCtx, onUIEvent ); return SGS_SUCCESS; }
-		if( !strcmp( str, "currentEvent" ) ){ sgs_PushVar( callerCtx, currentEvent ); return SGS_SUCCESS; }
+		if( !strcmp( str, "lastKeyboardEvent" ) ){ sgs_PushVar( callerCtx, lastKeyboardEvent ); return SGS_SUCCESS; }
+		if( !strcmp( str, "lastMouseEvent" ) ){ sgs_PushVar( callerCtx, lastMouseEvent ); return SGS_SUCCESS; }
+		if( !strcmp( str, "lastTouchEvent" ) ){ sgs_PushVar( callerCtx, lastTouchEvent ); return SGS_SUCCESS; }
 	}
 	return SGS_ENOTFND;
 }
@@ -237,8 +503,10 @@ int sgsOuzelEventHandler::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj
 		{ sgs_PushStringLit( callerCtx, "\nonTouchEvent = " ); sgs_DumpData( callerCtx, onTouchEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nonGamepadEvent = " ); sgs_DumpData( callerCtx, onGamepadEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nonUIEvent = " ); sgs_DumpData( callerCtx, onUIEvent, depth ).push( callerCtx ); }
-		{ sgs_PushStringLit( callerCtx, "\ncurrentEvent = " ); sgs_DumpData( callerCtx, currentEvent, depth ).push( callerCtx ); }
-		sgs_StringConcat( callerCtx, 12 );
+		{ sgs_PushStringLit( callerCtx, "\nlastKeyboardEvent = " ); sgs_DumpData( callerCtx, lastKeyboardEvent, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nlastMouseEvent = " ); sgs_DumpData( callerCtx, lastMouseEvent, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nlastTouchEvent = " ); sgs_DumpData( callerCtx, lastTouchEvent, depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 16 );
 		sgs_PadString( callerCtx );
 		sgs_PushStringLit( callerCtx, "\n}" );
 		sgs_StringConcat( callerCtx, 3 );
@@ -429,6 +697,12 @@ static int _sgs_method__sgsOuzel__setScreenSaverEnabled( sgs_Context* callerCtx 
 	sgsOuzel::setScreenSaverEnabled( sgs_GetVar<bool>()(callerCtx,0) ); return 0;
 }
 
+static int _sgs_method__sgsOuzel__createEventHandler( sgs_Context* callerCtx )
+{
+	sgs_FuncName( callerCtx, "sgsOuzel.createEventHandler" );
+	sgs_PushVar(callerCtx,sgsOuzel::createEventHandler( sgs_GetVar<int>()(callerCtx,0) )); return 1;
+}
+
 int sgsOuzel::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
 int sgsOuzel::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzel*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
 int sgsOuzel::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
@@ -520,6 +794,7 @@ static sgs_RegFuncConst sgsOuzel__sgs_funcs[] =
 	{ "exit", _sgs_method__sgsOuzel__exit },
 	{ "setAppAndDeveloperNames", _sgs_method__sgsOuzel__setAppAndDeveloperNames },
 	{ "setScreenSaverEnabled", _sgs_method__sgsOuzel__setScreenSaverEnabled },
+	{ "createEventHandler", _sgs_method__sgsOuzel__createEventHandler },
 	{ NULL, NULL },
 };
 

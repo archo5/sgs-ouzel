@@ -1,6 +1,6 @@
 
 bin/sgsouzel.exe: src/cppbc_sgs_ouzel.cpp src/sgs_ouzel.cpp sgscript/ext/sgsxgmath.c sgscript/ext/sgs_prof.c ouzel/build/libouzel.a sgscript/lib/libsgscript.a
-	$(CXX) -std=gnu++11 -o $@ $^ -Isgscript/src -Iouzel/ouzel -Louzel/build -louzel -Lsgscript/lib -lsgscript -lkernel32 -luser32 -lgdi32 -lole32 -loleaut32 -lOpenGL32 -ldsound -ld3d11 -ldinput8 -lxinput -luuid -ldxguid -lshlwapi
+	$(CXX) -std=gnu++11 -o $@ $^ -Isgscript/src -Iouzel/ouzel -Louzel/build -louzel -Lsgscript/lib -lsgscript -lkernel32 -luser32 -lgdi32 -lole32 -loleaut32 -lOpenGL32 -ldsound -ld3d11 -ldinput8 -lxinput -luuid -ldxguid -lshlwapi -u WinMain
 
 src/cppbc_sgs_ouzel.cpp: src/sgs_ouzel.hpp | sgscript/bin/sgsvm.exe
 	sgscript/bin/sgsvm.exe -p sgscript/ext/cppbc.sgs src/sgs_ouzel.hpp -iname sgs_ouzel.hpp

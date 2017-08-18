@@ -32,6 +32,45 @@ template< class T > sgsHandle<T> GetObjHandle( void* ptr )
 }
 
 
+int sgsOuzelColor::call( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	float v[4];
+	auto ssz = sgs_StackSize( callerCtx );
+	if( ssz == 1 && sgs_ParseVec4( callerCtx, 0, v, 0 ) )
+	{
+		sgs_CreateColorp( callerCtx, NULL, v );
+		return 1;
+	}
+	else if( ssz == 1 && sgs_ItemType( callerCtx, 0 ) == SGS_VT_INT )
+	{
+		sgs_PushVar( callerCtx, Color( sgs_GetVar<uint32_t>()( callerCtx, 0 ) ) );
+		return 1;
+	}
+	else if( ssz >= 3 && sgs_ItemType( callerCtx, 0 ) == SGS_VT_INT && sgs_ItemType( callerCtx, 1 ) == SGS_VT_INT && sgs_ItemType( callerCtx, 2 ) == SGS_VT_INT )
+	{
+		sgs_PushVar( callerCtx, Color(
+			sgs_GetVar<uint8_t>()( callerCtx, 0 ),
+			sgs_GetVar<uint8_t>()( callerCtx, 1 ),
+			sgs_GetVar<uint8_t>()( callerCtx, 2 ),
+			ssz == 4 ? sgs_GetVar<uint8_t>()( callerCtx, 3 ) : 0xFF
+		) );
+		return 1;
+	}
+	else if( ssz == 1 && sgs_ItemType( callerCtx, 0 ) == SGS_VT_STRING )
+	{
+		sgs_PushVar( callerCtx, Color( sgs_GetVar<string>()( callerCtx, 0 ) ) );
+		return 1;
+	}
+	else
+		return sgs_Msg( C, SGS_WARNING, "Unknown overload" );
+}
+
+
+sgsHandle< struct sgsOuzelNode > sgsOuzelUIEvent::getNode()
+{
+	return GetObjHandle<sgsOuzelNode>( node );
+}
+
 sgsOuzelEventHandler::sgsOuzelEventHandler( int priority ) : EventHandler( priority )
 {
 	keyboardHandler = bind( &sgsOuzelEventHandler::handleKeyboard, this, placeholders::_1, placeholders::_2 );
@@ -43,6 +82,7 @@ sgsOuzelEventHandler::sgsOuzelEventHandler( int priority ) : EventHandler( prior
 	lastKeyboardEvent = CreateObj<sgsOuzelKeyboardEvent>();
 	lastMouseEvent = CreateObj<sgsOuzelMouseEvent>();
 	lastTouchEvent = CreateObj<sgsOuzelTouchEvent>();
+	lastUIEvent = CreateObj<sgsOuzelUIEvent>();
 	
 	sharedEngine->getEventDispatcher()->addEventHandler( this );
 }
@@ -79,8 +119,8 @@ bool sgsOuzelEventHandler::handleGamepad( Event::Type type, const GamepadEvent& 
 
 bool sgsOuzelEventHandler::handleUI( Event::Type type, const UIEvent& event )
 {
-	/* TODO */
-	return onUIEvent.not_null() ? GetScriptVar().tthiscall<bool>( C, onUIEvent, int(type) ) : false;
+	*static_cast<UIEvent*>(&*lastUIEvent) = event;
+	return onUIEvent.not_null() ? GetScriptVar().tthiscall<bool>( C, onUIEvent, int(type), lastUIEvent ) : false;
 }
 
 
@@ -192,11 +232,22 @@ sgsHandle< struct sgsOuzelMenu > sgsOuzelWidget::getMenu()
 	return GetObjHandle<sgsOuzelMenu>( Item()->getMenu() );
 }
 
-
-void sgsOuzel::exit()
+void sgsOuzelMenu::addWidget( sgsOuzelWidget::Handle widget )
 {
-	sharedEngine->exit();
+	if( widget )
+		Item()->addWidget( widget->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "widget not specified" );
 }
+
+void sgsOuzelMenu::selectWidget( sgsOuzelWidget::Handle widget )
+{
+	if( widget )
+		Item()->selectWidget( widget->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "widget not specified" );
+}
+
 
 void sgsOuzel::setAppAndDeveloperNames( const string& appName, const string& devName )
 {
@@ -253,6 +304,81 @@ sgsOuzelMenu::Handle sgsOuzel::createMenu()
 	return h;
 }
 
+sgsOuzelButton::Handle sgsOuzel::createButton(
+	const string& normalImage,
+	const string& selectedImage,
+	const string& pressedImage,
+	const string& disabledImage,
+	const string& label /* = "" */,
+	const string& font /* = "" */,
+	float fontSize /* = 1.0f */,
+	const Color& aLabelColor /* = Color::WHITE */,
+	const Color& aLabelSelectedColor /* = Color::WHITE */,
+	const Color& aLabelPressedColor /* = Color::WHITE */,
+	const Color& aLabelDisabledColor /* = Color::WHITE */,
+	SGS_CTX )
+{
+	auto ssz = sgs_StackSize( C );
+	auto h = CreateObj<sgsOuzelButton>();
+	h->obj = new Button(
+		normalImage,
+		selectedImage,
+		pressedImage,
+		disabledImage,
+		label,
+		font,
+		ssz >= 7 ? fontSize : 1.0f,
+		ssz >= 8 ? aLabelColor : Color::WHITE,
+		ssz >= 9 ? aLabelSelectedColor : Color::WHITE,
+		ssz >= 10 ? aLabelPressedColor : Color::WHITE,
+		ssz >= 11 ? aLabelDisabledColor : Color::WHITE
+	);
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+
+#define RICET( x ) { #x, sgs_Int(Event::Type::x) },
+static sgs_RegIntConst g_EventTypesRIC[] =
+{
+	RICET( KEY_PRESS )
+	RICET( KEY_RELEASE )
+	RICET( KEY_REPEAT )
+	RICET( MOUSE_PRESS )
+	RICET( MOUSE_RELEASE )
+	RICET( MOUSE_SCROLL )
+	RICET( MOUSE_MOVE )
+	RICET( TOUCH_BEGIN )
+	RICET( TOUCH_MOVE )
+	RICET( TOUCH_END )
+	RICET( TOUCH_CANCEL )
+	RICET( GAMEPAD_CONNECT )
+	RICET( GAMEPAD_DISCONNECT )
+	RICET( GAMEPAD_BUTTON_CHANGE )
+	RICET( WINDOW_SIZE_CHANGE )
+	RICET( WINDOW_TITLE_CHANGE )
+	RICET( WINDOW_FULLSCREEN_CHANGE )
+	RICET( WINDOW_CONTENT_SCALE_CHANGE )
+	RICET( WINDOW_SCREEN_CHANGE )
+	RICET( ENGINE_START )
+	RICET( ENGINE_STOP )
+	RICET( ENGINE_RESUME )
+	RICET( ENGINE_PAUSE )
+	RICET( ORIENTATION_CHANGE )
+	RICET( LOW_MEMORY )
+	RICET( OPEN_FILE )
+	RICET( ENTER_NODE )
+	RICET( LEAVE_NODE )
+	RICET( PRESS_NODE )
+	RICET( RELEASE_NODE )
+	RICET( CLICK_NODE )
+	RICET( DRAG_NODE )
+	RICET( WIDGET_CHANGE )
+	RICET( RESET )
+	RICET( FINISH )
+	RICET( USER )
+	{ NULL, 0 },
+};
 
 #define RIC( x ) { #x, x },
 static sgs_RegIntConst g_ModifiersRIC[] =
@@ -431,6 +557,23 @@ static sgs_RegIntConst g_MouseButtonsRIC[] =
 	RICMB( BUTTON_COUNT )
 	{ NULL, 0 },
 };
+#define RICCT( x ) { #x, sgs_Int(Camera::Type::x) },
+static sgs_RegIntConst g_CameraTypesRIC[] =
+{
+	RICCT( CUSTOM )
+	RICCT( ORTHOGRAPHIC )
+	RICCT( PERSPECTIVE )
+	{ NULL, 0 },
+};
+#define RICCSM( x ) { #x, sgs_Int(Camera::ScaleMode::x) },
+static sgs_RegIntConst g_CameraScaleModesRIC[] =
+{
+	RICCSM( NONE )
+	RICCSM( EXACT_FIT )
+	RICCSM( NO_BORDER )
+	RICCSM( SHOW_ALL )
+	{ NULL, 0 },
+};
 
 
 void ouzelMain( const vector<string>& args )
@@ -444,10 +587,17 @@ void ouzelMain( const vector<string>& args )
 	sgsVariable ouzel = sgs_GetClassInterface< sgsOuzel >( g_sgsCtx );
 	sgsEnv( g_sgsCtx ).setprop( "ouzel", ouzel );
 	
+	ouzel.setprop( "Color", CreateObj<sgsOuzelColor>() );
+	
 	sgs_StoreIntConsts( g_sgsCtx, ouzel.var, g_ModifiersRIC, -1 );
 	sgsVariable input;
 	input.create_dict( g_sgsCtx );
 	ouzel.setprop( "input", input );
+	
+	sgsVariable EventType;
+	EventType.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, EventType.var, g_EventTypesRIC, -1 );
+	ouzel.setprop( "EventType", EventType );
 	
 	sgsVariable KeyboardKey;
 	KeyboardKey.create_dict( g_sgsCtx );
@@ -458,6 +608,20 @@ void ouzelMain( const vector<string>& args )
 	MouseButton.create_dict( g_sgsCtx );
 	sgs_StoreIntConsts( g_sgsCtx, MouseButton.var, g_MouseButtonsRIC, -1 );
 	input.setprop( "MouseButton", MouseButton );
+	
+//	sgsVariable ouzel_scene;
+//	ouzel_scene.create_dict( g_sgsCtx );
+//	ouzel.setprop( "scene", ouzel_scene );
+	
+	sgsVariable CameraType;
+	CameraType.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, CameraType.var, g_CameraTypesRIC, -1 );
+	ouzel.setprop( "CameraType", CameraType );
+	
+	sgsVariable CameraScaleMode;
+	CameraScaleMode.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, CameraScaleMode.var, g_CameraScaleModesRIC, -1 );
+	ouzel.setprop( "CameraScaleMode", CameraScaleMode );
 	
 	sgsVariable ouzel_window = CreateObj<sgsOuzelWindow>();
 	ouzel.setprop( "window", ouzel_window );

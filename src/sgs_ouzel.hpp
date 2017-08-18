@@ -23,6 +23,12 @@ template<> struct sgs_GetVar<Vector2> { Vector2 operator () ( SGS_CTX, sgs_StkId
 template<> inline sgsString sgs_DumpData<Vector2>( SGS_CTX, const Vector2& var, int depth ){ char bfr[ 128 ] = {0};
 	snprintf( bfr, 127, "Vector2(%g;%g)", var.x, var.y ); return sgsString( C, bfr ); }
 
+template<> inline void sgs_PushVar( SGS_CTX, const Size2& v ){ sgs_CreateVec2( C, nullptr, v.width, v.height ); }
+template<> struct sgs_GetVar<Size2> { Size2 operator () ( SGS_CTX, sgs_StkIdx item ){
+	float vtmp[3] = {0.0f}; sgs_ParseVec2( C, item, vtmp, 0 ); return Size2( vtmp[0], vtmp[1] ); }};
+template<> inline sgsString sgs_DumpData<Size2>( SGS_CTX, const Size2& var, int depth ){ char bfr[ 128 ] = {0};
+	snprintf( bfr, 127, "Size2(%g;%g)", var.width, var.height ); return sgsString( C, bfr ); }
+
 template<> inline void sgs_PushVar( SGS_CTX, const Vector3& v ){ sgs_CreateVec3( C, nullptr, v.x, v.y, v.z ); }
 template<> struct sgs_GetVar<Vector3> { Vector3 operator () ( SGS_CTX, sgs_StkIdx item ){
 	float vtmp[3] = {0.0f}; sgs_ParseVec3( C, item, vtmp, 0 ); return Vector3( vtmp[0], vtmp[1], vtmp[2] ); }};
@@ -34,6 +40,26 @@ template<> struct sgs_GetVar<Color> { Color operator () ( SGS_CTX, sgs_StkIdx it
 	float vtmp[4] = {0.0f}; sgs_ParseColor( C, item, vtmp, 0 ); return Color( Vector4( vtmp[0], vtmp[1], vtmp[2], vtmp[3] ) ); }};
 template<> inline sgsString sgs_DumpData<Color>( SGS_CTX, const Color& var, int depth ){ char bfr[ 192 ] = {0};
 	snprintf( bfr, 191, "Color(%u;%u;%u;%u)", var.r, var.g, var.b, var.a ); return sgsString( C, bfr ); }
+
+
+// CORE
+
+struct sgsOuzelColor : sgsObjectBase
+{
+	SGS_OBJECT;
+	
+	SGS_IFUNC( call ) int call( sgs_Context* callerCtx, sgs_VarObj* obj );
+	
+	SGS_PROPFN( READ SOURCE Color(Color::BLACK)   ) SGS_ALIAS( Color BLACK   );
+	SGS_PROPFN( READ SOURCE Color(Color::RED)     ) SGS_ALIAS( Color RED     );
+	SGS_PROPFN( READ SOURCE Color(Color::MAGENTA) ) SGS_ALIAS( Color MAGENTA );
+	SGS_PROPFN( READ SOURCE Color(Color::GREEN)   ) SGS_ALIAS( Color GREEN   );
+	SGS_PROPFN( READ SOURCE Color(Color::CYAN)    ) SGS_ALIAS( Color CYAN    );
+	SGS_PROPFN( READ SOURCE Color(Color::BLUE)    ) SGS_ALIAS( Color BLUE    );
+	SGS_PROPFN( READ SOURCE Color(Color::YELLOW)  ) SGS_ALIAS( Color YELLOW  );
+	SGS_PROPFN( READ SOURCE Color(Color::WHITE)   ) SGS_ALIAS( Color WHITE   );
+	SGS_PROPFN( READ SOURCE Color(Color::GRAY)    ) SGS_ALIAS( Color GRAY    );
+};
 
 
 // INPUT
@@ -76,10 +102,32 @@ struct sgsOuzelTouchEvent : sgsObjectBase, TouchEvent
 	typedef sgsHandle< sgsOuzelTouchEvent > Handle;
 	
 	SGS_PROPFN( READ ) SGS_ALIAS( uint64_t touchId );
+	SGS_PROPFN( READ SOURCE difference ) SGS_ALIAS( Vector2 difference );
 	SGS_PROPFN( READ SOURCE difference.x ) SGS_ALIAS( float differenceX );
 	SGS_PROPFN( READ SOURCE difference.y ) SGS_ALIAS( float differenceY );
+	SGS_PROPFN( READ SOURCE position ) SGS_ALIAS( Vector2 position );
 	SGS_PROPFN( READ SOURCE position.x ) SGS_ALIAS( float positionX );
 	SGS_PROPFN( READ SOURCE position.y ) SGS_ALIAS( float positionY );
+};
+
+struct sgsOuzelUIEvent : sgsObjectBase, UIEvent
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelUIEvent > Handle;
+	
+	sgsHandle< struct sgsOuzelNode > getNode();
+	SGS_PROPFN( READ getNode ) SGS_ALIAS( sgsHandle< struct sgsOuzelNode > node );
+	SGS_PROPFN( READ ) SGS_ALIAS( uint64_t touchId );
+	SGS_PROPFN( READ SOURCE difference ) SGS_ALIAS( Vector2 difference );
+	SGS_PROPFN( READ SOURCE difference.x ) SGS_ALIAS( float differenceX );
+	SGS_PROPFN( READ SOURCE difference.y ) SGS_ALIAS( float differenceY );
+	SGS_PROPFN( READ SOURCE position ) SGS_ALIAS( Vector2 position );
+	SGS_PROPFN( READ SOURCE position.x ) SGS_ALIAS( float positionX );
+	SGS_PROPFN( READ SOURCE position.y ) SGS_ALIAS( float positionY );
+	SGS_PROPFN( READ SOURCE localPosition ) SGS_ALIAS( Vector2 localPosition );
+	SGS_PROPFN( READ SOURCE localPosition.x ) SGS_ALIAS( float localPositionX );
+	SGS_PROPFN( READ SOURCE localPosition.y ) SGS_ALIAS( float localPositionY );
 };
 
 struct sgsOuzelEventHandler : sgsObjectBase, EventHandler
@@ -108,6 +156,7 @@ struct sgsOuzelEventHandler : sgsObjectBase, EventHandler
 	SGS_PROPFN( READ ) sgsOuzelKeyboardEvent::Handle lastKeyboardEvent;
 	SGS_PROPFN( READ ) sgsOuzelMouseEvent::Handle lastMouseEvent;
 	SGS_PROPFN( READ ) sgsOuzelTouchEvent::Handle lastTouchEvent;
+	SGS_PROPFN( READ ) sgsOuzelUIEvent::Handle lastUIEvent;
 };
 
 
@@ -140,6 +189,8 @@ struct sgsOuzelNode : sgsOuzelNodeContainer
 	
 	typedef sgsHandle< sgsOuzelNode > Handle;
 	Node* Item(){ return static_cast<Node*>( obj ); }
+	
+	SGS_PROPFN( READ Item()->getPosition WRITE Item()->setPosition ) SGS_ALIAS( Vector3 position );
 	
 	SGS_PROPFN( READ Item()->getOrder WRITE Item()->setOrder ) SGS_ALIAS( int32_t order );
 	SGS_PROPFN( READ Item()->getWorldOrder ) SGS_ALIAS( int32_t worldOrder );
@@ -187,6 +238,11 @@ struct sgsOuzelCamera : sgsOuzelNode
 	SGS_PROPFN( READ Item()->getFOV WRITE Item()->setFOV ) SGS_ALIAS( float FOV );
 	SGS_PROPFN( READ Item()->getNearPlane WRITE Item()->setNearPlane ) SGS_ALIAS( float nearPlane );
 	SGS_PROPFN( READ Item()->getFarPlane WRITE Item()->setFarPlane ) SGS_ALIAS( float farPlane );
+	
+	int getScaleMode(){ return int(Item()->getScaleMode()); }
+	void setScaleMode( int scaleMode ){ Item()->setScaleMode( Camera::ScaleMode(scaleMode) ); }
+	SGS_PROPFN( READ getScaleMode WRITE setScaleMode ) SGS_ALIAS( int scaleMode );
+	SGS_PROPFN( READ Item()->getTargetContentSize WRITE Item()->setTargetContentSize ) SGS_ALIAS( Size2 targetContentSize );
 	
 	SGS_PROPFN( READ Item()->getDepthWrite WRITE Item()->setDepthWrite ) SGS_ALIAS( bool depthWrite );
 	SGS_PROPFN( READ Item()->getDepthTest WRITE Item()->setDepthTest ) SGS_ALIAS( bool depthTest );
@@ -241,10 +297,18 @@ struct sgsOuzelMenu : sgsOuzelWidget
 	typedef sgsHandle< sgsOuzelMenu > Handle;
 	Menu* Item(){ return static_cast<Menu*>( obj ); }
 	
-	SGS_METHOD void addWidget( sgsOuzelWidget::Handle widget ){ Item()->addWidget( widget->Item() ); }
-	SGS_METHOD void selectWidget( sgsOuzelWidget::Handle widget ){ Item()->selectWidget( widget->Item() ); }
+	SGS_METHOD void addWidget( sgsOuzelWidget::Handle widget );
+	SGS_METHOD void selectWidget( sgsOuzelWidget::Handle widget );
 	SGS_METHOD void selectNextWidget(){ Item()->selectNextWidget(); }
 	SGS_METHOD void selectPreviousWidget(){ Item()->selectPreviousWidget(); }
+};
+
+struct sgsOuzelButton : sgsOuzelWidget
+{
+	SGS_OBJECT_INHERIT( sgsOuzelWidget );
+	
+	typedef sgsHandle< sgsOuzelButton > Handle;
+	Button* Item(){ return static_cast<Button*>( obj ); }
 };
 
 
@@ -282,7 +346,7 @@ struct sgsOuzelFileSystem : sgsObjectBase
 	
 	typedef sgsHandle< sgsOuzelFileSystem > Handle;
 	
-	SGS_METHOD void addResourcePath( const std::string& path ){ sharedEngine->getFileSystem()->addResourcePath( path ); }
+	SGS_METHOD void addResourcePath( const string& path ){ sharedEngine->getFileSystem()->addResourcePath( path ); }
 };
 
 struct sgsOuzelWindow : sgsObjectBase
@@ -302,9 +366,10 @@ struct sgsOuzel : sgsLiteObjectBase
 {
 	SGS_OBJECT_LITE;
 	
-	SGS_STATICMETHOD void exit();
+	SGS_STATICMETHOD void exit(){ sharedEngine->exit(); }
 	SGS_STATICMETHOD void setAppAndDeveloperNames( const string& appName, const string& devName );
 	SGS_STATICMETHOD void setScreenSaverEnabled( bool enabled );
+	SGS_STATICMETHOD bool openURL( const string& url ){ return sharedEngine->openURL( url ); }
 	
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
 	
@@ -314,4 +379,17 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD sgsOuzelCamera::Handle createCamera();
 	
 	SGS_STATICMETHOD sgsOuzelMenu::Handle createMenu();
+	SGS_STATICMETHOD sgsOuzelButton::Handle createButton(
+		const string& normalImage,
+		const string& selectedImage,
+		const string& pressedImage,
+		const string& disabledImage,
+		const string& label /* = "" */,
+		const string& font /* = "" */,
+		float fontSize /* = 1.0f */,
+		const Color& aLabelColor /* = Color::WHITE */,
+		const Color& aLabelSelectedColor /* = Color::WHITE */,
+		const Color& aLabelPressedColor /* = Color::WHITE */,
+		const Color& aLabelDisabledColor /* = Color::WHITE */,
+		SGS_CTX );
 };

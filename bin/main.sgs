@@ -1,4 +1,12 @@
 
+function bind( t, f )
+{
+	return function() use( t, f )
+	{
+		f.apply( t, va_get_args() );
+	};
+}
+
 println( "gogo!" );
 ouzel.setAppAndDeveloperNames( "Test App", "someone" );
 ouzel.setScreenSaverEnabled( false );
@@ -13,18 +21,88 @@ function eh.onKeyboardEvent( type, e )
 	println( "KEYBOARD EVENT! ", { type, e = dumpvar(e) } );
 }
 
-ouzel.renderer.clearColor = color(0.2,0.3,0.4);
+ouzel.renderer.clearColor = ouzel.Color( 64, 0, 0 );
 
-global scene = ouzel.createScene();
-ouzel.sceneManager.scene = scene;
-
-global layer = ouzel.createLayer();
-scene.addLayer( layer );
-
-global camera = ouzel.createCamera();
-layer.addChild( camera );
-
-global menu = ouzel.createMenu();
-layer.addChild( menu );
-
-printvar( layer.getCameras() );
+class MainMenu
+{
+	function __construct()
+	{
+		this.eventHandler = ouzel.createEventHandler();
+		this.eventHandler.
+		{
+			onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			onUIEvent = bind( this, this.onUIEvent ),
+		};
+		
+		this.scene = ouzel.createScene();
+		ouzel.sceneManager.scene = this.scene;
+		
+		this.layer = ouzel.createLayer();
+		this.scene.addLayer( this.layer );
+		
+		this.camera = ouzel.createCamera();
+		this.camera.scaleMode = ouzel.CameraScaleMode.SHOW_ALL;
+		this.camera.targetContentSize = vec2(400, 600);
+		this.layer.addChild( this.camera );
+		
+		this.menu = ouzel.createMenu();
+		this.layer.addChild( this.menu );
+		
+		this.gitHubButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GitHub", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.spritesButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Sprites", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.guiButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GUI", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.renderTargetButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Render target", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.animationsButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Animations", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.inputButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Input", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.soundButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Sound", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.perspectiveButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Perspective", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		
+		this.gitHubButton.position = vec2(0, 120);
+		this.menu.addWidget( this.gitHubButton );
+		
+		this.spritesButton.position = vec2(0, 80);
+		this.menu.addWidget( this.spritesButton );
+		
+		this.guiButton.position = vec2(0, 40);
+		this.menu.addWidget( this.guiButton );
+		
+		this.renderTargetButton.position = vec2(0, 0);
+		this.menu.addWidget( this.renderTargetButton );
+		
+		this.animationsButton.position = vec2(0, -40);
+		this.menu.addWidget( this.animationsButton );
+		
+		this.inputButton.position = vec2(0, -80);
+		this.menu.addWidget( this.inputButton );
+		
+		this.soundButton.position = vec2(0, -120);
+		this.menu.addWidget( this.soundButton );
+		
+		this.perspectiveButton.position = vec2(0, -160);
+		this.menu.addWidget( this.perspectiveButton );
+	}
+	function onKeyboardEvent( type, e )
+	{
+		if( e.key == ouzel.input.KeyboardKey.ESCAPE )
+		{
+			if( type == ouzel.EventType.KEY_PRESS )
+			{
+				ouzel.exit();
+			}
+			return false;
+		}
+		return true;
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE )
+		{
+			if( e.node === this.gitHubButton )
+			{
+				ouzel.openURL( "https://github.com/elnormous/ouzel" );
+			}
+		}
+		return true;
+	}
+}
+curScene = new MainMenu();

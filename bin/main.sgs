@@ -96,6 +96,11 @@ class MainMenu
 				_G.curScene.eventHandler.dispose();
 				_G.curScene = new SpritesSample();
 			}
+			else if( e.node === this.guiButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new GUISample();
+			}
 		}
 		return true;
 	}
@@ -130,12 +135,14 @@ class SpritesSample
 		{
 			characterSprite = ouzel.createSprite(),
 			character = ouzel.createNode().{ position = vec2( -300, 0 ) },
+			// move = ouzel.createMove( 4, vec2( 300, 0 ) ),
 		};
 		this.characterSprite.initFromFile( "run.json" );
 		this.characterSprite.play( true );
 		this.character.addComponent( this.characterSprite );
 		this.layer.addChild( this.character );
-		// TODO
+		// this.character.addComponent( this.move );
+		// this.move.start();
 		
 		// fire
 		this.
@@ -190,6 +197,15 @@ class SpritesSample
 	}
 	function onGamepadEvent( type, e )
 	{
+		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
+		{
+			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
 	}
 	function onUIEvent( type, e )
 	{
@@ -207,6 +223,122 @@ class SpritesSample
 			else if( e.node === this.wireframeButton )
 			{
 				this.camera.wireframe = !this.camera.wireframe;
+			}
+		}
+		return true;
+	}
+	function onKeyboardEvent( type, e )
+	{
+		if( type == ouzel.EventType.KEY_PRESS )
+		{
+			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
+	}
+}
+class GUISample
+{
+	function __construct()
+	{
+		this.
+		{
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			guiCamera = ouzel.createCamera(),
+			guiLayer = ouzel.createLayer(),
+			menu = ouzel.createMenu(),
+			
+			button = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Button", "arial.fnt", 0, ouzel.Color.RED, ouzel.Color.RED, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, 100 ),
+			},
+			fullscreenButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Fullscreen", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, 40 ),
+			},
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+			
+			checkBox = ouzel.createCheckBox( "checkbox.png", "", "", "", "tick.png" ).
+			{
+				position = vec2( -100, 100 ),
+			},
+			
+			label1 = ouzel.createLabel( "checkbox", "AmosisTechnik.ttf", 24.0 ).
+			{
+				// color = CYAN
+				position = vec2( -28, 102 ),
+			},
+			label2 = ouzel.createLabel( ouzel.getString("Ouzel"), "ArialBlack.fnt" ).
+			{
+				position = vec2( 10, 0 ),
+			},
+			label3 = ouzel.createLabel( "UTF-8 ĀāČč\nNew line", "ArialBlack.fnt", 0.0, ouzel.Color.WHITE, vec2(0, 0.5) ).
+			{
+				// color = BLUE
+				position = vec2( -100, -100 ),
+				scale = vec3( 0.5, 0.5, 1 ),
+			},
+		};
+		
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		this.guiLayer.addChild( this.menu );
+		
+		this.menu.addWidget( this.button );
+		this.menu.addWidget( this.checkBox );
+		this.menu.addWidget( this.fullscreenButton );
+		this.menu.addWidget( this.label1 );
+		
+		ouzel.addLanguage( "latvian", "lv.mo" );
+		ouzel.setLanguage( "latvian" );
+		
+		this.menu.addWidget( this.label2 );
+		this.menu.addWidget( this.label3 );
+		this.menu.addWidget( this.backButton );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+	function onGamepadEvent( type, e )
+	{
+		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
+		{
+			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE )
+		{
+			if( e.node === this.backButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+			else if( e.node === this.button )
+			{
+				this.checkBox.checked = !this.checkBox.checked;
+			}
+			else if( e.node === this.fullscreenButton )
+			{
+				ouzel.window.fullscreen = !ouzel.window.fullscreen;
 			}
 		}
 		return true;

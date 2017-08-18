@@ -98,6 +98,7 @@ sgsOuzelEventHandler::sgsOuzelEventHandler( int priority ) : EventHandler( prior
 	lastKeyboardEvent = CreateObj<sgsOuzelKeyboardEvent>();
 	lastMouseEvent = CreateObj<sgsOuzelMouseEvent>();
 	lastTouchEvent = CreateObj<sgsOuzelTouchEvent>();
+	lastGamepadEvent = CreateObj<sgsOuzelGamepadEvent>();
 	lastUIEvent = CreateObj<sgsOuzelUIEvent>();
 	
 	sharedEngine->getEventDispatcher()->addEventHandler( this );
@@ -129,8 +130,8 @@ bool sgsOuzelEventHandler::handleTouch( Event::Type type, const TouchEvent& even
 
 bool sgsOuzelEventHandler::handleGamepad( Event::Type type, const GamepadEvent& event )
 {
-	/* TODO */
-	return onGamepadEvent.not_null() ? GetScriptVar().tthiscall<bool>( C, onGamepadEvent, int(type) ) : false;
+	*static_cast<GamepadEvent*>(&*lastGamepadEvent) = event;
+	return onGamepadEvent.not_null() ? GetScriptVar().tthiscall<bool>( C, onGamepadEvent, int(type), lastGamepadEvent ) : false;
 }
 
 bool sgsOuzelEventHandler::handleUI( Event::Type type, const UIEvent& event )
@@ -353,6 +354,23 @@ void sgsOuzel::setScreenSaverEnabled( bool enabled )
 	sharedEngine->setScreenSaverEnabled( enabled );
 }
 
+
+void sgsOuzel::addLanguage( const string& name, const string& filename )
+{
+	sharedEngine->getLocalization()->addLanguage( name, filename );
+}
+
+void sgsOuzel::setLanguage( const string& language )
+{
+	sharedEngine->getLocalization()->setLanguage( language );
+}
+
+string sgsOuzel::getString( const string& str )
+{
+	return sharedEngine->getLocalization()->getString( str );
+}
+
+
 sgsOuzelEventHandler::Handle sgsOuzel::createEventHandler( int priority )
 {
 	sgsVariable out( g_sgsCtx );
@@ -405,6 +423,27 @@ sgsOuzelMenu::Handle sgsOuzel::createMenu()
 	return h;
 }
 
+sgsOuzelLabel::Handle sgsOuzel::createLabel(
+	const string& aText,
+	const string& fontFile,
+	float fontSize /* = 1.0f */,
+	Color color /* = Color::WHITE */,
+	const Vector2& textAnchor /* = Vector2(0.5f, 0.5f) */,
+	SGS_CTX )
+{
+	auto ssz = sgs_StackSize( C );
+	auto h = CreateObj<sgsOuzelLabel>();
+	h->obj = new Label(
+		aText,
+		fontFile,
+		ssz >= 3 ? fontSize : 1.0f,
+		ssz >= 4 ? color : Color::WHITE,
+		ssz >= 5 ? textAnchor : Vector2(0.5f,0.5f)
+	);
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
 sgsOuzelButton::Handle sgsOuzel::createButton(
 	const string& normalImage,
 	const string& selectedImage,
@@ -433,6 +472,25 @@ sgsOuzelButton::Handle sgsOuzel::createButton(
 		ssz >= 9 ? aLabelSelectedColor : Color::WHITE,
 		ssz >= 10 ? aLabelPressedColor : Color::WHITE,
 		ssz >= 11 ? aLabelDisabledColor : Color::WHITE
+	);
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelCheckBox::Handle sgsOuzel::createCheckBox(
+	const string& normalImage,
+	const string& selectedImage,
+	const string& pressedImage,
+	const string& disabledImage,
+	const string& tickImage )
+{
+	auto h = CreateObj<sgsOuzelCheckBox>();
+	h->obj = new CheckBox(
+		normalImage,
+		selectedImage,
+		pressedImage,
+		disabledImage,
+		tickImage
 	);
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
@@ -675,6 +733,38 @@ static sgs_RegIntConst g_CameraScaleModesRIC[] =
 	RICCSM( SHOW_ALL )
 	{ NULL, 0 },
 };
+#define RICGB( x ) { #x, sgs_Int(GamepadButton::x) },
+static sgs_RegIntConst g_GamepadButtonsRIC[] =
+{
+	RICGB( NONE )
+	RICGB( DPAD_LEFT )
+	RICGB( DPAD_RIGHT )
+	RICGB( DPAD_UP )
+	RICGB( DPAD_DOWN )
+	RICGB( FACE_BOTTOM )
+	RICGB( FACE_RIGHT )
+	RICGB( FACE_LEFT )
+	RICGB( FACE_TOP )
+	RICGB( LEFT_SHOULDER )
+	RICGB( LEFT_TRIGGER )
+	RICGB( RIGHT_SHOULDER )
+	RICGB( RIGHT_TRIGGER )
+	RICGB( LEFT_THUMB )
+	RICGB( RIGHT_THUMB )
+	RICGB( START )
+	RICGB( BACK )
+	RICGB( PAUSE )
+	RICGB( LEFT_THUMB_LEFT )
+	RICGB( LEFT_THUMB_RIGHT )
+	RICGB( LEFT_THUMB_UP )
+	RICGB( LEFT_THUMB_DOWN )
+	RICGB( RIGHT_THUMB_LEFT )
+	RICGB( RIGHT_THUMB_RIGHT )
+	RICGB( RIGHT_THUMB_UP )
+	RICGB( RIGHT_THUMB_DOWN )
+	RICGB( BUTTON_COUNT )
+	{ NULL, 0 },
+};
 
 
 void ouzelMain( const vector<string>& args )
@@ -710,6 +800,11 @@ void ouzelMain( const vector<string>& args )
 	sgs_StoreIntConsts( g_sgsCtx, MouseButton.var, g_MouseButtonsRIC, -1 );
 	input.setprop( "MouseButton", MouseButton );
 	
+	sgsVariable GamepadButton;
+	GamepadButton.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, GamepadButton.var, g_GamepadButtonsRIC, -1 );
+	input.setprop( "GamepadButton", GamepadButton );
+	
 //	sgsVariable ouzel_scene;
 //	ouzel_scene.create_dict( g_sgsCtx );
 //	ouzel.setprop( "scene", ouzel_scene );
@@ -735,6 +830,12 @@ void ouzelMain( const vector<string>& args )
 	
 	sgsVariable ouzel_sceneMgr = CreateObj<sgsOuzelSceneManager>();
 	ouzel.setprop( "sceneManager", ouzel_sceneMgr );
+	
+	for( const string& arg : args )
+		sgs_PushVar( g_sgsCtx, arg );
+	sgsVariable sgs_args;
+	sgs_args.create_array( g_sgsCtx, args.size() );
+	sgsEnv( g_sgsCtx ).setprop( "args", sgs_args );
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Loading 'main'";
 	sgs_Include( g_sgsCtx, "main" );

@@ -118,6 +118,21 @@ struct sgsOuzelTouchEvent : sgsObjectBase, TouchEvent
 	SGS_PROPFN( READ SOURCE position.y ) SGS_ALIAS( float positionY );
 };
 
+struct sgsOuzelGamepadEvent : sgsObjectBase, GamepadEvent
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelGamepadEvent > Handle;
+	
+	// TODO gamepad
+	int getButton() const { return (int) button; }
+	SGS_PROPFN( READ getButton ) SGS_ALIAS( int button );
+	SGS_PROPFN( READ SOURCE pressed ) SGS_ALIAS( bool pressed );
+	SGS_PROPFN( READ SOURCE previousPressed ) SGS_ALIAS( bool previousPressed );
+	SGS_PROPFN( READ SOURCE value ) SGS_ALIAS( float value );
+	SGS_PROPFN( READ SOURCE previousValue ) SGS_ALIAS( float previousValue );
+};
+
 struct sgsOuzelUIEvent : sgsObjectBase, UIEvent
 {
 	SGS_OBJECT;
@@ -164,6 +179,7 @@ struct sgsOuzelEventHandler : sgsOuzelDisposable, EventHandler
 	SGS_PROPFN( READ ) sgsOuzelKeyboardEvent::Handle lastKeyboardEvent;
 	SGS_PROPFN( READ ) sgsOuzelMouseEvent::Handle lastMouseEvent;
 	SGS_PROPFN( READ ) sgsOuzelTouchEvent::Handle lastTouchEvent;
+	SGS_PROPFN( READ ) sgsOuzelGamepadEvent::Handle lastGamepadEvent;
 	SGS_PROPFN( READ ) sgsOuzelUIEvent::Handle lastUIEvent;
 };
 
@@ -242,6 +258,8 @@ struct sgsOuzelNode : sgsOuzelNodeContainer
 	
 	SGS_PROPFN( READ Item()->getOrder WRITE Item()->setOrder ) SGS_ALIAS( int32_t order );
 	SGS_PROPFN( READ Item()->getWorldOrder ) SGS_ALIAS( int32_t worldOrder );
+	
+	SGS_PROPFN( READ Item()->getScale WRITE Item()->setScale ) SGS_ALIAS( Vector3 scale );
 	
 	SGS_PROPFN( READ Item()->getOpacity WRITE Item()->setOpacity ) SGS_ALIAS( float opacity );
 	SGS_PROPFN( READ Item()->getFlipX WRITE Item()->setFlipX ) SGS_ALIAS( bool flipX );
@@ -358,12 +376,32 @@ struct sgsOuzelMenu : sgsOuzelWidget
 	SGS_METHOD void selectPreviousWidget(){ Item()->selectPreviousWidget(); }
 };
 
+struct sgsOuzelLabel : sgsOuzelWidget
+{
+	SGS_OBJECT_INHERIT( sgsOuzelWidget );
+	
+	typedef sgsHandle< sgsOuzelLabel > Handle;
+	Label* Item(){ return static_cast<Label*>( obj ); }
+	
+	SGS_PROPFN( READ Item()->getText WRITE Item()->setText ) SGS_ALIAS( string text );
+};
+
 struct sgsOuzelButton : sgsOuzelWidget
 {
 	SGS_OBJECT_INHERIT( sgsOuzelWidget );
 	
 	typedef sgsHandle< sgsOuzelButton > Handle;
 	Button* Item(){ return static_cast<Button*>( obj ); }
+};
+
+struct sgsOuzelCheckBox : sgsOuzelWidget
+{
+	SGS_OBJECT_INHERIT( sgsOuzelWidget );
+	
+	typedef sgsHandle< sgsOuzelCheckBox > Handle;
+	CheckBox* Item(){ return static_cast<CheckBox*>( obj ); }
+	
+	SGS_PROPFN( READ Item()->isChecked WRITE Item()->setChecked ) SGS_ALIAS( bool checked );
 };
 
 
@@ -426,6 +464,11 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD void setScreenSaverEnabled( bool enabled );
 	SGS_STATICMETHOD bool openURL( const string& url ){ return sharedEngine->openURL( url ); }
 	
+	// Localization
+	SGS_STATICMETHOD void addLanguage( const string& name, const string& filename );
+	SGS_STATICMETHOD void setLanguage( const string& language );
+	SGS_STATICMETHOD string getString( const string& str );
+	
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
 	
 	SGS_STATICMETHOD sgsOuzelScene::Handle createScene();
@@ -436,6 +479,13 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();
 	
 	SGS_STATICMETHOD sgsOuzelMenu::Handle createMenu();
+	SGS_STATICMETHOD sgsOuzelLabel::Handle createLabel(
+		const string& aText,
+		const string& fontFile,
+		float fontSize /* = 1.0f */,
+		Color color /* = Color::WHITE */,
+		const Vector2& textAnchor /* = Vector2(0.5f, 0.5f) */,
+		SGS_CTX );
 	SGS_STATICMETHOD sgsOuzelButton::Handle createButton(
 		const string& normalImage,
 		const string& selectedImage,
@@ -449,4 +499,10 @@ struct sgsOuzel : sgsLiteObjectBase
 		const Color& aLabelPressedColor /* = Color::WHITE */,
 		const Color& aLabelDisabledColor /* = Color::WHITE */,
 		SGS_CTX );
+	SGS_STATICMETHOD sgsOuzelCheckBox::Handle createCheckBox(
+		const string& normalImage,
+		const string& selectedImage,
+		const string& pressedImage,
+		const string& disabledImage,
+		const string& tickImage );
 };

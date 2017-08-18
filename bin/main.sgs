@@ -7,19 +7,10 @@ function bind( t, f )
 	};
 }
 
-println( "gogo!" );
-ouzel.setAppAndDeveloperNames( "Test App", "someone" );
+ouzel.setAppAndDeveloperNames( "sgs-ouzel Samples", "org.sgscript" );
 ouzel.setScreenSaverEnabled( false );
-ouzel.window.title = "This thing works!";
+ouzel.window.title = "sgs-ouzel Samples";
 ouzel.fileSystem.addResourcePath( "../ouzel/samples/Resources" );
-
-printvar( ouzel.input );
-
-global eh = ouzel.createEventHandler();
-function eh.onKeyboardEvent( type, e )
-{
-	println( "KEYBOARD EVENT! ", { type, e = dumpvar(e) } );
-}
 
 ouzel.renderer.clearColor = ouzel.Color( 64, 0, 0 );
 
@@ -27,8 +18,7 @@ class MainMenu
 {
 	function __construct()
 	{
-		this.eventHandler = ouzel.createEventHandler();
-		this.eventHandler.
+		this.eventHandler = ouzel.createEventHandler().
 		{
 			onKeyboardEvent = bind( this, this.onKeyboardEvent ),
 			onUIEvent = bind( this, this.onUIEvent ),
@@ -101,8 +91,138 @@ class MainMenu
 			{
 				ouzel.openURL( "https://github.com/elnormous/ouzel" );
 			}
+			else if( e.node === this.spritesButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new SpritesSample();
+			}
 		}
 		return true;
 	}
 }
-curScene = new MainMenu();
+class SpritesSample
+{
+	function __construct()
+	{
+		this.
+		{
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			layer = ouzel.createLayer(),
+			camera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+		};
+		
+		this.layer.addChild( this.camera );
+		this.scene.addLayer( this.layer );
+		
+		// character
+		this.
+		{
+			characterSprite = ouzel.createSprite(),
+			character = ouzel.createNode().{ position = vec2( -300, 0 ) },
+		};
+		this.characterSprite.initFromFile( "run.json" );
+		this.characterSprite.play( true );
+		this.character.addComponent( this.characterSprite );
+		this.layer.addChild( this.character );
+		// TODO
+		
+		// fire
+		this.
+		{
+			fireSprite = ouzel.createSprite().{ offset = vec2( 0, 20 ) },
+			fireNode = ouzel.createNode().{ position = vec2( -100, -140 ) },
+		};
+		this.fireSprite.initFromFile( "fire.json" );
+		this.fireSprite.play( true );
+		this.fireNode.addComponent( this.fireSprite );
+		this.layer.addChild( this.fireNode );
+		
+		// triangle
+		this.
+		{
+			triangleSprite = ouzel.createSprite(),
+			triangleNode = ouzel.createNode().{ position = vec2( 100, -140 ) },
+		};
+		this.triangleSprite.initFromFile( "triangle.json" );
+		this.triangleNode.addComponent( this.triangleSprite );
+		this.layer.addChild( this.triangleNode );
+		
+		// GUI
+		this.
+		{
+			guiCamera = ouzel.createCamera(),
+			guiLayer = ouzel.createLayer(),
+			menu = ouzel.createMenu(),
+			
+			hideButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Show/hide", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, 200 ),
+			},
+			wireframeButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Wireframe", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, 160 ),
+			},
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+		};
+		
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		this.guiLayer.addChild( this.menu );
+		this.menu.addWidget( this.hideButton );
+		this.menu.addWidget( this.wireframeButton );
+		this.menu.addWidget( this.backButton );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+	function onGamepadEvent( type, e )
+	{
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE )
+		{
+			if( e.node === this.backButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+			else if( e.node === this.hideButton )
+			{
+				this.character.hidden = !this.character.hidden;
+			}
+			else if( e.node === this.wireframeButton )
+			{
+				this.camera.wireframe = !this.camera.wireframe;
+			}
+		}
+		return true;
+	}
+	function onKeyboardEvent( type, e )
+	{
+		if( type == ouzel.EventType.KEY_PRESS )
+		{
+			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
+	}
+}
+
+global curScene = new MainMenu();

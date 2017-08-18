@@ -11,6 +11,9 @@ string DEVELOPER_NAME = "org.sgscript";
 unordered_map< void*, sgsObjectBase* > g_PtrToSgsObj;
 
 
+sgs_ObjInterface g_sgsobj_empty_handle[1] = {{ "empty_handle", NULL }};
+
+
 template< class T > sgsHandle<T> CreateObj()
 {
 	sgsVariable v;
@@ -29,6 +32,19 @@ template< class T > T* GetObj( void* ptr )
 template< class T > sgsHandle<T> GetObjHandle( void* ptr )
 {
 	return sgsHandle<T>( GetObj<T>( ptr ) );
+}
+
+
+void sgsOuzelDisposable::dispose()
+{
+	if( m_sgsObject )
+	{
+		this->~sgsOuzelDisposable();
+		m_sgsObject->data = NULL;
+		m_sgsObject->iface = g_sgsobj_empty_handle;
+		C = NULL;
+		m_sgsObject = NULL;
+	}
 }
 
 
@@ -124,6 +140,45 @@ bool sgsOuzelEventHandler::handleUI( Event::Type type, const UIEvent& event )
 }
 
 
+sgsOuzelComponent::~sgsOuzelComponent()
+{
+	g_PtrToSgsObj.erase( obj );
+	delete obj;
+}
+
+sgsHandle< struct sgsOuzelNode > sgsOuzelComponent::getNode()
+{
+	return GetObjHandle<sgsOuzelNode>( obj->getNode() );
+}
+
+
+bool sgsOuzelSprite::initFromFile( const string& filename, bool mipmaps /* = true */,
+	uint32_t spritesX /* = 1 */, uint32_t spritesY /* = 1 */,
+	const Vector2& pivot /* = Vector2(0.5f, 0.5f) */ )
+{
+	auto ssz = sgs_StackSize( C );
+	Item()->init(
+		filename,
+		ssz >= 2 ? mipmaps : true,
+		ssz >= 3 ? spritesX : 1,
+		ssz >= 4 ? spritesY : 1,
+		ssz >= 5 ? pivot : Vector2(0.5f,0.5f)
+	);
+}
+
+void sgsOuzelSprite::play( bool repeat /* = true */, float newFrameInterval /* = 0.1f */ )
+{
+	auto ssz = sgs_StackSize( C );
+	Item()->play( ssz >= 1 ? repeat : true, ssz >= 2 ? newFrameInterval : 0.1f );
+}
+
+void sgsOuzelSprite::stop( bool resetAnimation /* = true */ )
+{
+	auto ssz = sgs_StackSize( C );
+	Item()->stop( ssz >= 1 ? resetAnimation : true );
+}
+
+
 sgsOuzelNodeContainer::~sgsOuzelNodeContainer()
 {
 	g_PtrToSgsObj.erase( obj );
@@ -181,6 +236,44 @@ sgsOuzelNodeContainer::Handle sgsOuzelNode::getParent()
 void sgsOuzelNode::removeFromParent()
 {
 	Item()->removeFromParent();
+}
+
+void sgsOuzelNode::addComponent( sgsOuzelComponent::Handle component )
+{
+	if( component )
+		Item()->addComponent( component->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "component not specified" );
+}
+
+void sgsOuzelNode::removeComponent( sgsOuzelComponent::Handle component )
+{
+	if( component )
+		Item()->removeComponent( component->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "component not specified" );
+}
+
+void sgsOuzelNode::removeAllComponents()
+{
+	Item()->removeAllComponents();
+}
+
+sgsVariable sgsOuzelNode::getComponents( uint32_t type /* = <none> */ )
+{
+	std::vector<Component*> storedComps;
+	const std::vector<Component*>* pcomps = &storedComps;
+	if( sgs_StackSize( C ) >= 1 )
+		storedComps = Item()->getComponents();
+	else
+		pcomps = &Item()->getComponents();
+	for( Component* comp : *pcomps )
+	{
+		sgs_PushVar( C, GetObjHandle<sgsOuzelComponent>( comp ) );
+	}
+	sgsVariable var;
+	var.create_array( C, pcomps->size() );
+	return var;
 }
 
 
@@ -292,6 +385,14 @@ sgsOuzelCamera::Handle sgsOuzel::createCamera()
 {
 	auto h = CreateObj<sgsOuzelCamera>();
 	h->obj = new Camera;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelSprite::Handle sgsOuzel::createSprite()
+{
+	auto h = CreateObj<sgsOuzelSprite>();
+	h->obj = new Sprite;
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
 }

@@ -12,6 +12,7 @@ using namespace std;
 using namespace ouzel;
 using namespace input;
 using namespace scene;
+using namespace graphics;
 using namespace gui;
 
 
@@ -40,6 +41,12 @@ template<> struct sgs_GetVar<Color> { Color operator () ( SGS_CTX, sgs_StkIdx it
 	float vtmp[4] = {0.0f}; sgs_ParseColor( C, item, vtmp, 0 ); return Color( Vector4( vtmp[0], vtmp[1], vtmp[2], vtmp[3] ) ); }};
 template<> inline sgsString sgs_DumpData<Color>( SGS_CTX, const Color& var, int depth ){ char bfr[ 192 ] = {0};
 	snprintf( bfr, 191, "Color(%u;%u;%u;%u)", var.r, var.g, var.b, var.a ); return sgsString( C, bfr ); }
+
+template<> inline void sgs_PushVar( SGS_CTX, const Rectangle& v ){ sgs_CreateAABB2( C, nullptr, v.position.x, v.position.y, v.position.x + v.size.width, v.position.y + v.size.height ); }
+template<> struct sgs_GetVar<Rectangle> { Rectangle operator () ( SGS_CTX, sgs_StkIdx item ){
+	float vtmp[4] = {0.0f}; sgs_ParseAABB2( C, item, vtmp ); return Rectangle( vtmp[0], vtmp[1], vtmp[2] - vtmp[0], vtmp[3] - vtmp[1] ); }};
+template<> inline sgsString sgs_DumpData<Rectangle>( SGS_CTX, const Rectangle& var, int depth ){ char bfr[ 192 ] = {0};
+	snprintf( bfr, 191, "Rectangle(pos=%f;%f size=%f;%f)", var.position.x, var.position.y, var.size.width, var.size.height ); return sgsString( C, bfr ); }
 
 
 // CORE
@@ -215,6 +222,9 @@ struct sgsOuzelSprite : sgsOuzelComponent
 	SGS_METHOD bool initFromFile( const string& filename, bool mipmaps /* = true */,
 		uint32_t spritesX /* = 1 */, uint32_t spritesY /* = 1 */,
 		const Vector2& pivot /* = Vector2(0.5f, 0.5f) */ );
+	SGS_METHOD bool initFromTexture( sgsHandle< struct sgsOuzelTexture > newTexture,
+		uint32_t spritesX /* = 1 */, uint32_t spritesY /* = 1 */,
+		const Vector2& pivot /* = Vector2(0.5f, 0.5f) */ );
 	
 	SGS_PROPFN( READ Item()->getSize ) SGS_ALIAS( Size2 size );
 	SGS_PROPFN( READ Item()->getOffset WRITE Item()->setOffset ) SGS_ALIAS( Vector2 offset );
@@ -353,10 +363,21 @@ struct sgsOuzelCamera : sgsOuzelNode
 	SGS_PROPFN( READ Item()->getNearPlane WRITE Item()->setNearPlane ) SGS_ALIAS( float nearPlane );
 	SGS_PROPFN( READ Item()->getFarPlane WRITE Item()->setFarPlane ) SGS_ALIAS( float farPlane );
 	
+	SGS_PROPFN( READ Item()->getViewport WRITE Item()->setViewport ) SGS_ALIAS( Rectangle viewport );
+	SGS_PROPFN( READ Item()->getRenderViewport ) SGS_ALIAS( Rectangle renderViewport );
+	
 	int getScaleMode(){ return int(Item()->getScaleMode()); }
 	void setScaleMode( int scaleMode ){ Item()->setScaleMode( Camera::ScaleMode(scaleMode) ); }
 	SGS_PROPFN( READ getScaleMode WRITE setScaleMode ) SGS_ALIAS( int scaleMode );
 	SGS_PROPFN( READ Item()->getTargetContentSize WRITE Item()->setTargetContentSize ) SGS_ALIAS( Size2 targetContentSize );
+	
+	SGS_PROPFN( READ Item()->getContentSize ) SGS_ALIAS( Size2 contentSize );
+	SGS_PROPFN( READ Item()->getContentScale ) SGS_ALIAS( Vector2 contentScale );
+	SGS_PROPFN( READ Item()->getContentPosition ) SGS_ALIAS( Vector2 contentPosition );
+	
+	sgsHandle< struct sgsOuzelTexture > getRenderTarget();
+	void setRenderTarget( sgsHandle< struct sgsOuzelTexture > rt );
+	SGS_PROPFN( READ getRenderTarget WRITE setRenderTarget ) SGS_ALIAS( sgsHandle< struct sgsOuzelTexture > renderTarget );
 	
 	SGS_PROPFN( READ Item()->getDepthWrite WRITE Item()->setDepthWrite ) SGS_ALIAS( bool depthWrite );
 	SGS_PROPFN( READ Item()->getDepthTest WRITE Item()->setDepthTest ) SGS_ALIAS( bool depthTest );
@@ -449,6 +470,74 @@ struct sgsOuzelCheckBox : sgsOuzelWidget
 
 
 // RENDERING
+
+extern const char* PixelFormatNames[];
+extern const int PixelFormatCount;
+
+template<> inline void sgs_PushVar( SGS_CTX, const PixelFormat& v ){ sgs_PushInt( C, sgs_Int(v) ); }
+template<> struct sgs_GetVar<PixelFormat> { PixelFormat operator () ( SGS_CTX, sgs_StkIdx item )
+{
+	if( sgs_ItemType( C, item ) == SGS_VT_INT )
+		return PixelFormat( sgs_GetInt( C, item ) );
+	if( sgs_ItemType( C, item ) == SGS_VT_STRING )
+	{
+		const char* str = sgs_GetStringPtr( C, item );
+		const char** pfn = PixelFormatNames;
+		while( *pfn )
+		{
+			if( strcmp( str, *pfn ) == 0 )
+				return PixelFormat( int( pfn - PixelFormatNames ) );
+			pfn++;
+		}
+	}
+	return PixelFormat::DEFAULT;
+}};
+template<> inline sgsString sgs_DumpData<PixelFormat>( SGS_CTX, const PixelFormat& var, int depth )
+{
+	int i = int( var );
+	char bfr[ 128 ] = {0};
+	snprintf( bfr, 127, "PixelFormat(%s)", i >= 0 && i < PixelFormatCount ? PixelFormatNames[ i ] : "invalid" );
+	return sgsString( C, bfr );
+}
+
+struct sgsOuzelTexture : sgsObjectBase
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelTexture > Handle;
+	
+	std::shared_ptr<Texture> texture;
+	Texture* Item(){ return texture.get(); }
+	
+	~sgsOuzelTexture();
+	SGS_METHOD bool initWithSize( const Size2& newSize,
+		uint32_t newFlags /* = 0 */,
+		uint32_t newMipmaps /* = 0 */,
+		uint32_t newSampleCount /* = 1 */,
+		PixelFormat newPixelFormat /* = PixelFormat::RGBA8_UNORM */ );
+	SGS_METHOD bool initFromFile( const string& newFilename,
+		uint32_t newFlags /* = 0 */,
+		uint32_t newMipmaps /* = 0 */,
+		PixelFormat newPixelFormat /* = PixelFormat::RGBA8_UNORM */ );
+	
+	// TODO getResource
+	SGS_PROPFN( READ Item()->getFilename ) SGS_ALIAS( string filename );
+	SGS_PROPFN( READ Item()->getSize WRITE Item()->setSize ) SGS_ALIAS( Size2 size );
+	// TODO setData
+	SGS_PROPFN( READ Item()->getFlags ) SGS_ALIAS( uint32_t flags );
+	SGS_PROPFN( READ Item()->getMipmaps ) SGS_ALIAS( uint32_t mipmaps );
+	// TODO filter
+	// TODO addressX
+	// TODO addressY
+	SGS_PROPFN( READ Item()->getMaxAnisotropy WRITE Item()->setMaxAnisotropy ) SGS_ALIAS( uint32_t maxAnisotropy );
+	SGS_PROPFN( READ Item()->getSampleCount ) SGS_ALIAS( uint32_t sampleCount );
+//	SGS_PROPFN( READ Item()->getDepth ) SGS_ALIAS( bool depth ); // TODO linker error
+	SGS_PROPFN( READ Item()->getPixelFormat ) SGS_ALIAS( PixelFormat pixelFormat );
+	SGS_PROPFN( READ Item()->getClearColorBuffer WRITE Item()->setClearColorBuffer ) SGS_ALIAS( bool clearColorBuffer );
+	SGS_PROPFN( READ Item()->getClearDepthBuffer WRITE Item()->setClearDepthBuffer ) SGS_ALIAS( bool clearDepthBuffer );
+	SGS_PROPFN( READ Item()->getClearColor WRITE Item()->setClearColor ) SGS_ALIAS( Color clearColor );
+//	SGS_PROPFN( READ Item()->getClearDepth WRITE Item()->setClearDepth ) SGS_ALIAS( float clearDepth ); // TODO linker error
+};
 
 struct sgsOuzelRenderer : sgsObjectBase
 {
@@ -549,4 +638,6 @@ struct sgsOuzel : sgsLiteObjectBase
 		const string& pressedImage,
 		const string& disabledImage,
 		const string& tickImage );
+	
+	SGS_STATICMETHOD sgsOuzelTexture::Handle createTexture();
 };

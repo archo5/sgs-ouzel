@@ -158,12 +158,30 @@ bool sgsOuzelSprite::initFromFile( const string& filename, bool mipmaps /* = tru
 	const Vector2& pivot /* = Vector2(0.5f, 0.5f) */ )
 {
 	auto ssz = sgs_StackSize( C );
-	Item()->init(
+	return Item()->init(
 		filename,
 		ssz >= 2 ? mipmaps : true,
 		ssz >= 3 ? spritesX : 1,
 		ssz >= 4 ? spritesY : 1,
 		ssz >= 5 ? pivot : Vector2(0.5f,0.5f)
+	);
+}
+
+bool sgsOuzelSprite::initFromTexture( sgsHandle< struct sgsOuzelTexture > newTexture,
+	uint32_t spritesX /* = 1 */, uint32_t spritesY /* = 1 */,
+	const Vector2& pivot /* = Vector2(0.5f, 0.5f) */ )
+{
+	if( !newTexture )
+	{
+		sgs_Msg( C, SGS_WARNING, "texture not specified" );
+		return false;
+	}
+	auto ssz = sgs_StackSize( C );
+	return Item()->init(
+		newTexture->texture,
+		ssz >= 2 ? spritesX : 1,
+		ssz >= 3 ? spritesY : 1,
+		ssz >= 4 ? pivot : Vector2(0.5f,0.5f)
 	);
 }
 
@@ -328,6 +346,20 @@ sgsOuzelScene::Handle sgsOuzelLayer::getScene()
 }
 
 
+sgsHandle< struct sgsOuzelTexture > sgsOuzelCamera::getRenderTarget()
+{
+	return GetObjHandle<sgsOuzelTexture>( Item()->getRenderTarget().get() );
+}
+
+void sgsOuzelCamera::setRenderTarget( sgsHandle< struct sgsOuzelTexture > rt )
+{
+	if( rt )
+		Item()->setRenderTarget( rt->texture );
+	else
+		sgs_Msg( C, SGS_WARNING, "render target texture not specified" );
+}
+
+
 void sgsOuzelScene::addLayer( sgsOuzelLayer::Handle layer )
 {
 	Scene::addLayer( layer->Item() );
@@ -367,6 +399,77 @@ void sgsOuzelMenu::selectWidget( sgsOuzelWidget::Handle widget )
 		Item()->selectWidget( widget->Item() );
 	else
 		sgs_Msg( C, SGS_WARNING, "widget not specified" );
+}
+
+
+const char* PixelFormatNames[] =
+{
+	"DEFAULT",
+	"A8_UNORM",
+	"R8_UNORM",
+	"R8_SNORM",
+	"R8_UINT",
+	"R8_SINT",
+	"R16_UNORM",
+	"R16_SNORM",
+	"R16_UINT",
+	"R16_SINT",
+	"R16_FLOAT",
+	"R32_UINT",
+	"R32_SINT",
+	"R32_FLOAT",
+	"RG8_UNORM",
+	"RG8_SNORM",
+	"RG8_UINT",
+	"RG8_SINT",
+	"RGBA8_UNORM",
+	"RGBA8_SNORM",
+	"RGBA8_UINT",
+	"RGBA8_SINT",
+	"RGBA16_UNORM",
+	"RGBA16_SNORM",
+	"RGBA16_UINT",
+	"RGBA16_SINT",
+	"RGBA16_FLOAT",
+	"RGBA32_UINT",
+	"RGBA32_SINT",
+	"RGBA32_FLOAT",
+	NULL,
+};
+const int PixelFormatCount = sizeof( PixelFormatNames ) / sizeof( PixelFormatNames[0] ) - 1;
+
+sgsOuzelTexture::~sgsOuzelTexture()
+{
+	g_PtrToSgsObj.erase( Item() );
+	texture.reset();
+}
+
+bool sgsOuzelTexture::initWithSize( const Size2& newSize,
+	uint32_t newFlags /* = 0 */,
+	uint32_t newMipmaps /* = 0 */,
+	uint32_t newSampleCount /* = 1 */,
+	PixelFormat newPixelFormat /* = PixelFormat::RGBA8_UNORM */ )
+{
+	auto ssz = sgs_StackSize( C );
+	return Item()->init(
+		newSize,
+		newFlags,
+		newMipmaps,
+		newSampleCount,
+		ssz >= 5 ? newPixelFormat : PixelFormat::RGBA8_UNORM );
+}
+
+bool sgsOuzelTexture::initFromFile( const string& newFilename,
+	uint32_t newFlags /* = 0 */,
+	uint32_t newMipmaps /* = 0 */,
+	PixelFormat newPixelFormat /* = PixelFormat::RGBA8_UNORM */ )
+{
+	auto ssz = sgs_StackSize( C );
+	return Item()->init(
+		newFilename,
+		newFlags,
+		newMipmaps,
+		ssz >= 4 ? newPixelFormat : PixelFormat::RGBA8_UNORM );
 }
 
 
@@ -531,6 +634,15 @@ sgsOuzelCheckBox::Handle sgsOuzel::createCheckBox(
 		tickImage
 	);
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+
+sgsOuzelTexture::Handle sgsOuzel::createTexture()
+{
+	auto h = CreateObj<sgsOuzelTexture>();
+	h->texture.reset( new Texture );
+	g_PtrToSgsObj.insert({ h->Item(), h.get() });
 	return h;
 }
 
@@ -754,23 +866,6 @@ static sgs_RegIntConst g_MouseButtonsRIC[] =
 	RICMB( BUTTON_COUNT )
 	{ NULL, 0 },
 };
-#define RICCT( x ) { #x, sgs_Int(Camera::Type::x) },
-static sgs_RegIntConst g_CameraTypesRIC[] =
-{
-	RICCT( CUSTOM )
-	RICCT( ORTHOGRAPHIC )
-	RICCT( PERSPECTIVE )
-	{ NULL, 0 },
-};
-#define RICCSM( x ) { #x, sgs_Int(Camera::ScaleMode::x) },
-static sgs_RegIntConst g_CameraScaleModesRIC[] =
-{
-	RICCSM( NONE )
-	RICCSM( EXACT_FIT )
-	RICCSM( NO_BORDER )
-	RICCSM( SHOW_ALL )
-	{ NULL, 0 },
-};
 #define RICGB( x ) { #x, sgs_Int(GamepadButton::x) },
 static sgs_RegIntConst g_GamepadButtonsRIC[] =
 {
@@ -801,6 +896,31 @@ static sgs_RegIntConst g_GamepadButtonsRIC[] =
 	RICGB( RIGHT_THUMB_UP )
 	RICGB( RIGHT_THUMB_DOWN )
 	RICGB( BUTTON_COUNT )
+	{ NULL, 0 },
+};
+#define RICCT( x ) { #x, sgs_Int(Camera::Type::x) },
+static sgs_RegIntConst g_CameraTypesRIC[] =
+{
+	RICCT( CUSTOM )
+	RICCT( ORTHOGRAPHIC )
+	RICCT( PERSPECTIVE )
+	{ NULL, 0 },
+};
+#define RICCSM( x ) { #x, sgs_Int(Camera::ScaleMode::x) },
+static sgs_RegIntConst g_CameraScaleModesRIC[] =
+{
+	RICCSM( NONE )
+	RICCSM( EXACT_FIT )
+	RICCSM( NO_BORDER )
+	RICCSM( SHOW_ALL )
+	{ NULL, 0 },
+};
+#define RICTF( x ) { #x, Texture::x },
+static sgs_RegIntConst g_TextureFlagsRIC[] =
+{
+	RICTF( DYNAMIC )
+	RICTF( RENDER_TARGET )
+	RICTF( DEPTH_BUFFER )
 	{ NULL, 0 },
 };
 
@@ -862,6 +982,11 @@ void ouzelMain( const vector<string>& args )
 	
 	sgsVariable ouzel_fileSys = CreateObj<sgsOuzelFileSystem>();
 	ouzel.setprop( "fileSystem", ouzel_fileSys );
+	
+	sgsVariable TextureFlags;
+	TextureFlags.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, TextureFlags.var, g_TextureFlagsRIC, -1 );
+	ouzel.setprop( "TextureFlags", TextureFlags );
 	
 	sgsVariable ouzel_renderer = CreateObj<sgsOuzelRenderer>();
 	ouzel.setprop( "renderer", ouzel_renderer );

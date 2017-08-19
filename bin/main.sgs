@@ -101,11 +101,45 @@ class MainMenu
 				_G.curScene.eventHandler.dispose();
 				_G.curScene = new GUISample();
 			}
+			else if( e.node === this.renderTargetButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new RTSample();
+			}
 		}
 		return true;
 	}
 }
-class SpritesSample
+
+class Sample
+{
+	function onGamepadEvent( type, e )
+	{
+		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
+		{
+			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
+	}
+	function onKeyboardEvent( type, e )
+	{
+		if( type == ouzel.EventType.KEY_PRESS )
+		{
+			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+		}
+		return true;
+	}
+}
+
+class SpritesSample : Sample
 {
 	function __construct()
 	{
@@ -168,7 +202,11 @@ class SpritesSample
 		// GUI
 		this.
 		{
-			guiCamera = ouzel.createCamera(),
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
 			guiLayer = ouzel.createLayer(),
 			menu = ouzel.createMenu(),
 			
@@ -195,18 +233,6 @@ class SpritesSample
 		
 		ouzel.sceneManager.scene = this.scene;
 	}
-	function onGamepadEvent( type, e )
-	{
-		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
-		{
-			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
-			{
-				_G.curScene.eventHandler.dispose();
-				_G.curScene = new MainMenu();
-			}
-		}
-		return true;
-	}
 	function onUIEvent( type, e )
 	{
 		if( type == ouzel.EventType.CLICK_NODE )
@@ -227,20 +253,9 @@ class SpritesSample
 		}
 		return true;
 	}
-	function onKeyboardEvent( type, e )
-	{
-		if( type == ouzel.EventType.KEY_PRESS )
-		{
-			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
-			{
-				_G.curScene.eventHandler.dispose();
-				_G.curScene = new MainMenu();
-			}
-		}
-		return true;
-	}
 }
-class GUISample
+
+class GUISample : Sample
 {
 	function __construct()
 	{
@@ -254,7 +269,11 @@ class GUISample
 			},
 			
 			scene = ouzel.createScene(),
-			guiCamera = ouzel.createCamera(),
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
 			guiLayer = ouzel.createLayer(),
 			menu = ouzel.createMenu(),
 			
@@ -311,18 +330,6 @@ class GUISample
 		
 		ouzel.sceneManager.scene = this.scene;
 	}
-	function onGamepadEvent( type, e )
-	{
-		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
-		{
-			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
-			{
-				_G.curScene.eventHandler.dispose();
-				_G.curScene = new MainMenu();
-			}
-		}
-		return true;
-	}
 	function onUIEvent( type, e )
 	{
 		if( type == ouzel.EventType.CLICK_NODE )
@@ -343,11 +350,92 @@ class GUISample
 		}
 		return true;
 	}
-	function onKeyboardEvent( type, e )
+}
+
+class RTSample : Sample
+{
+	function __construct()
 	{
-		if( type == ouzel.EventType.KEY_PRESS )
+		this.
 		{
-			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			layer = ouzel.createLayer(),
+			camera = ouzel.createCamera(),
+			
+			renderTarget = ouzel.createTexture(),
+			rtLayer = ouzel.createLayer(),
+			rtCamera = ouzel.createCamera(),
+			camera1 = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 400, 600 ),
+				viewport = aabb2( 0, 0, 0.5, 1 ),
+			},
+			camera2 = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 400, 600 ),
+				viewport = aabb2( 0.5, 0, 1, 1 ),
+			},
+			
+			characterSprite = ouzel.createSprite(),
+			rtCharacter = ouzel.createNode(),
+			
+			rtSprite = ouzel.createSprite(),
+			rtNode = ouzel.createNode(),
+			
+			guiLayer = ouzel.createLayer(),
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			menu = ouzel.createMenu(),
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+		};
+		
+		this.scene.addLayer( this.rtLayer );
+		this.renderTarget.initWithSize( vec2(256,256), ouzel.TextureFlags.RENDER_TARGET, 0, 1 );
+		this.renderTarget.clearColor = ouzel.Color(0, 64, 0);
+		this.rtCamera.renderTarget = this.renderTarget;
+		this.rtLayer.addChild( this.rtCamera );
+		
+		this.layer.addChild( this.camera1 );
+		this.layer.addChild( this.camera2 );
+		this.scene.addLayer( this.layer );
+		
+		this.characterSprite.initFromFile( "run.json" );
+		this.characterSprite.play( true );
+		this.rtCharacter.addComponent( this.characterSprite );
+		this.rtLayer.addChild( this.rtCharacter );
+		
+		this.rtSprite.initFromTexture( this.renderTarget );
+		this.rtNode.addComponent( this.rtSprite );
+		this.layer.addChild( this.rtNode );
+		
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		
+		this.guiLayer.addChild( this.menu );
+		this.menu.addWidget( this.backButton );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE )
+		{
+			if( e.node === this.backButton )
 			{
 				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();

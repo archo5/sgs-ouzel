@@ -1,0 +1,158 @@
+
+class InputSample : Sample
+{
+	function __construct()
+	{
+		this.
+		{
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+				onMouseEvent = bind( this, this.onMouseEvent ),
+				onTouchEvent = bind( this, this.onTouchEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			layer = ouzel.createLayer(),
+			camera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			
+			flameParticleSystem = ouzel.createParticleSystem(),
+			flame = ouzel.createNode(),
+		};
+		
+		this.layer.addChild( this.camera );
+		this.scene.addLayer( this.layer );
+		
+		this.flameParticleSystem.init( "flame.json" );
+		this.flame.addComponent( this.flameParticleSystem );
+		this.flame.pickable = false;
+		this.layer.addChild( this.flame );
+		
+		// GUI
+		this.
+		{
+			cursor = ouzel.createCursor(),
+			
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			guiLayer = ouzel.createLayer(),
+			menu = ouzel.createMenu(),
+			
+			hideButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Show/hide", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, 200 ),
+			},
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+		};
+		this.cursor.init( "cursor.png", vec2(0, 63) );
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		this.guiLayer.addChild( this.menu );
+		this.menu.addWidget( this.hideButton );
+		this.menu.addWidget( this.backButton );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+	
+	function onKeyboardEvent( type, e )
+	{
+		if( type == ouzel.EventType.KEY_PRESS )
+		{
+			pos = this.camera.position;
+			flamePos = this.camera.convertWorldToNormalized( this.flame.position );
+			
+			if( e.key == ouzel.KeyboardKey.UP )
+				flamePos.y += 0.01;
+			else if( e.key == ouzel.KeyboardKey.DOWN )
+				flamePos.y -= 0.01;
+			else if( e.key == ouzel.KeyboardKey.LEFT )
+				flamePos.x -= 0.01;
+			else if( e.key == ouzel.KeyboardKey.RIGHT )
+				flamePos.x += 0.01;
+			else if( e.key == ouzel.KeyboardKey.W )
+				pos.y += 10;
+			else if( e.key == ouzel.KeyboardKey.S )
+				pos.y -= 10;
+			else if( e.key == ouzel.KeyboardKey.A )
+				pos.x -= 10;
+			else if( e.key == ouzel.KeyboardKey.D )
+				pos.x += 10;
+			else if( e.key == ouzel.KeyboardKey.R )
+				ouzel.window.size = vec2(640, 480);
+			else if( e.key == ouzel.KeyboardKey.TAB )
+				this.hideButton.enabled = !this.hideButton.enabled;
+			else if( e.key == ouzel.KeyboardKey.ESCAPE ||
+				e.key == ouzel.KeyboardKey.MENU )
+			{
+				ouzel.input.cursorVisible = true;
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new MainMenu();
+			}
+			
+			this.camera.position = pos;
+			this.flame.position = this.camera.convertNormalizedToWorld( flamePos );
+		}
+		
+		return true;
+	}
+	function onMouseEvent( type, e )
+	{
+		if( type == ouzel.EventType.MOUSE_MOVE )
+		{
+			this.flame.position = this.camera.convertNormalizedToWorld( e.position );
+		}
+		return true;
+	}
+	function onTouchEvent( type, e )
+	{
+		this.flame.position = this.camera.convertNormalizedToWorld( e.position );
+		return true;
+	}
+	function onGamepadEvent( type, e )
+	{
+		if( type == ouzel.EventType.GAMEPAD_BUTTON_CHANGE )
+		{
+			flamePos = this.camera.convertWorldToNormalized( this.flame.position );
+			
+			if( e.button == ouzel.input.GamepadButton.DPAD_UP ||
+				e.button == ouzel.input.GamepadButton.LEFT_THUMB_UP ||
+				e.button == ouzel.input.GamepadButton.RIGHT_THUMB_UP )
+				flamePos.y = e.value / 2 + 0.5;
+			if( e.button == ouzel.input.GamepadButton.DPAD_DOWN ||
+				e.button == ouzel.input.GamepadButton.LEFT_THUMB_DOWN ||
+				e.button == ouzel.input.GamepadButton.RIGHT_THUMB_DOWN )
+				flamePos.y = -e.value / 2 + 0.5;
+			if( e.button == ouzel.input.GamepadButton.DPAD_LEFT ||
+				e.button == ouzel.input.GamepadButton.LEFT_THUMB_LEFT ||
+				e.button == ouzel.input.GamepadButton.RIGHT_THUMB_LEFT )
+				flamePos.x = -e.value / 2 + 0.5;
+			if( e.button == ouzel.input.GamepadButton.DPAD_RIGHT ||
+				e.button == ouzel.input.GamepadButton.LEFT_THUMB_RIGHT ||
+				e.button == ouzel.input.GamepadButton.RIGHT_THUMB_RIGHT )
+				flamePos.x = e.value / 2 + 0.5;
+			
+			this.flame.position = this.camera.convertNormalizedToWorld( flamePos );
+		}
+		return this!Sample.onGamepadEvent( type, e );
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE && e.node === this.hideButton )
+		{
+			ouzel.input.cursorVisible = !ouzel.input.cursorVisible;
+		}
+		return this!Sample.onUIEvent( type, e );
+	}
+}

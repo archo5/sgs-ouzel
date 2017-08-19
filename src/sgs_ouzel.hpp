@@ -238,6 +238,39 @@ struct sgsOuzelSprite : sgsOuzelComponent
 	SGS_PROPFN( WRITE Item()->setCurrentFrame ) SGS_ALIAS( uint32_t currentFrame );
 };
 
+struct sgsOuzelShapeRenderer : sgsOuzelComponent
+{
+	SGS_OBJECT_INHERIT( sgsOuzelComponent );
+	
+	typedef sgsHandle< sgsOuzelShapeRenderer > Handle;
+	ShapeRenderer* Item(){ return static_cast<ShapeRenderer*>( obj ); }
+	
+	SGS_METHOD void clear(){ Item()->clear(); }
+	SGS_METHOD bool line( const Vector2& start,
+		const Vector2& finish,
+		const Color& color,
+		float thickness /* = 0.0f */ ){ return Item()->line( start, finish, color, thickness ); }
+	SGS_METHOD bool circle( const Vector2& position,
+		float radius,
+		const Color& color,
+		bool fill /* = false */,
+		uint32_t segments /* = 16 */,
+		float thickness /* = 0.0f */ );
+	SGS_METHOD bool rectangle( const Rectangle& rectangle,
+		const Color& color,
+		bool fill /* = false */,
+		float thickness /* = 0.0f */ ){ return Item()->rectangle( rectangle, color, fill, thickness ); }
+	// TODO
+	//SGS_METHOD bool polygon( const std::vector<Vector2>& edges,
+	//	const Color& color,
+	//	bool fill /* = false */,
+	//	float thickness /* = 0.0f */ ){ return Item()->polygon( edges, color, fill, thickness ); }
+	//SGS_METHOD bool curve( const std::vector<Vector2>& controlPoints,
+	//	const Color& color,
+	//	uint32_t segments /* = 16 */,
+	//	float thickness /* = 0.0f */ );
+};
+
 struct sgsOuzelAnimator : sgsOuzelComponent
 {
 	SGS_OBJECT_INHERIT( sgsOuzelComponent );
@@ -271,9 +304,55 @@ struct sgsOuzelAnimator : sgsOuzelComponent
 struct sgsOuzelMove : sgsOuzelAnimator
 {
 	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
-	
 	typedef sgsHandle< sgsOuzelMove > Handle;
-	Move* Item(){ return static_cast<Move*>( obj ); }
+};
+
+struct sgsOuzelRotate : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelRotate > Handle;
+};
+
+struct sgsOuzelScale : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelScale > Handle;
+};
+
+struct sgsOuzelShake : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelShake > Handle;
+};
+
+struct sgsOuzelFade : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelFade > Handle;
+};
+
+struct sgsOuzelEase : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelEase > Handle;
+};
+
+struct sgsOuzelRepeat : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelRepeat > Handle;
+};
+
+struct sgsOuzelParallel : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelParallel > Handle;
+};
+
+struct sgsOuzelSequence : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	typedef sgsHandle< sgsOuzelSequence > Handle;
 };
 
 struct sgsOuzelNodeContainer : sgsObjectBase
@@ -604,7 +683,17 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
 	
 	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();
+	SGS_STATICMETHOD sgsOuzelShapeRenderer::Handle createShapeRenderer();
+	SGS_STATICMETHOD sgsOuzelAnimator::Handle createAnimator( float aLength );
 	SGS_STATICMETHOD sgsOuzelMove::Handle createMove( float aLength, const Vector3& aPosition, bool aRelative /* = false */ );
+	SGS_STATICMETHOD sgsOuzelRotate::Handle createRotate( float aLength, const Vector3& aRotation, bool aRelative /* = false */ );
+	SGS_STATICMETHOD sgsOuzelScale::Handle createScale( float aLength, const Vector3& aScale, bool aRelative /* = false */ );
+	SGS_STATICMETHOD sgsOuzelShake::Handle createShake( float aLength, const Vector3& aDistance, float aTimeScale );
+	SGS_STATICMETHOD sgsOuzelFade::Handle createFade( float aLength, float aOpacity, bool aRelative /* = false */ );
+	SGS_STATICMETHOD sgsOuzelEase::Handle createEase( sgsOuzelAnimator::Handle animator, int aType, int aFunc );
+	SGS_STATICMETHOD sgsOuzelRepeat::Handle createRepeat( sgsOuzelAnimator::Handle animator, uint32_t aCount /* = 0 */ );
+	SGS_STATICMETHOD sgsOuzelParallel::Handle createParallel( sgsVariable animators );
+	SGS_STATICMETHOD sgsOuzelSequence::Handle createSequence( sgsVariable animators );
 	
 	SGS_STATICMETHOD sgsOuzelScene::Handle createScene();
 	SGS_STATICMETHOD sgsOuzelLayer::Handle createLayer();

@@ -1,0 +1,105 @@
+
+class AnimationsSample : Sample
+{
+	function __construct()
+	{
+		this.
+		{
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			layer = ouzel.createLayer(),
+			camera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			
+			shapeDrawable = ouzel.createShapeRenderer(),
+			drawNode = ouzel.createNode().
+			{
+				position = vec2(-300, 0),
+			},
+			shake = ouzel.createShake( 10, vec2(10, 20), 20 ),
+			
+			witchSprite = ouzel.createSprite(),
+			witch = ouzel.createNode().
+			{
+				position = vec2(200, 0),
+			},
+			witchScale = ouzel.createScale( 2, vec2(0.1), false ),
+			witchFade = ouzel.createFade( 2, 0.4 ),
+			witchRotate = ouzel.createRotate( 1, vec3(0,0,M_PI*2), false ),
+			witchRepeat = ouzel.createRepeat( this.witchRotate, 3 ),
+			witchParallel = ouzel.createParallel([ this.witchScale, this.witchFade ]),
+			witchSequence = ouzel.createSequence([ this.witchRepeat, this.witchParallel ]),
+			
+			ballSprite = ouzel.createSprite(),
+			ball = ouzel.createNode(),
+			ballDelay = ouzel.createAnimator( 1 ),
+			ballMove = ouzel.createMove( 2, vec2(0, -240), false ),
+			ballEase = ouzel.createEase( this.ballMove, ouzel.EaseType.OUT, ouzel.EaseFunc.BOUNCE ),
+			ballSequence = ouzel.createSequence([ this.ballDelay, this.ballEase ]),
+		};
+		
+		this.layer.addChild( this.camera );
+		this.scene.addLayer( this.layer );
+		
+		this.shapeDrawable.rectangle( aabb2(0, 0, 100, 100), ouzel.Color(0, 128, 128, 255), true );
+		this.shapeDrawable.rectangle( aabb2(0, 0, 100, 100), ouzel.Color.WHITE, false, 2 );
+		this.shapeDrawable.line( vec2(0, 0), vec2(50, 50), ouzel.Color.CYAN, 2 );
+		
+	//	this.shapeDrawable.curve( [vec2(50, 50), vec2(100, 50), vec2(50, 0), vec2(100, 0)], ouzel.Color.YELLOW );
+		
+		this.shapeDrawable.circle( vec2(25, 75), 20, ouzel.Color.BLUE, true );
+		this.shapeDrawable.circle( vec2(25, 75), 20, ouzel.Color.WHITE, false );
+		this.shapeDrawable.circle( vec2(75, 75), 20, ouzel.Color.BLUE, false, 16, 4.0 );
+		
+	//	this.shapeDrawable.polygon( [vec2(15, 75), vec2(25, 75), vec2(25, 55)], Color("#ff0000"), false );
+		
+		this.drawNode.addComponent( this.shapeDrawable );
+		this.drawNode.addComponent( this.shake );
+		this.shake.start();
+		this.layer.addChild( this.drawNode );
+		
+		this.witchSprite.initFromFile( "witch.png" );
+		this.witch.addComponent( this.witchSprite );
+		this.witch.addComponent( this.witchSequence );
+		this.witchSequence.start();
+		this.layer.addChild( this.witch );
+		
+		this.ballSprite.initFromFile( "ball.png" );
+		this.ball.addComponent( this.ballSprite );
+		this.ball.addComponent( this.ballSequence );
+		this.ballSequence.start();
+		this.layer.addChild( this.ball );
+		
+		// GUI
+		this.
+		{
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			guiLayer = ouzel.createLayer(),
+			menu = ouzel.createMenu(),
+			
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+		};
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		this.guiLayer.addChild( this.menu );
+		this.menu.addWidget( this.backButton );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+}

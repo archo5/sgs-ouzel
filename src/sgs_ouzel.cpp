@@ -198,6 +198,28 @@ void sgsOuzelSprite::stop( bool resetAnimation /* = true */ )
 }
 
 
+bool sgsOuzelShapeRenderer::circle( const Vector2& position,
+	float radius,
+	const Color& color,
+	bool fill /* = false */,
+	uint32_t segments /* = 16 */,
+	float thickness /* = 0.0f */ )
+{
+	auto ssz = sgs_StackSize( C );
+	return Item()->circle( position, radius, color, fill, ssz >= 5 ? segments : 16, thickness );
+}
+
+// TODO
+//bool sgsOuzelShapeRenderer::curve( const std::vector<Vector2>& controlPoints,
+//	const Color& color,
+//	uint32_t segments /* = 16 */,
+//	float thickness /* = 0.0f */ )
+//{
+//	auto ssz = sgs_StackSize( C );
+//	return Item()->curve( controlPoints, color, ssz >= 3 ? segments : 16, thickness );
+//}
+
+
 sgsHandle< struct sgsOuzelNode > sgsOuzelAnimator::getTargetNode()
 {
 	return GetObjHandle<sgsOuzelNode>( Item()->getTargetNode() );
@@ -517,10 +539,134 @@ sgsOuzelSprite::Handle sgsOuzel::createSprite()
 	return h;
 }
 
+sgsOuzelShapeRenderer::Handle sgsOuzel::createShapeRenderer()
+{
+	auto h = CreateObj<sgsOuzelShapeRenderer>();
+	h->obj = new ShapeRenderer;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelAnimator::Handle sgsOuzel::createAnimator( float aLength )
+{
+	auto h = CreateObj<sgsOuzelAnimator>();
+	h->obj = new Animator( aLength );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
 sgsOuzelMove::Handle sgsOuzel::createMove( float aLength, const Vector3& aPosition, bool aRelative )
 {
 	auto h = CreateObj<sgsOuzelMove>();
 	h->obj = new Move( aLength, aPosition, aRelative );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelRotate::Handle sgsOuzel::createRotate( float aLength, const Vector3& aRotation, bool aRelative /* = false */ )
+{
+	auto h = CreateObj<sgsOuzelRotate>();
+	h->obj = new Rotate( aLength, aRotation, aRelative );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelScale::Handle sgsOuzel::createScale( float aLength, const Vector3& aScale, bool aRelative /* = false */ )
+{
+	auto h = CreateObj<sgsOuzelScale>();
+	h->obj = new Scale( aLength, aScale, aRelative );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelShake::Handle sgsOuzel::createShake( float aLength, const Vector3& aDistance, float aTimeScale )
+{
+	auto h = CreateObj<sgsOuzelShake>();
+	h->obj = new Shake( aLength, aDistance, aTimeScale );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelFade::Handle sgsOuzel::createFade( float aLength, float aOpacity, bool aRelative /* = false */ )
+{
+	auto h = CreateObj<sgsOuzelFade>();
+	h->obj = new Fade( aLength, aOpacity, aRelative );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelEase::Handle sgsOuzel::createEase( sgsOuzelAnimator::Handle animator, int aType, int aFunc )
+{
+	if( !animator )
+	{
+		sgs_Msg( g_sgsCtx, SGS_WARNING, "animator not specified" );
+		return {};
+	}
+	
+	auto h = CreateObj<sgsOuzelEase>();
+	h->obj = new Ease( animator->Item(), Ease::Type(aType), Ease::Func(aFunc) );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelRepeat::Handle sgsOuzel::createRepeat( sgsOuzelAnimator::Handle animator, uint32_t aCount /* = 0 */ )
+{
+	if( !animator )
+	{
+		sgs_Msg( g_sgsCtx, SGS_WARNING, "animator not specified" );
+		return {};
+	}
+	
+	auto h = CreateObj<sgsOuzelRepeat>();
+	h->obj = new Repeat( animator->Item(), aCount );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelParallel::Handle sgsOuzel::createParallel( sgsVariable animators )
+{
+	std::vector<Animator*> anims;
+	sgsVarIterator it( animators );
+	int i = 0;
+	while( it.Advance() )
+	{
+		auto ah = it.GetValue().get_handle<sgsOuzelAnimator>();
+		if( ah )
+			anims.push_back( ah->Item() );
+		else
+		{
+			sgs_Msg( g_sgsCtx, SGS_WARNING, "variable %d in iterator is not an animator", i );
+			return {};
+		}
+		i++;
+	}
+	
+	auto h = CreateObj<sgsOuzelParallel>();
+	h->obj = new Parallel( anims );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelSequence::Handle sgsOuzel::createSequence( sgsVariable animators )
+{
+	std::vector<Animator*> anims;
+	sgsVarIterator it( animators );
+	int i = 0;
+	while( it.Advance() )
+	{
+		auto ah = it.GetValue().get_handle<sgsOuzelAnimator>();
+		if( ah )
+			anims.push_back( ah->Item() );
+		else
+		{
+			sgs_Msg( g_sgsCtx, SGS_WARNING, "variable %d in iterator is not an animator", i );
+			return {};
+		}
+		i++;
+	}
+	
+	auto h = CreateObj<sgsOuzelSequence>();
+	h->obj = new Sequence( anims );
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
 }
@@ -915,6 +1061,29 @@ static sgs_RegIntConst g_CameraScaleModesRIC[] =
 	RICCSM( SHOW_ALL )
 	{ NULL, 0 },
 };
+#define RICEaT( x ) { #x, sgs_Int(Ease::Type::x) },
+static sgs_RegIntConst g_EaseTypesRIC[] =
+{
+	RICEaT( IN )
+	RICEaT( OUT )
+	RICEaT( INOUT )
+	{ NULL, 0 },
+};
+#define RICEaF( x ) { #x, sgs_Int(Ease::Func::x) },
+static sgs_RegIntConst g_EaseFuncsRIC[] =
+{
+	RICEaF( SINE )
+	RICEaF( QUAD )
+	RICEaF( CUBIC )
+	RICEaF( QUART )
+	RICEaF( QUINT )
+	RICEaF( EXPO )
+	RICEaF( CIRC )
+	RICEaF( BACK )
+	RICEaF( ELASTIC )
+	RICEaF( BOUNCE )
+	{ NULL, 0 },
+};
 #define RICTF( x ) { #x, Texture::x },
 static sgs_RegIntConst g_TextureFlagsRIC[] =
 {
@@ -931,6 +1100,12 @@ void ouzelMain( const vector<string>& args )
 	g_sgsCtx = sgs_CreateEngine();
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Initializing bindings";
+	sgs_LoadLib_Fmt( g_sgsCtx );
+	sgs_LoadLib_IO( g_sgsCtx );
+	sgs_LoadLib_Math( g_sgsCtx );
+	sgs_LoadLib_OS( g_sgsCtx );
+	sgs_LoadLib_RE( g_sgsCtx );
+	sgs_LoadLib_String( g_sgsCtx );
 	sgs_xgm_module_entry_point( g_sgsCtx );
 	
 	sgsVariable ouzel = sgs_GetClassInterface< sgsOuzel >( g_sgsCtx );
@@ -976,6 +1151,16 @@ void ouzelMain( const vector<string>& args )
 	CameraScaleMode.create_dict( g_sgsCtx );
 	sgs_StoreIntConsts( g_sgsCtx, CameraScaleMode.var, g_CameraScaleModesRIC, -1 );
 	ouzel.setprop( "CameraScaleMode", CameraScaleMode );
+	
+	sgsVariable EaseType;
+	EaseType.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, EaseType.var, g_EaseTypesRIC, -1 );
+	ouzel.setprop( "EaseType", EaseType );
+	
+	sgsVariable EaseFunc;
+	EaseFunc.create_dict( g_sgsCtx );
+	sgs_StoreIntConsts( g_sgsCtx, EaseFunc.var, g_EaseFuncsRIC, -1 );
+	ouzel.setprop( "EaseFunc", EaseFunc );
 	
 	sgsVariable ouzel_window = CreateObj<sgsOuzelWindow>();
 	ouzel.setprop( "window", ouzel_window );

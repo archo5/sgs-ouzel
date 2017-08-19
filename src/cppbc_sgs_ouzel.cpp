@@ -1095,6 +1095,344 @@ static sgs_ObjInterface sgsOuzelEventHandler__sgs_interface =
 _sgsInterface sgsOuzelEventHandler::_sgs_interface(sgsOuzelEventHandler__sgs_interface, sgsOuzelEventHandler__sgs_ifn);
 
 
+static int _sgs_method__sgsOuzelCursor__initFromFile( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelCursor::_sgs_interface, (void**) &base, "sgsOuzelCursor.initFromFile" ) ) return 0;
+	sgsOuzelCursor* data = static_cast<sgsOuzelCursor*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->init( sgs_GetVar<std::string>()(callerCtx,0), sgs_GetVar<Vector2>()(callerCtx,1) )); return 1;
+}
+
+int sgsOuzelCursor::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelCursor::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelCursor::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelCursor::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelCursor::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelCursor::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelCursor::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelCursor::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelCursor::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelCursor::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelCursor::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelCursor::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelCursor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelCursor::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelCursor::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelCursor::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelCursor();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelCursor::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelCursor::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelCursor::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelCursor::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelCursor" );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelCursor::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 78 ];
+	sprintf( bfr, "sgsOuzelCursor (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelCursor* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		sgs_StringConcat( callerCtx, 0 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelCursor( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelCursor, (  ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelCursor[] =
+{ { "sgsUnserialize_sgsOuzelCursor", sgsUnserialize_sgsOuzelCursor } };
+
+static sgs_RegFuncConst sgsOuzelCursor__sgs_funcs[] =
+{
+	{ "initFromFile", _sgs_method__sgsOuzelCursor__initFromFile },
+	{ NULL, NULL },
+};
+
+static int sgsOuzelCursor__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelCursor__sgs_funcs,
+		-1, "sgsOuzelCursor." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelCursor, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelCursor", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelCursor__sgs_interface =
+{
+	"sgsOuzelCursor",
+	sgsOuzelCursor::_sgslocal_destruct, sgsOuzelCursor::_sgslocal_gcmark, sgsOuzelCursor::_sgslocal_getindex, sgsOuzelCursor::_sgslocal_setindex, NULL, sgsOuzelCursor::_sgslocal_serialize, sgsOuzelCursor::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+};
+_sgsInterface sgsOuzelCursor::_sgs_interface(sgsOuzelCursor__sgs_interface, sgsOuzelCursor__sgs_ifn);
+
+
+static int _sgs_method__sgsOuzelInput__setCursor( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.setCursor" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->setCursor( sgs_GetVar<sgsOuzelCursor::Handle>()(callerCtx,0) ); return 0;
+}
+
+static int _sgs_method__sgsOuzelInput__startGamepadDiscovery( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.startGamepadDiscovery" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->startGamepadDiscovery(  ); return 0;
+}
+
+static int _sgs_method__sgsOuzelInput__stopGamepadDiscovery( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.stopGamepadDiscovery" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->stopGamepadDiscovery(  ); return 0;
+}
+
+static int _sgs_method__sgsOuzelInput__isKeyboardKeyDown( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.isKeyboardKeyDown" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->isKeyboardKeyDown( sgs_GetVar<int>()(callerCtx,0) )); return 1;
+}
+
+static int _sgs_method__sgsOuzelInput__isMouseButtonDown( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.isMouseButtonDown" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->isMouseButtonDown( sgs_GetVar<int>()(callerCtx,0) )); return 1;
+}
+
+static int _sgs_method__sgsOuzelInput__showVirtualKeyboard( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.showVirtualKeyboard" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->showVirtualKeyboard(  )); return 1;
+}
+
+static int _sgs_method__sgsOuzelInput__hideVirtualKeyboard( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelInput::_sgs_interface, (void**) &base, "sgsOuzelInput.hideVirtualKeyboard" ) ) return 0;
+	sgsOuzelInput* data = static_cast<sgsOuzelInput*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->hideVirtualKeyboard(  )); return 1;
+}
+
+int sgsOuzelInput::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelInput::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelInput::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelInput::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelInput::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelInput::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelInput::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelInput::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelInput::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelInput::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelInput::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelInput::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelInput*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelInput::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelInput::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelInput::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelInput();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelInput::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelInput::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "cursorVisible" ) ){ sgs_PushVar( callerCtx, sharedEngine->getInput()->isCursorVisible() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "cursorLocked" ) ){ sgs_PushVar( callerCtx, sharedEngine->getInput()->isCursorLocked() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "cursorPosition" ) ){ sgs_PushVar( callerCtx, sharedEngine->getInput()->getCursorPosition() ); return SGS_SUCCESS; }
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelInput::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "cursorVisible" ) ){ sharedEngine->getInput()->setCursorVisible( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
+		if( !strcmp( str, "cursorLocked" ) ){ sharedEngine->getInput()->setCursorLocked( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
+		if( !strcmp( str, "cursorPosition" ) ){ sharedEngine->getInput()->setCursorPosition( sgs_GetVar<Vector2>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
+	}
+	return SGS_ENOTFND;
+}
+
+int sgsOuzelInput::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelInput" );
+	}
+	sgs_InitStringLit( callerCtx, &key, "cursorVisible" );
+	sgs_PushVar( callerCtx, sharedEngine->getInput()->isCursorVisible() );
+	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
+	sgs_Pop( callerCtx, 1 );
+	sgs_Release( callerCtx, &key );
+	sgs_InitStringLit( callerCtx, &key, "cursorLocked" );
+	sgs_PushVar( callerCtx, sharedEngine->getInput()->isCursorLocked() );
+	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
+	sgs_Pop( callerCtx, 1 );
+	sgs_Release( callerCtx, &key );
+	sgs_InitStringLit( callerCtx, &key, "cursorPosition" );
+	sgs_PushVar( callerCtx, sharedEngine->getInput()->getCursorPosition() );
+	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
+	sgs_Pop( callerCtx, 1 );
+	sgs_Release( callerCtx, &key );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelInput::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 77 ];
+	sprintf( bfr, "sgsOuzelInput (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelInput* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		{ sgs_PushStringLit( callerCtx, "\ncursorVisible = " ); sgs_DumpData( callerCtx, sharedEngine->getInput()->isCursorVisible(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ncursorLocked = " ); sgs_DumpData( callerCtx, sharedEngine->getInput()->isCursorLocked(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ncursorPosition = " ); sgs_DumpData( callerCtx, sharedEngine->getInput()->getCursorPosition(), depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 6 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelInput( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelInput, (  ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelInput[] =
+{ { "sgsUnserialize_sgsOuzelInput", sgsUnserialize_sgsOuzelInput } };
+
+static sgs_RegFuncConst sgsOuzelInput__sgs_funcs[] =
+{
+	{ "setCursor", _sgs_method__sgsOuzelInput__setCursor },
+	{ "startGamepadDiscovery", _sgs_method__sgsOuzelInput__startGamepadDiscovery },
+	{ "stopGamepadDiscovery", _sgs_method__sgsOuzelInput__stopGamepadDiscovery },
+	{ "isKeyboardKeyDown", _sgs_method__sgsOuzelInput__isKeyboardKeyDown },
+	{ "isMouseButtonDown", _sgs_method__sgsOuzelInput__isMouseButtonDown },
+	{ "showVirtualKeyboard", _sgs_method__sgsOuzelInput__showVirtualKeyboard },
+	{ "hideVirtualKeyboard", _sgs_method__sgsOuzelInput__hideVirtualKeyboard },
+	{ NULL, NULL },
+};
+
+static int sgsOuzelInput__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelInput__sgs_funcs,
+		-1, "sgsOuzelInput." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelInput, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelInput", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelInput__sgs_interface =
+{
+	"sgsOuzelInput",
+	sgsOuzelInput::_sgslocal_destruct, sgsOuzelInput::_sgslocal_gcmark, sgsOuzelInput::_sgslocal_getindex, sgsOuzelInput::_sgslocal_setindex, NULL, sgsOuzelInput::_sgslocal_serialize, sgsOuzelInput::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+};
+_sgsInterface sgsOuzelInput::_sgs_interface(sgsOuzelInput__sgs_interface, sgsOuzelInput__sgs_ifn);
+
+
 static int _sgs_method__sgsOuzelComponent__pointOn( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
@@ -1598,6 +1936,174 @@ static sgs_ObjInterface sgsOuzelShapeRenderer__sgs_interface =
 	sgsOuzelComponent::_sgs_interface,
 };
 _sgsInterface sgsOuzelShapeRenderer::_sgs_interface(sgsOuzelShapeRenderer__sgs_interface, sgsOuzelShapeRenderer__sgs_ifn);
+
+
+static int _sgs_method__sgsOuzelParticleSystem__initFromFile( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelParticleSystem::_sgs_interface, (void**) &base, "sgsOuzelParticleSystem.initFromFile" ) ) return 0;
+	sgsOuzelParticleSystem* data = static_cast<sgsOuzelParticleSystem*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->initFromFile( sgs_GetVar<string>()(callerCtx,0) )); return 1;
+}
+
+static int _sgs_method__sgsOuzelParticleSystem__resume( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelParticleSystem::_sgs_interface, (void**) &base, "sgsOuzelParticleSystem.resume" ) ) return 0;
+	sgsOuzelParticleSystem* data = static_cast<sgsOuzelParticleSystem*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->resume(  ); return 0;
+}
+
+static int _sgs_method__sgsOuzelParticleSystem__stop( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelParticleSystem::_sgs_interface, (void**) &base, "sgsOuzelParticleSystem.stop" ) ) return 0;
+	sgsOuzelParticleSystem* data = static_cast<sgsOuzelParticleSystem*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->stop(  ); return 0;
+}
+
+static int _sgs_method__sgsOuzelParticleSystem__reset( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelParticleSystem::_sgs_interface, (void**) &base, "sgsOuzelParticleSystem.reset" ) ) return 0;
+	sgsOuzelParticleSystem* data = static_cast<sgsOuzelParticleSystem*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->reset(  ); return 0;
+}
+
+int sgsOuzelParticleSystem::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelParticleSystem::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelParticleSystem::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelParticleSystem*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelParticleSystem::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelParticleSystem::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelParticleSystem::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelParticleSystem();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelParticleSystem::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	sgsOuzelComponent::_sgs_gcmark( callerCtx, obj );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelParticleSystem::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "running" ) ){ sgs_PushVar( callerCtx, Item()->isRunning() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "active" ) ){ sgs_PushVar( callerCtx, Item()->isActive() ); return SGS_SUCCESS; }
+	}
+	return sgsOuzelComponent::_sgs_getindex( callerCtx, obj );
+}
+
+int sgsOuzelParticleSystem::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+	}
+	return sgsOuzelComponent::_sgs_setindex( callerCtx, obj );
+}
+
+int sgsOuzelParticleSystem::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelParticleSystem" );
+	}
+	sgsOuzelComponent::_sgsimpl_serialize( C, obj );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelParticleSystem::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 86 ];
+	sprintf( bfr, "sgsOuzelParticleSystem (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelParticleSystem* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		sgs_PushStringLit( callerCtx, "\n[inherited] " );
+		sgsOuzelComponent::_sgs_dump( callerCtx, obj, depth );
+		{ sgs_PushStringLit( callerCtx, "\nrunning = " ); sgs_DumpData( callerCtx, Item()->isRunning(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nactive = " ); sgs_DumpData( callerCtx, Item()->isActive(), depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 6 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelParticleSystem( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelParticleSystem, (  ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelParticleSystem[] =
+{ { "sgsUnserialize_sgsOuzelParticleSystem", sgsUnserialize_sgsOuzelParticleSystem } };
+
+static sgs_RegFuncConst sgsOuzelParticleSystem__sgs_funcs[] =
+{
+	{ "initFromFile", _sgs_method__sgsOuzelParticleSystem__initFromFile },
+	{ "resume", _sgs_method__sgsOuzelParticleSystem__resume },
+	{ "stop", _sgs_method__sgsOuzelParticleSystem__stop },
+	{ "reset", _sgs_method__sgsOuzelParticleSystem__reset },
+	{ NULL, NULL },
+};
+
+static int sgsOuzelParticleSystem__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelParticleSystem__sgs_funcs,
+		-1, "sgsOuzelParticleSystem." );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelComponent >( C );
+	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelParticleSystem, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelParticleSystem", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelParticleSystem__sgs_interface =
+{
+	"sgsOuzelParticleSystem",
+	sgsOuzelParticleSystem::_sgslocal_destruct, sgsOuzelParticleSystem::_sgslocal_gcmark, sgsOuzelParticleSystem::_sgslocal_getindex, sgsOuzelParticleSystem::_sgslocal_setindex, NULL, sgsOuzelParticleSystem::_sgslocal_serialize, sgsOuzelParticleSystem::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+	sgsOuzelComponent::_sgs_interface,
+};
+_sgsInterface sgsOuzelParticleSystem::_sgs_interface(sgsOuzelParticleSystem__sgs_interface, sgsOuzelParticleSystem__sgs_ifn);
 
 
 static int _sgs_method__sgsOuzelAnimator__update( sgs_Context* callerCtx )
@@ -3579,6 +4085,33 @@ static sgs_ObjInterface sgsOuzelLayer__sgs_interface =
 _sgsInterface sgsOuzelLayer::_sgs_interface(sgsOuzelLayer__sgs_interface, sgsOuzelLayer__sgs_ifn);
 
 
+static int _sgs_method__sgsOuzelCamera__recalculateProjection( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelCamera::_sgs_interface, (void**) &base, "sgsOuzelCamera.recalculateProjection" ) ) return 0;
+	sgsOuzelCamera* data = static_cast<sgsOuzelCamera*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	data->recalculateProjection(  ); return 0;
+}
+
+static int _sgs_method__sgsOuzelCamera__convertNormalizedToWorld( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelCamera::_sgs_interface, (void**) &base, "sgsOuzelCamera.convertNormalizedToWorld" ) ) return 0;
+	sgsOuzelCamera* data = static_cast<sgsOuzelCamera*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->convertNormalizedToWorld( sgs_GetVar<Vector2>()(callerCtx,0) )); return 1;
+}
+
+static int _sgs_method__sgsOuzelCamera__convertWorldToNormalized( sgs_Context* callerCtx )
+{
+	sgsLiteObjectBase* base;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelCamera::_sgs_interface, (void**) &base, "sgsOuzelCamera.convertWorldToNormalized" ) ) return 0;
+	sgsOuzelCamera* data = static_cast<sgsOuzelCamera*>( base );
+	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
+	sgs_PushVar(callerCtx,data->convertWorldToNormalized( sgs_GetVar<Vector3>()(callerCtx,0) )); return 1;
+}
+
 int sgsOuzelCamera::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
 int sgsOuzelCamera::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelCamera*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
 int sgsOuzelCamera::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
@@ -3773,6 +4306,9 @@ static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelCamera[] =
 
 static sgs_RegFuncConst sgsOuzelCamera__sgs_funcs[] =
 {
+	{ "recalculateProjection", _sgs_method__sgsOuzelCamera__recalculateProjection },
+	{ "convertNormalizedToWorld", _sgs_method__sgsOuzelCamera__convertNormalizedToWorld },
+	{ "convertWorldToNormalized", _sgs_method__sgsOuzelCamera__convertWorldToNormalized },
 	{ NULL, NULL },
 };
 
@@ -5441,6 +5977,12 @@ static int _sgs_method__sgsOuzel__createEventHandler( sgs_Context* callerCtx )
 	sgs_PushVar(callerCtx,sgsOuzel::createEventHandler( sgs_GetVar<int>()(callerCtx,0) )); return 1;
 }
 
+static int _sgs_method__sgsOuzel__createCursor( sgs_Context* callerCtx )
+{
+	sgs_FuncName( callerCtx, "sgsOuzel.createCursor" );
+	sgs_PushVar(callerCtx,sgsOuzel::createCursor(  )); return 1;
+}
+
 static int _sgs_method__sgsOuzel__createSprite( sgs_Context* callerCtx )
 {
 	sgs_FuncName( callerCtx, "sgsOuzel.createSprite" );
@@ -5451,6 +5993,12 @@ static int _sgs_method__sgsOuzel__createShapeRenderer( sgs_Context* callerCtx )
 {
 	sgs_FuncName( callerCtx, "sgsOuzel.createShapeRenderer" );
 	sgs_PushVar(callerCtx,sgsOuzel::createShapeRenderer(  )); return 1;
+}
+
+static int _sgs_method__sgsOuzel__createParticleSystem( sgs_Context* callerCtx )
+{
+	sgs_FuncName( callerCtx, "sgsOuzel.createParticleSystem" );
+	sgs_PushVar(callerCtx,sgsOuzel::createParticleSystem( sgs_GetVar<string>()(callerCtx,0) )); return 1;
 }
 
 static int _sgs_method__sgsOuzel__createAnimator( sgs_Context* callerCtx )
@@ -5663,8 +6211,10 @@ static sgs_RegFuncConst sgsOuzel__sgs_funcs[] =
 	{ "setLanguage", _sgs_method__sgsOuzel__setLanguage },
 	{ "getString", _sgs_method__sgsOuzel__getString },
 	{ "createEventHandler", _sgs_method__sgsOuzel__createEventHandler },
+	{ "createCursor", _sgs_method__sgsOuzel__createCursor },
 	{ "createSprite", _sgs_method__sgsOuzel__createSprite },
 	{ "createShapeRenderer", _sgs_method__sgsOuzel__createShapeRenderer },
+	{ "createParticleSystem", _sgs_method__sgsOuzel__createParticleSystem },
 	{ "createAnimator", _sgs_method__sgsOuzel__createAnimator },
 	{ "createMove", _sgs_method__sgsOuzel__createMove },
 	{ "createRotate", _sgs_method__sgsOuzel__createRotate },

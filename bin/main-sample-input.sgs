@@ -22,14 +22,13 @@ class InputSample : Sample
 				targetContentSize = vec2( 800, 600 ),
 			},
 			
-			flameParticleSystem = ouzel.createParticleSystem(),
+			flameParticleSystem = ouzel.createParticleSystem( "flame.json" ),
 			flame = ouzel.createNode(),
 		};
 		
 		this.layer.addChild( this.camera );
 		this.scene.addLayer( this.layer );
 		
-		this.flameParticleSystem.init( "flame.json" );
 		this.flame.addComponent( this.flameParticleSystem );
 		this.flame.pickable = false;
 		this.layer.addChild( this.flame );
@@ -56,7 +55,8 @@ class InputSample : Sample
 				position = vec2( -200, -200 ),
 			},
 		};
-		this.cursor.init( "cursor.png", vec2(0, 63) );
+		this.cursor.initFromFile( "cursor.png", vec2(0, 63) );
+		ouzel.Input.setCursor( this.cursor );
 		this.guiLayer.addChild( this.guiCamera );
 		this.scene.addLayer( this.guiLayer );
 		this.guiLayer.addChild( this.menu );
@@ -73,28 +73,28 @@ class InputSample : Sample
 			pos = this.camera.position;
 			flamePos = this.camera.convertWorldToNormalized( this.flame.position );
 			
-			if( e.key == ouzel.KeyboardKey.UP )
+			if( e.key == ouzel.input.KeyboardKey.UP )
 				flamePos.y += 0.01;
-			else if( e.key == ouzel.KeyboardKey.DOWN )
+			else if( e.key == ouzel.input.KeyboardKey.DOWN )
 				flamePos.y -= 0.01;
-			else if( e.key == ouzel.KeyboardKey.LEFT )
+			else if( e.key == ouzel.input.KeyboardKey.LEFT )
 				flamePos.x -= 0.01;
-			else if( e.key == ouzel.KeyboardKey.RIGHT )
+			else if( e.key == ouzel.input.KeyboardKey.RIGHT )
 				flamePos.x += 0.01;
-			else if( e.key == ouzel.KeyboardKey.W )
+			else if( e.key == ouzel.input.KeyboardKey.W )
 				pos.y += 10;
-			else if( e.key == ouzel.KeyboardKey.S )
+			else if( e.key == ouzel.input.KeyboardKey.S )
 				pos.y -= 10;
-			else if( e.key == ouzel.KeyboardKey.A )
+			else if( e.key == ouzel.input.KeyboardKey.A )
 				pos.x -= 10;
-			else if( e.key == ouzel.KeyboardKey.D )
+			else if( e.key == ouzel.input.KeyboardKey.D )
 				pos.x += 10;
-			else if( e.key == ouzel.KeyboardKey.R )
+			else if( e.key == ouzel.input.KeyboardKey.R )
 				ouzel.window.size = vec2(640, 480);
-			else if( e.key == ouzel.KeyboardKey.TAB )
+			else if( e.key == ouzel.input.KeyboardKey.TAB )
 				this.hideButton.enabled = !this.hideButton.enabled;
-			else if( e.key == ouzel.KeyboardKey.ESCAPE ||
-				e.key == ouzel.KeyboardKey.MENU )
+			else if( e.key == ouzel.input.KeyboardKey.ESCAPE ||
+				e.key == ouzel.input.KeyboardKey.MENU )
 			{
 				ouzel.input.cursorVisible = true;
 				_G.curScene.eventHandler.dispose();
@@ -149,9 +149,16 @@ class InputSample : Sample
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE && e.node === this.hideButton )
+		if( type == ouzel.EventType.CLICK_NODE )
 		{
-			ouzel.input.cursorVisible = !ouzel.input.cursorVisible;
+			if( e.node === this.backButton )
+			{
+				ouzel.Input.cursorVisible = true;
+			}
+			if( e.node === this.hideButton )
+			{
+				ouzel.Input.cursorVisible = !ouzel.Input.cursorVisible;
+			}
 		}
 		return this!Sample.onUIEvent( type, e );
 	}

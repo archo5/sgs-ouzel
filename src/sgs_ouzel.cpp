@@ -530,6 +530,11 @@ sgsOuzelEventHandler::Handle sgsOuzel::createEventHandler( int priority )
 	return out.get_handle<sgsOuzelEventHandler>();
 }
 
+sgsOuzelCursor::Handle sgsOuzel::createCursor()
+{
+	return CreateObj<sgsOuzelCursor>();
+}
+
 
 sgsOuzelSprite::Handle sgsOuzel::createSprite()
 {
@@ -543,6 +548,16 @@ sgsOuzelShapeRenderer::Handle sgsOuzel::createShapeRenderer()
 {
 	auto h = CreateObj<sgsOuzelShapeRenderer>();
 	h->obj = new ShapeRenderer;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelParticleSystem::Handle sgsOuzel::createParticleSystem( const string& filename )
+{
+	auto h = CreateObj<sgsOuzelParticleSystem>();
+	h->obj = sgs_StackSize( g_sgsCtx ) >= 1
+		? new ParticleSystem( filename )
+		: new ParticleSystem;
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
 }
@@ -1112,6 +1127,8 @@ void ouzelMain( const vector<string>& args )
 	sgsEnv( g_sgsCtx ).setprop( "ouzel", ouzel );
 	
 	ouzel.setprop( "Color", CreateObj<sgsOuzelColor>() );
+	
+	ouzel.setprop( "Input", CreateObj<sgsOuzelInput>() );
 	
 	sgs_StoreIntConsts( g_sgsCtx, ouzel.var, g_ModifiersRIC, -1 );
 	sgsVariable input;

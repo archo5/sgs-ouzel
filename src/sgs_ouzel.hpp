@@ -190,6 +190,49 @@ struct sgsOuzelEventHandler : sgsOuzelDisposable, EventHandler
 	SGS_PROPFN( READ ) sgsOuzelUIEvent::Handle lastUIEvent;
 };
 
+struct sgsOuzelCursor : sgsObjectBase, Cursor
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelCursor > Handle;
+	
+	// TODO -- SGS_METHOD bool initSystemCursor( SystemCursor systemCursor );
+	SGS_METHOD_NAMED( initFromFile ) SGS_ALIAS( bool init( const std::string& filename, const Vector2& hotSpot ) );
+	// TODO initFromBytes
+};
+
+struct sgsOuzelInput : sgsObjectBase
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelInput > Handle;
+	
+	SGS_METHOD void setCursor( sgsOuzelCursor::Handle cursor ){ sharedEngine->getInput()->setCursor( cursor ); }
+	SGS_PROPFN(
+		READ sharedEngine->getInput()->isCursorVisible
+		WRITE sharedEngine->getInput()->setCursorVisible )
+	SGS_ALIAS( bool cursorVisible );
+	SGS_PROPFN(
+		READ sharedEngine->getInput()->isCursorLocked
+		WRITE sharedEngine->getInput()->setCursorLocked )
+	SGS_ALIAS( bool cursorLocked );
+	SGS_PROPFN(
+		READ sharedEngine->getInput()->getCursorPosition
+		WRITE sharedEngine->getInput()->setCursorPosition )
+	SGS_ALIAS( Vector2 cursorPosition );
+	
+	SGS_METHOD void startGamepadDiscovery(){ sharedEngine->getInput()->startGamepadDiscovery(); }
+	SGS_METHOD void stopGamepadDiscovery(){ sharedEngine->getInput()->stopGamepadDiscovery(); }
+	
+	SGS_METHOD bool isKeyboardKeyDown( int key ){ return sharedEngine->getInput()->isKeyboardKeyDown( KeyboardKey(key) ); }
+	SGS_METHOD bool isMouseButtonDown( int btn ){ return sharedEngine->getInput()->isMouseButtonDown( MouseButton(btn) ); }
+	
+	// TODO ***
+	
+	SGS_METHOD bool showVirtualKeyboard(){ return sharedEngine->getInput()->showVirtualKeyboard(); }
+	SGS_METHOD bool hideVirtualKeyboard(){ return sharedEngine->getInput()->hideVirtualKeyboard(); }
+};
+
 
 // SCENE
 
@@ -269,6 +312,23 @@ struct sgsOuzelShapeRenderer : sgsOuzelComponent
 	//	const Color& color,
 	//	uint32_t segments /* = 16 */,
 	//	float thickness /* = 0.0f */ );
+};
+
+struct sgsOuzelParticleSystem : sgsOuzelComponent
+{
+	SGS_OBJECT_INHERIT( sgsOuzelComponent );
+	
+	typedef sgsHandle< sgsOuzelParticleSystem > Handle;
+	ParticleSystem* Item(){ return static_cast<ParticleSystem*>( obj ); }
+	
+	SGS_METHOD bool initFromFile( const string& filename ){ return Item()->init( filename ); }
+	SGS_METHOD void resume(){ Item()->resume(); }
+	SGS_METHOD void stop(){ Item()->stop(); }
+	SGS_METHOD void reset(){ Item()->reset(); }
+	
+	SGS_PROPFN( READ Item()->isRunning ) SGS_ALIAS( bool running );
+	SGS_PROPFN( READ Item()->isActive ) SGS_ALIAS( bool active );
+	// TODO positionType
 };
 
 struct sgsOuzelAnimator : sgsOuzelComponent
@@ -441,6 +501,15 @@ struct sgsOuzelCamera : sgsOuzelNode
 	SGS_PROPFN( READ Item()->getFOV WRITE Item()->setFOV ) SGS_ALIAS( float FOV );
 	SGS_PROPFN( READ Item()->getNearPlane WRITE Item()->setNearPlane ) SGS_ALIAS( float nearPlane );
 	SGS_PROPFN( READ Item()->getFarPlane WRITE Item()->setFarPlane ) SGS_ALIAS( float farPlane );
+	
+	// TODO getProjection
+	SGS_METHOD void recalculateProjection(){ Item()->recalculateProjection(); }
+	// TODO get*Projection
+	
+	SGS_METHOD Vector3 convertNormalizedToWorld( const Vector2& np ){ return Item()->convertNormalizedToWorld( np ); }
+	SGS_METHOD Vector2 convertWorldToNormalized( const Vector3& wp ){ return Item()->convertWorldToNormalized( wp ); }
+	
+	// TODO checkVisibility
 	
 	SGS_PROPFN( READ Item()->getViewport WRITE Item()->setViewport ) SGS_ALIAS( Rectangle viewport );
 	SGS_PROPFN( READ Item()->getRenderViewport ) SGS_ALIAS( Rectangle renderViewport );
@@ -681,9 +750,11 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD string getString( const string& str );
 	
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
+	SGS_STATICMETHOD sgsOuzelCursor::Handle createCursor();
 	
 	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();
 	SGS_STATICMETHOD sgsOuzelShapeRenderer::Handle createShapeRenderer();
+	SGS_STATICMETHOD sgsOuzelParticleSystem::Handle createParticleSystem( const string& filename );
 	SGS_STATICMETHOD sgsOuzelAnimator::Handle createAnimator( float aLength );
 	SGS_STATICMETHOD sgsOuzelMove::Handle createMove( float aLength, const Vector3& aPosition, bool aRelative /* = false */ );
 	SGS_STATICMETHOD sgsOuzelRotate::Handle createRotate( float aLength, const Vector3& aRotation, bool aRelative /* = false */ );

@@ -180,6 +180,33 @@ void sgsOuzelSprite::stop( bool resetAnimation /* = true */ )
 }
 
 
+sgsHandle< struct sgsOuzelNode > sgsOuzelAnimator::getTargetNode()
+{
+	return GetObjHandle<sgsOuzelNode>( Item()->getTargetNode() );
+}
+
+void sgsOuzelAnimator::addAnimator( sgsOuzelAnimator::Handle animator )
+{
+	if( animator )
+		Item()->addAnimator( animator->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "animator not specified" );
+}
+
+void sgsOuzelAnimator::removeAnimator( sgsOuzelAnimator::Handle animator )
+{
+	if( animator )
+		Item()->removeAnimator( animator->Item() );
+	else
+		sgs_Msg( C, SGS_WARNING, "animator not specified" );
+}
+
+sgsOuzelAnimator::Handle sgsOuzelAnimator::getParent()
+{
+	return GetObjHandle<sgsOuzelAnimator>( Item()->getParent() );
+}
+
+
 sgsOuzelNodeContainer::~sgsOuzelNodeContainer()
 {
 	g_PtrToSgsObj.erase( obj );
@@ -378,6 +405,24 @@ sgsOuzelEventHandler::Handle sgsOuzel::createEventHandler( int priority )
 	return out.get_handle<sgsOuzelEventHandler>();
 }
 
+
+sgsOuzelSprite::Handle sgsOuzel::createSprite()
+{
+	auto h = CreateObj<sgsOuzelSprite>();
+	h->obj = new Sprite;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+sgsOuzelMove::Handle sgsOuzel::createMove( float aLength, const Vector3& aPosition, bool aRelative )
+{
+	auto h = CreateObj<sgsOuzelMove>();
+	h->obj = new Move( aLength, aPosition, aRelative );
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
+
 sgsOuzelScene::Handle sgsOuzel::createScene()
 {
 	return CreateObj<sgsOuzelScene>();
@@ -407,13 +452,6 @@ sgsOuzelCamera::Handle sgsOuzel::createCamera()
 	return h;
 }
 
-sgsOuzelSprite::Handle sgsOuzel::createSprite()
-{
-	auto h = CreateObj<sgsOuzelSprite>();
-	h->obj = new Sprite;
-	g_PtrToSgsObj.insert({ h->obj, h.get() });
-	return h;
-}
 
 sgsOuzelMenu::Handle sgsOuzel::createMenu()
 {

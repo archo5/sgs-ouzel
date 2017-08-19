@@ -135,14 +135,14 @@ class SpritesSample
 		{
 			characterSprite = ouzel.createSprite(),
 			character = ouzel.createNode().{ position = vec2( -300, 0 ) },
-			// move = ouzel.createMove( 4, vec2( 300, 0 ) ),
+			move = ouzel.createMove( 4, vec2( 300, 0 ) ),
 		};
 		this.characterSprite.initFromFile( "run.json" );
 		this.characterSprite.play( true );
 		this.character.addComponent( this.characterSprite );
 		this.layer.addChild( this.character );
-		// this.character.addComponent( this.move );
-		// this.move.start();
+		this.character.addComponent( this.move );
+		this.move.start();
 		
 		// fire
 		this.
@@ -278,7 +278,7 @@ class GUISample
 			
 			label1 = ouzel.createLabel( "checkbox", "AmosisTechnik.ttf", 24.0 ).
 			{
-				// color = CYAN
+				color = ouzel.Color.CYAN,
 				position = vec2( -28, 102 ),
 			},
 			label2 = ouzel.createLabel( ouzel.getString("Ouzel"), "ArialBlack.fnt" ).
@@ -287,7 +287,7 @@ class GUISample
 			},
 			label3 = ouzel.createLabel( "UTF-8 ĀāČč\nNew line", "ArialBlack.fnt", 0.0, ouzel.Color.WHITE, vec2(0, 0.5) ).
 			{
-				// color = BLUE
+				color = ouzel.Color.BLUE,
 				position = vec2( -100, -100 ),
 				scale = vec3( 0.5, 0.5, 1 ),
 			},

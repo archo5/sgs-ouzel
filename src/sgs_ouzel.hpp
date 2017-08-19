@@ -223,6 +223,47 @@ struct sgsOuzelSprite : sgsOuzelComponent
 	SGS_METHOD void stop( bool resetAnimation /* = true */ );
 	SGS_METHOD void reset(){ Item()->reset(); }
 	SGS_PROPFN( READ Item()->isPlaying ) SGS_ALIAS( bool playing );
+	
+	// TODO getFrames
+	SGS_PROPFN( WRITE Item()->setCurrentFrame ) SGS_ALIAS( uint32_t currentFrame );
+};
+
+struct sgsOuzelAnimator : sgsOuzelComponent
+{
+	SGS_OBJECT_INHERIT( sgsOuzelComponent );
+	
+	typedef sgsHandle< sgsOuzelAnimator > Handle;
+	Animator* Item(){ return static_cast<Animator*>( obj ); }
+	
+	SGS_METHOD void update( float delta ){ Item()->update( delta ); }
+	SGS_METHOD void start(){ Item()->start(); }
+	SGS_METHOD void play(){ Item()->play(); }
+	SGS_METHOD void resume(){ Item()->resume(); }
+	SGS_METHOD void stop( bool resetAnimation /* = false */ ){ Item()->stop( resetAnimation ); }
+	SGS_METHOD void reset(){ Item()->reset(); }
+	
+	SGS_PROPFN( READ Item()->isRunning ) SGS_ALIAS( bool running );
+	SGS_PROPFN( READ Item()->isDone ) SGS_ALIAS( bool done );
+	SGS_PROPFN( READ Item()->getLength ) SGS_ALIAS( float length );
+	SGS_PROPFN( READ Item()->getCurrentTime ) SGS_ALIAS( float currentTime );
+	SGS_PROPFN( READ Item()->getProgress ) SGS_ALIAS( float progress );
+	
+	sgsHandle< struct sgsOuzelNode > getTargetNode();
+	SGS_PROPFN( READ getTargetNode ) SGS_ALIAS( sgsHandle< struct sgsOuzelNode > targetNode );
+	SGS_METHOD void addAnimator( sgsOuzelAnimator::Handle animator );
+	SGS_METHOD void removeAnimator( sgsOuzelAnimator::Handle animator );
+	SGS_METHOD void removeAllAnimators(){ Item()->removeAllAnimators(); }
+	sgsOuzelAnimator::Handle getParent();
+	SGS_PROPFN( READ getParent ) SGS_ALIAS( sgsOuzelAnimator::Handle parent );
+	SGS_METHOD void removeFromParent(){ Item()->removeFromParent(); }
+};
+
+struct sgsOuzelMove : sgsOuzelAnimator
+{
+	SGS_OBJECT_INHERIT( sgsOuzelAnimator );
+	
+	typedef sgsHandle< sgsOuzelMove > Handle;
+	Move* Item(){ return static_cast<Move*>( obj ); }
 };
 
 struct sgsOuzelNodeContainer : sgsObjectBase
@@ -384,6 +425,8 @@ struct sgsOuzelLabel : sgsOuzelWidget
 	Label* Item(){ return static_cast<Label*>( obj ); }
 	
 	SGS_PROPFN( READ Item()->getText WRITE Item()->setText ) SGS_ALIAS( string text );
+	// TODO getLabelDrawable
+	SGS_PROPFN( READ Item()->getLabelDrawable()->getColor WRITE Item()->getLabelDrawable()->setColor ) SGS_ALIAS( Color color );
 };
 
 struct sgsOuzelButton : sgsOuzelWidget
@@ -471,12 +514,13 @@ struct sgsOuzel : sgsLiteObjectBase
 	
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
 	
+	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();
+	SGS_STATICMETHOD sgsOuzelMove::Handle createMove( float aLength, const Vector3& aPosition, bool aRelative /* = false */ );
+	
 	SGS_STATICMETHOD sgsOuzelScene::Handle createScene();
 	SGS_STATICMETHOD sgsOuzelLayer::Handle createLayer();
 	SGS_STATICMETHOD sgsOuzelNode::Handle createNode();
 	SGS_STATICMETHOD sgsOuzelCamera::Handle createCamera();
-	
-	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();
 	
 	SGS_STATICMETHOD sgsOuzelMenu::Handle createMenu();
 	SGS_STATICMETHOD sgsOuzelLabel::Handle createLabel(

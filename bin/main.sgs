@@ -10,7 +10,7 @@ function bind( t, f )
 ouzel.setAppAndDeveloperNames( "sgs-ouzel Samples", "org.sgscript" );
 ouzel.setScreenSaverEnabled( false );
 ouzel.window.title = "sgs-ouzel Samples";
-ouzel.fileSystem.addResourcePath( "../ouzel/samples/Resources" );
+ouzel.fileSystem.addResourcePath( "Resources" );
 
 ouzel.renderer.clearColor = ouzel.Color( 64, 0, 0 );
 

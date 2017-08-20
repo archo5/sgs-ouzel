@@ -1,7 +1,7 @@
 // Copyright (C) 2017 Elviss Strazdins
 // This file is part of the Ouzel engine.
 
-package org.ouzelengine;
+package org.sgscript.ouzel;
 
 import android.app.Activity;
 import android.view.Surface;
@@ -10,7 +10,7 @@ public class OuzelLibJNIWrapper
 {
     static
     {
-        System.loadLibrary("samples");
+        System.loadLibrary("sgsouzel");
     }
 
     public static native void onCreate(Activity mainActivity);

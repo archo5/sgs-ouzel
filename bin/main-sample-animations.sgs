@@ -54,13 +54,13 @@ class AnimationsSample : Sample
 		this.shapeDrawable.rectangle( aabb2(0, 0, 100, 100), ouzel.Color.WHITE, false, 2 );
 		this.shapeDrawable.line( vec2(0, 0), vec2(50, 50), ouzel.Color.CYAN, 2 );
 		
-	//	this.shapeDrawable.curve( [vec2(50, 50), vec2(100, 50), vec2(50, 0), vec2(100, 0)], ouzel.Color.YELLOW );
+		this.shapeDrawable.curve( [vec2(50, 50), vec2(100, 50), vec2(50, 0), vec2(100, 0)], ouzel.Color.YELLOW );
 		
 		this.shapeDrawable.circle( vec2(25, 75), 20, ouzel.Color.BLUE, true );
 		this.shapeDrawable.circle( vec2(25, 75), 20, ouzel.Color.WHITE, false );
 		this.shapeDrawable.circle( vec2(75, 75), 20, ouzel.Color.BLUE, false, 16, 4.0 );
 		
-	//	this.shapeDrawable.polygon( [vec2(15, 75), vec2(25, 75), vec2(25, 55)], Color("#ff0000"), false );
+		this.shapeDrawable.polygon( [vec2(15, 75), vec2(25, 75), vec2(25, 55)], ouzel.Color("#ff0000"), false );
 		
 		this.drawNode.addComponent( this.shapeDrawable );
 		this.drawNode.addComponent( this.shake );

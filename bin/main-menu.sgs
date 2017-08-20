@@ -101,6 +101,11 @@ class MainMenu
 				_G.curScene.eventHandler.dispose();
 				_G.curScene = new InputSample();
 			}
+			else if( e.node === this.soundButton )
+			{
+				_G.curScene.eventHandler.dispose();
+				_G.curScene = new SoundSample();
+			}
 		}
 		return true;
 	}

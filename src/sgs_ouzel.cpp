@@ -209,15 +209,14 @@ bool sgsOuzelShapeRenderer::circle( const Vector2& position,
 	return Item()->circle( position, radius, color, fill, ssz >= 5 ? segments : 16, thickness );
 }
 
-// TODO
-//bool sgsOuzelShapeRenderer::curve( const std::vector<Vector2>& controlPoints,
-//	const Color& color,
-//	uint32_t segments /* = 16 */,
-//	float thickness /* = 0.0f */ )
-//{
-//	auto ssz = sgs_StackSize( C );
-//	return Item()->curve( controlPoints, color, ssz >= 3 ? segments : 16, thickness );
-//}
+bool sgsOuzelShapeRenderer::curve( const std::vector<Vector2>& controlPoints,
+	const Color& color,
+	uint32_t segments /* = 16 */,
+	float thickness /* = 0.0f */ )
+{
+	auto ssz = sgs_StackSize( C );
+	return Item()->curve( controlPoints, color, ssz >= 3 ? segments : 16, thickness );
+}
 
 
 sgsHandle< struct sgsOuzelNode > sgsOuzelAnimator::getTargetNode()
@@ -796,6 +795,12 @@ sgsOuzelCheckBox::Handle sgsOuzel::createCheckBox(
 	);
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
+}
+
+
+sgsOuzelSound::Handle sgsOuzel::createSound()
+{
+	return CreateObj<sgsOuzelSound>();
 }
 
 

@@ -14,19 +14,20 @@ using namespace input;
 using namespace scene;
 using namespace graphics;
 using namespace gui;
+using namespace audio;
 
 
 // math types
 
 template<> inline void sgs_PushVar( SGS_CTX, const Vector2& v ){ sgs_CreateVec2( C, nullptr, v.x, v.y ); }
 template<> struct sgs_GetVar<Vector2> { Vector2 operator () ( SGS_CTX, sgs_StkIdx item ){
-	float vtmp[3] = {0.0f}; sgs_ParseVec2( C, item, vtmp, 0 ); return Vector2( vtmp[0], vtmp[1] ); }};
+	float vtmp[2] = {0.0f}; sgs_ParseVec2( C, item, vtmp, 0 ); return Vector2( vtmp[0], vtmp[1] ); }};
 template<> inline sgsString sgs_DumpData<Vector2>( SGS_CTX, const Vector2& var, int depth ){ char bfr[ 128 ] = {0};
 	snprintf( bfr, 127, "Vector2(%g;%g)", var.x, var.y ); return sgsString( C, bfr ); }
 
 template<> inline void sgs_PushVar( SGS_CTX, const Size2& v ){ sgs_CreateVec2( C, nullptr, v.width, v.height ); }
 template<> struct sgs_GetVar<Size2> { Size2 operator () ( SGS_CTX, sgs_StkIdx item ){
-	float vtmp[3] = {0.0f}; sgs_ParseVec2( C, item, vtmp, 0 ); return Size2( vtmp[0], vtmp[1] ); }};
+	float vtmp[2] = {0.0f}; sgs_ParseVec2( C, item, vtmp, 0 ); return Size2( vtmp[0], vtmp[1] ); }};
 template<> inline sgsString sgs_DumpData<Size2>( SGS_CTX, const Size2& var, int depth ){ char bfr[ 128 ] = {0};
 	snprintf( bfr, 127, "Size2(%g;%g)", var.width, var.height ); return sgsString( C, bfr ); }
 
@@ -47,6 +48,41 @@ template<> struct sgs_GetVar<Rectangle> { Rectangle operator () ( SGS_CTX, sgs_S
 	float vtmp[4] = {0.0f}; sgs_ParseAABB2( C, item, vtmp ); return Rectangle( vtmp[0], vtmp[1], vtmp[2] - vtmp[0], vtmp[3] - vtmp[1] ); }};
 template<> inline sgsString sgs_DumpData<Rectangle>( SGS_CTX, const Rectangle& var, int depth ){ char bfr[ 192 ] = {0};
 	snprintf( bfr, 191, "Rectangle(pos=%f;%f size=%f;%f)", var.position.x, var.position.y, var.size.width, var.size.height ); return sgsString( C, bfr ); }
+
+template<> inline void sgs_PushVar( SGS_CTX, const std::vector<Vector2>& vv )
+{
+	for( const auto& v : vv )
+		sgs_PushVar( C, v );
+	sgs_CreateArray( C, NULL, vv.size() );
+}
+template<> struct sgs_GetVar<std::vector<Vector2>>
+{
+	std::vector<Vector2> operator () ( SGS_CTX, sgs_StkIdx item )
+	{
+		sgsVariable arr( C, item );
+		if( !arr.is_array() )
+		{
+			sgs_Msg( C, SGS_WARNING, "expected array of vec2" );
+			return {};
+		}
+		std::vector<Vector2> out;
+		out.reserve( sgs_ArraySize( arr.var ) );
+		sgsVarIterator it( arr );
+		while( it.Advance() )
+		{
+			sgsVariable val = it.GetValue();
+			if( !val.is_object( xgm_vec2_iface ) )
+			{
+				sgs_Msg( C, SGS_WARNING, "expected array of vec2" );
+				return {};
+			}
+			float* vdata = val.get_raw_object_data<float>();
+			out.push_back( Vector2( vdata[0], vdata[1] ) );
+		}
+		return out;
+	}
+};
+
 
 
 // CORE
@@ -303,15 +339,14 @@ struct sgsOuzelShapeRenderer : sgsOuzelComponent
 		const Color& color,
 		bool fill /* = false */,
 		float thickness /* = 0.0f */ ){ return Item()->rectangle( rectangle, color, fill, thickness ); }
-	// TODO
-	//SGS_METHOD bool polygon( const std::vector<Vector2>& edges,
-	//	const Color& color,
-	//	bool fill /* = false */,
-	//	float thickness /* = 0.0f */ ){ return Item()->polygon( edges, color, fill, thickness ); }
-	//SGS_METHOD bool curve( const std::vector<Vector2>& controlPoints,
-	//	const Color& color,
-	//	uint32_t segments /* = 16 */,
-	//	float thickness /* = 0.0f */ );
+	SGS_METHOD bool polygon( const std::vector<Vector2>& edges,
+		const Color& color,
+		bool fill /* = false */,
+		float thickness /* = 0.0f */ ){ return Item()->polygon( edges, color, fill, thickness ); }
+	SGS_METHOD bool curve( const std::vector<Vector2>& controlPoints,
+		const Color& color,
+		uint32_t segments /* = 16 */,
+		float thickness /* = 0.0f */ );
 };
 
 struct sgsOuzelParticleSystem : sgsOuzelComponent
@@ -617,6 +652,29 @@ struct sgsOuzelCheckBox : sgsOuzelWidget
 };
 
 
+// AUDIO
+
+struct sgsOuzelSound : sgsObjectBase, Sound
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelSound > Handle;
+	
+	SGS_METHOD bool initFromFile( const string& filename, bool relativePosition /* = false */ ){
+		return init( sharedEngine->getCache()->getSoundData( filename ), relativePosition ); }
+	
+	SGS_METHOD SGS_ALIAS( void setPosition( const Vector3& newPosition ) );
+	SGS_METHOD SGS_ALIAS( void setPitch( float newPitch ) );
+	SGS_METHOD SGS_ALIAS( void setGain( float newGain ) );
+	
+	SGS_METHOD SGS_ALIAS( void play( bool repeatSound /* = false */ ) );
+	SGS_METHOD SGS_ALIAS( void pause() );
+	SGS_METHOD SGS_ALIAS( void stop() );
+	
+	SGS_PROPFN( READ isRepeating ) SGS_ALIAS( bool repeating );
+};
+
+
 // RENDERING
 
 extern const char* PixelFormatNames[];
@@ -798,6 +856,8 @@ struct sgsOuzel : sgsLiteObjectBase
 		const string& pressedImage,
 		const string& disabledImage,
 		const string& tickImage );
+	
+	SGS_STATICMETHOD sgsOuzelSound::Handle createSound();
 	
 	SGS_STATICMETHOD sgsOuzelTexture::Handle createTexture();
 };

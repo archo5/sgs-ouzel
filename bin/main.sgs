@@ -60,7 +60,8 @@ include
 	"main-sample-gui",
 	"main-sample-rt",
 	"main-sample-animations",
-	"main-sample-input"
+	"main-sample-input",
+	"main-sample-sound"
 ;
 
 global curScene = new MainMenu();

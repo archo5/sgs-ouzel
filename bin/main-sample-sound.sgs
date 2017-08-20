@@ -1,0 +1,92 @@
+
+class SoundSample : Sample
+{
+	function __construct()
+	{
+		this.
+		{
+			eventHandler = ouzel.createEventHandler().
+			{
+				onGamepadEvent = bind( this, this.onGamepadEvent ),
+				onUIEvent = bind( this, this.onUIEvent ),
+				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
+			},
+			
+			scene = ouzel.createScene(),
+			guiCamera = ouzel.createCamera().
+			{
+				scaleMode = ouzel.CameraScaleMode.SHOW_ALL,
+				targetContentSize = vec2( 800, 600 ),
+			},
+			guiLayer = ouzel.createLayer(),
+			menu = ouzel.createMenu(),
+			
+			backButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Back", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( -200, -200 ),
+			},
+			test8BitButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "8-bit", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( 0, 80 ),
+			},
+			test24BitButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "24-bit", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( 0, 40 ),
+			},
+			jumpButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Jump", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( 0, 0 ),
+			},
+			ambientButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Ambient", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( 0, -40 ),
+			},
+			musicButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Music", "arial.fnt", 0, ouzel.Color.BLACK, ouzel.Color.BLACK, ouzel.Color.BLACK ).
+			{
+				position = vec2( 0, -80 ),
+			},
+			
+			test8BitSound = ouzel.createSound(),
+			test24BitSound = ouzel.createSound(),
+			jumpSound = ouzel.createSound(),
+			ambientSound = ouzel.createSound(),
+			music = ouzel.createSound(),
+		};
+		
+		this.test8BitSound.initFromFile( "8-bit.wav" );
+		this.test24BitSound.initFromFile( "24-bit.wav" );
+		this.jumpSound.initFromFile( "jump.wav" );
+		this.ambientSound.initFromFile( "ambient.wav" );
+		this.music.initFromFile( "music.ogg" );
+		
+		this.menu.addWidget( this.test8BitButton );
+		this.menu.addWidget( this.test24BitButton );
+		this.menu.addWidget( this.jumpButton );
+		this.menu.addWidget( this.ambientButton );
+		this.menu.addWidget( this.musicButton );
+		this.menu.addWidget( this.backButton );
+		
+		this.guiLayer.addChild( this.guiCamera );
+		this.scene.addLayer( this.guiLayer );
+		this.guiLayer.addChild( this.menu );
+		
+		ouzel.sceneManager.scene = this.scene;
+	}
+	function onUIEvent( type, e )
+	{
+		if( type == ouzel.EventType.CLICK_NODE )
+		{
+			if( e.node === this.test8BitButton )
+				this.test8BitSound.play();
+			if( e.node === this.test24BitButton )
+				this.test24BitSound.play();
+			if( e.node === this.jumpButton )
+				this.jumpSound.play();
+			if( e.node === this.ambientButton )
+				this.ambientSound.play();
+			if( e.node === this.musicButton )
+				this.music.play();
+		}
+		return this!Sample.onUIEvent( type, e );
+	}
+}

@@ -1,5 +1,5 @@
 [submodule "sgscript"]
-	path = sgscript
+	path = ext/sgscript
 	url = https://github.com/snake5/sgscript.git
 [submodule "ouzel"]
 	path = ext/ouzel

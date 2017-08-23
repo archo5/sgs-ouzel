@@ -17,7 +17,7 @@ if os.path.exists( "dist" ):
 os.mkdir( "dist" )
 
 print( "copying sample resources (if this fails, submodules haven't been checked out)" )
-shutil.copytree( "ouzel/samples/Resources", "dist/Resources" )
+shutil.copytree( "ext/ouzel/samples/Resources", "dist/Resources" )
 
 print( "copying sample code & helpers" )
 files = [

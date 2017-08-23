@@ -4,8 +4,8 @@
 #define SGS_CPPBC_WITH_STD_STRING 1
 #define SGS_CPPBC_WITH_STD_VECTOR 1
 
-#include "../sgscript/ext/sgs_cppbc.h"
-#include "../sgscript/ext/sgsxgmath.h"
+#include "../ext/sgscript/ext/sgs_cppbc.h"
+#include "../ext/sgscript/ext/sgsxgmath.h"
 #include "ouzel.hpp"
 
 using namespace std;

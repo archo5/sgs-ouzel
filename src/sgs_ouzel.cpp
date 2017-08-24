@@ -1114,10 +1114,45 @@ static sgs_RegIntConst g_TextureFlagsRIC[] =
 };
 
 
+SGSRESULT sgsOuzelFSFunc( void* userdata, SGS_CTX, int op, sgs_ScriptFSData* data )
+{
+	auto* fs = sharedEngine->getFileSystem();
+	std::vector<uint8_t> outdata;
+	switch( op )
+	{
+	case SGS_SFS_FILE_EXISTS:
+		// TODO resourceFileExists
+		return fs->readFile( data->filename, outdata )
+			? SGS_SUCCESS : SGS_ENOTFND;
+	case SGS_SFS_FILE_OPEN:
+		if( fs->readFile( data->filename, outdata ) )
+		{
+			data->userhandle = new uint8_t[ outdata.size() ];
+			memcpy( data->userhandle, outdata.data(), outdata.size() );
+			data->size = outdata.size();
+			return SGS_SUCCESS;
+		}
+		return SGS_ENOTFND;
+	case SGS_SFS_FILE_READ:
+		memcpy( data->output, data->userhandle, data->size );
+		return SGS_SUCCESS;
+	case SGS_SFS_FILE_CLOSE:
+		delete [] (uint8_t*) data->userhandle;
+		data->userhandle = nullptr;
+		return SGS_SUCCESS;
+	}
+	return SGS_ENOTSUP;
+}
+
+
 void ouzelMain( const vector<string>& args )
 {
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Starting SGScript";
 	g_sgsCtx = sgs_CreateEngine();
+	
+#ifdef __ANDROID__
+	sgs_SetScriptFSFunc( g_sgsCtx, sgsOuzelFSFunc, nullptr );
+#endif
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Initializing bindings";
 	sgs_LoadLib_Fmt( g_sgsCtx );

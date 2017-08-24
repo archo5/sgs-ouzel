@@ -3,7 +3,7 @@
 
 package org.sgscript.ouzel;
 
-import org.sgscript.ouzel.OuzelLibJNIWrapper;
+import org.ouzelengine.OuzelLibJNIWrapper;
 import org.sgscript.ouzel.View;
 
 import android.app.Activity;

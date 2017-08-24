@@ -3,6 +3,8 @@
 
 package org.sgscript.ouzel;
 
+import org.ouzelengine.OuzelLibJNIWrapper;
+
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;

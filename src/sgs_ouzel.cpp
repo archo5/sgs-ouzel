@@ -1121,9 +1121,7 @@ SGSRESULT sgsOuzelFSFunc( void* userdata, SGS_CTX, int op, sgs_ScriptFSData* dat
 	switch( op )
 	{
 	case SGS_SFS_FILE_EXISTS:
-		// TODO resourceFileExists
-		return fs->readFile( data->filename, outdata )
-			? SGS_SUCCESS : SGS_ENOTFND;
+		return fs->fileExists( data->filename ) ? SGS_SUCCESS : SGS_ENOTFND;
 	case SGS_SFS_FILE_OPEN:
 		if( fs->readFile( data->filename, outdata ) )
 		{

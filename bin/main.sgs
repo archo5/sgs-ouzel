@@ -1,12 +1,4 @@
 
-function bind( t, f )
-{
-	return function() use( t, f )
-	{
-		f.apply( t, va_get_args() );
-	};
-}
-
 ouzel.setAppAndDeveloperNames( "sgs-ouzel Samples", "org.sgscript" );
 ouzel.setScreenSaverEnabled( false );
 ouzel.window.title = "sgs-ouzel Samples";
@@ -14,7 +6,17 @@ ouzel.fileSystem.addResourcePath( "Resources" );
 
 ouzel.renderer.clearColor = ouzel.Color( 64, 0, 0 );
 
-class Sample
+class Scene
+{
+	function onUpdate( dt ){}
+	function onKeyboardEvent( type, e ){}
+	function onMouseEvent( type, e ){}
+	function onGamepadEvent( type, e ){}
+	function onTouchEvent( type, e ){}
+	function onUIEvent( type, e ){}
+}
+
+class Sample : Scene
 {
 	function onGamepadEvent( type, e )
 	{
@@ -22,7 +24,6 @@ class Sample
 		{
 			if( e.pressed && e.button == ouzel.input.GamepadButton.FACE_RIGHT )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();
 			}
 		}
@@ -34,7 +35,6 @@ class Sample
 		{
 			if( e.key == ouzel.input.KeyboardKey.ESCAPE || e.key == ouzel.input.KeyboardKey.MENU )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();
 			}
 		}
@@ -46,7 +46,6 @@ class Sample
 		{
 			if( e.node === this.backButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();
 			}
 		}
@@ -65,3 +64,14 @@ include
 ;
 
 global curScene = new MainMenu();
+
+global eventHandler = ouzel.createEventHandler();
+function eventHandler.onGamepadEvent( type, e ){ curScene.onGamepadEvent( type, e ); }
+function eventHandler.onUIEvent( type, e ){ curScene.onUIEvent( type, e ); }
+function eventHandler.onKeyboardEvent( type, e ){ curScene.onKeyboardEvent( type, e ); }
+function eventHandler.onMouseEvent( type, e ){ curScene.onMouseEvent( type, e ); }
+function eventHandler.onTouchEvent( type, e ){ curScene.onTouchEvent( type, e ); }
+
+global updateCallback = ouzel.createUpdateCallback();
+function updateCallback.onUpdate( dt ){ curScene.onUpdate( dt ); }
+

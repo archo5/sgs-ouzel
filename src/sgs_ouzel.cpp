@@ -87,7 +87,7 @@ sgsHandle< struct sgsOuzelNode > sgsOuzelUIEvent::getNode()
 	return GetObjHandle<sgsOuzelNode>( node );
 }
 
-sgsOuzelEventHandler::sgsOuzelEventHandler( int priority ) : EventHandler( priority )
+sgsOuzelEventHandler::sgsOuzelEventHandler( int prio ) : EventHandler( prio ), priority( prio )
 {
 	keyboardHandler = bind( &sgsOuzelEventHandler::handleKeyboard, this, placeholders::_1, placeholders::_2 );
 	mouseHandler = bind( &sgsOuzelEventHandler::handleMouse, this, placeholders::_1, placeholders::_2 );
@@ -102,12 +102,6 @@ sgsOuzelEventHandler::sgsOuzelEventHandler( int priority ) : EventHandler( prior
 	lastUIEvent = CreateObj<sgsOuzelUIEvent>();
 	
 	sharedEngine->getEventDispatcher()->addEventHandler( this );
-}
-
-int sgsOuzelEventHandler::unserialize( SGS_CTX )
-{
-	SGS_CREATECLASS( C, NULL, sgsOuzelEventHandler, ( sgs_GetVar<int>()( C, 0 ) ) );
-	return 1;
 }
 
 bool sgsOuzelEventHandler::handleKeyboard( Event::Type type, const KeyboardEvent& event )
@@ -138,6 +132,19 @@ bool sgsOuzelEventHandler::handleUI( Event::Type type, const UIEvent& event )
 {
 	*static_cast<UIEvent*>(&*lastUIEvent) = event;
 	return onUIEvent.not_null() ? GetScriptVar().tthiscall<bool>( C, onUIEvent, int(type), lastUIEvent ) : false;
+}
+
+sgsOuzelUpdateCallback::sgsOuzelUpdateCallback( int prio ) : UpdateCallback( prio ), priority( prio )
+{
+	callback = bind( &sgsOuzelUpdateCallback::update, this, placeholders::_1 );
+	
+	sharedEngine->scheduleUpdate( this );
+}
+
+void sgsOuzelUpdateCallback::update( float dt )
+{
+	if( onUpdate.not_null() )
+		onUpdate.tcall<void>( C, dt );
 }
 
 
@@ -527,6 +534,13 @@ sgsOuzelEventHandler::Handle sgsOuzel::createEventHandler( int priority )
 	sgsVariable out( g_sgsCtx );
 	SGS_CREATECLASS( g_sgsCtx, &out.var, sgsOuzelEventHandler, ( priority ) );
 	return out.get_handle<sgsOuzelEventHandler>();
+}
+
+sgsOuzelUpdateCallback::Handle sgsOuzel::createUpdateCallback( int priority )
+{
+	sgsVariable out( g_sgsCtx );
+	SGS_CREATECLASS( g_sgsCtx, &out.var, sgsOuzelUpdateCallback, ( priority ) );
+	return out.get_handle<sgsOuzelUpdateCallback>();
 }
 
 sgsOuzelCursor::Handle sgsOuzel::createCursor()

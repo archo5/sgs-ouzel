@@ -1,14 +1,8 @@
 
-class MainMenu
+class MainMenu : Scene
 {
 	function __construct()
 	{
-		this.eventHandler = ouzel.createEventHandler().
-		{
-			onKeyboardEvent = bind( this, this.onKeyboardEvent ),
-			onUIEvent = bind( this, this.onUIEvent ),
-		};
-		
 		this.scene = ouzel.createScene();
 		ouzel.sceneManager.scene = this.scene;
 		
@@ -23,7 +17,8 @@ class MainMenu
 		this.menu = ouzel.createMenu();
 		this.layer.addChild( this.menu );
 		
-		this.gitHubButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GitHub", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.gitHubButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GitHub\n[sgs-ouzel]", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
+		this.gitHubButton2 = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GitHub\n[Ouzel]", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
 		this.spritesButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Sprites", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
 		this.guiButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "GUI", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
 		this.renderTargetButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Render target", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
@@ -32,8 +27,11 @@ class MainMenu
 		this.soundButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Sound", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
 		this.perspectiveButton = ouzel.createButton( "button.png", "button_selected.png", "button_down.png", "", "Perspective", "arial.fnt", 0, ouzel.Color(20, 0, 0, 255), ouzel.Color.BLACK, ouzel.Color.BLACK );
 		
-		this.gitHubButton.position = vec2(0, 120);
+		this.gitHubButton.position = vec2(-50, 120);
 		this.menu.addWidget( this.gitHubButton );
+		
+		this.gitHubButton2.position = vec2(50, 120);
+		this.menu.addWidget( this.gitHubButton2 );
 		
 		this.spritesButton.position = vec2(0, 80);
 		this.menu.addWidget( this.spritesButton );
@@ -74,36 +72,34 @@ class MainMenu
 		{
 			if( e.node === this.gitHubButton )
 			{
+				ouzel.openURL( "https://github.com/snake5/sgs-ouzel" );
+			}
+			else if( e.node === this.gitHubButton2 )
+			{
 				ouzel.openURL( "https://github.com/elnormous/ouzel" );
 			}
 			else if( e.node === this.spritesButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new SpritesSample();
 			}
 			else if( e.node === this.guiButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new GUISample();
 			}
 			else if( e.node === this.renderTargetButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new RTSample();
 			}
 			else if( e.node === this.animationsButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new AnimationsSample();
 			}
 			else if( e.node === this.inputButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new InputSample();
 			}
 			else if( e.node === this.soundButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new SoundSample();
 			}
 		}

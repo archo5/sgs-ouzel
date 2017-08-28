@@ -963,6 +963,7 @@ int sgsOuzelEventHandler::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj*
 	char* str;
 	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
 	{
+		if( !strcmp( str, "priority" ) ){ sgs_PushVar( callerCtx, priority ); return SGS_SUCCESS; }
 		if( !strcmp( str, "onKeyboardEvent" ) ){ sgs_PushVar( callerCtx, onKeyboardEvent ); return SGS_SUCCESS; }
 		if( !strcmp( str, "onMouseEvent" ) ){ sgs_PushVar( callerCtx, onMouseEvent ); return SGS_SUCCESS; }
 		if( !strcmp( str, "onTouchEvent" ) ){ sgs_PushVar( callerCtx, onTouchEvent ); return SGS_SUCCESS; }
@@ -999,7 +1000,10 @@ int sgsOuzelEventHandler::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	if( obj->iface == _sgs_interface )
 	{
-		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelEventHandler" );
+		sgs_PushVar( callerCtx, priority );
+		sgs_Serialize( callerCtx, sgs_StackItem( callerCtx, -1 ) );
+		sgs_Pop( callerCtx, 1 );
+		sgs_SerializeObject( callerCtx, 1, "sgsUnserialize_sgsOuzelEventHandler" );
 	}
 	sgs_InitStringLit( callerCtx, &key, "onKeyboardEvent" );
 	sgs_PushVar( callerCtx, onKeyboardEvent );
@@ -1042,6 +1046,7 @@ int sgsOuzelEventHandler::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj
 	{
 		sgs_PushStringLit( callerCtx, "\n[inherited] " );
 		sgsOuzelDisposable::_sgs_dump( callerCtx, obj, depth );
+		{ sgs_PushStringLit( callerCtx, "\npriority = " ); sgs_DumpData( callerCtx, priority, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nonKeyboardEvent = " ); sgs_DumpData( callerCtx, onKeyboardEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nonMouseEvent = " ); sgs_DumpData( callerCtx, onMouseEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nonTouchEvent = " ); sgs_DumpData( callerCtx, onTouchEvent, depth ).push( callerCtx ); }
@@ -1052,7 +1057,7 @@ int sgsOuzelEventHandler::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj
 		{ sgs_PushStringLit( callerCtx, "\nlastTouchEvent = " ); sgs_DumpData( callerCtx, lastTouchEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nlastGamepadEvent = " ); sgs_DumpData( callerCtx, lastGamepadEvent, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nlastUIEvent = " ); sgs_DumpData( callerCtx, lastUIEvent, depth ).push( callerCtx ); }
-		sgs_StringConcat( callerCtx, 22 );
+		sgs_StringConcat( callerCtx, 24 );
 		sgs_PadString( callerCtx );
 		sgs_PushStringLit( callerCtx, "\n}" );
 		sgs_StringConcat( callerCtx, 3 );
@@ -1062,7 +1067,8 @@ int sgsOuzelEventHandler::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj
 
 int sgsUnserialize_sgsOuzelEventHandler( SGS_CTX )
 {
-	return sgsOuzelEventHandler::unserialize( C );
+	SGS_CREATECLASS( C, NULL, sgsOuzelEventHandler, ( sgs_GetVar<int>()( C, 0 ) ) );
+	return 1;
 }
 static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelEventHandler[] =
 { { "sgsUnserialize_sgsOuzelEventHandler", sgsUnserialize_sgsOuzelEventHandler } };
@@ -1093,6 +1099,151 @@ static sgs_ObjInterface sgsOuzelEventHandler__sgs_interface =
 	sgsOuzelDisposable::_sgs_interface,
 };
 _sgsInterface sgsOuzelEventHandler::_sgs_interface(sgsOuzelEventHandler__sgs_interface, sgsOuzelEventHandler__sgs_ifn);
+
+
+int sgsOuzelUpdateCallback::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelUpdateCallback::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelUpdateCallback::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelUpdateCallback*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelUpdateCallback::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelUpdateCallback::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+
+int sgsOuzelUpdateCallback::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	C = callerCtx;
+	this->~sgsOuzelUpdateCallback();
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelUpdateCallback::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	sgsOuzelDisposable::_sgs_gcmark( callerCtx, obj );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelUpdateCallback::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "interval" ) ){ sgs_PushVar( callerCtx, interval ); return SGS_SUCCESS; }
+		if( !strcmp( str, "priority" ) ){ sgs_PushVar( callerCtx, priority ); return SGS_SUCCESS; }
+		if( !strcmp( str, "onUpdate" ) ){ sgs_PushVar( callerCtx, onUpdate ); return SGS_SUCCESS; }
+	}
+	return sgsOuzelDisposable::_sgs_getindex( callerCtx, obj );
+}
+
+int sgsOuzelUpdateCallback::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char* str;
+	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
+	{
+		if( !strcmp( str, "interval" ) ){ interval = sgs_GetVar<float>()( callerCtx, 1 ); return SGS_SUCCESS; }
+		if( !strcmp( str, "onUpdate" ) ){ onUpdate = sgs_GetVar<sgsVariable>()( callerCtx, 1 ); return SGS_SUCCESS; }
+	}
+	return sgsOuzelDisposable::_sgs_setindex( callerCtx, obj );
+}
+
+int sgsOuzelUpdateCallback::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+{
+	sgs_Variable key;
+	(void) key;
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	if( obj->iface == _sgs_interface )
+	{
+		sgs_PushVar( callerCtx, priority );
+		sgs_Serialize( callerCtx, sgs_StackItem( callerCtx, -1 ) );
+		sgs_Pop( callerCtx, 1 );
+		sgs_SerializeObject( callerCtx, 1, "sgsUnserialize_sgsOuzelUpdateCallback" );
+	}
+	sgs_InitStringLit( callerCtx, &key, "interval" );
+	sgs_PushVar( callerCtx, interval );
+	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
+	sgs_Pop( callerCtx, 1 );
+	sgs_Release( callerCtx, &key );
+	sgs_InitStringLit( callerCtx, &key, "onUpdate" );
+	sgs_PushVar( callerCtx, onUpdate );
+	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
+	sgs_Pop( callerCtx, 1 );
+	sgs_Release( callerCtx, &key );
+	sgsOuzelDisposable::_sgsimpl_serialize( C, obj );
+	return SGS_SUCCESS;
+}
+
+int sgsOuzelUpdateCallback::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+{
+	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
+	char bfr[ 86 ];
+	sprintf( bfr, "sgsOuzelUpdateCallback (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelUpdateCallback* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+		obj->data, depth > 0 ? "\n{" : " ..." );
+	sgs_PushString( callerCtx, bfr );
+	if( depth > 0 )
+	{
+		sgs_PushStringLit( callerCtx, "\n[inherited] " );
+		sgsOuzelDisposable::_sgs_dump( callerCtx, obj, depth );
+		{ sgs_PushStringLit( callerCtx, "\ninterval = " ); sgs_DumpData( callerCtx, interval, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\npriority = " ); sgs_DumpData( callerCtx, priority, depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nonUpdate = " ); sgs_DumpData( callerCtx, onUpdate, depth ).push( callerCtx ); }
+		sgs_StringConcat( callerCtx, 8 );
+		sgs_PadString( callerCtx );
+		sgs_PushStringLit( callerCtx, "\n}" );
+		sgs_StringConcat( callerCtx, 3 );
+	}
+	return SGS_SUCCESS;
+}
+
+int sgsUnserialize_sgsOuzelUpdateCallback( SGS_CTX )
+{
+	SGS_CREATECLASS( C, NULL, sgsOuzelUpdateCallback, ( sgs_GetVar<int>()( C, 0 ) ) );
+	return 1;
+}
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelUpdateCallback[] =
+{ { "sgsUnserialize_sgsOuzelUpdateCallback", sgsUnserialize_sgsOuzelUpdateCallback } };
+
+static sgs_RegFuncConst sgsOuzelUpdateCallback__sgs_funcs[] =
+{
+	{ NULL, NULL },
+};
+
+static int sgsOuzelUpdateCallback__sgs_ifn( SGS_CTX )
+{
+	sgs_CreateDict( C, NULL, 0 );
+	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
+		sgsOuzelUpdateCallback__sgs_funcs,
+		-1, "sgsOuzelUpdateCallback." );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelDisposable >( C );
+	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelUpdateCallback, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelUpdateCallback", sgs_StackItem( C, -1 ) );
+	return 1;
+}
+
+static sgs_ObjInterface sgsOuzelUpdateCallback__sgs_interface =
+{
+	"sgsOuzelUpdateCallback",
+	sgsOuzelUpdateCallback::_sgslocal_destruct, sgsOuzelUpdateCallback::_sgslocal_gcmark, sgsOuzelUpdateCallback::_sgslocal_getindex, sgsOuzelUpdateCallback::_sgslocal_setindex, NULL, sgsOuzelUpdateCallback::_sgslocal_serialize, sgsOuzelUpdateCallback::_sgslocal_dump, NULL, NULL, NULL, 
+	NULL,
+	sgsOuzelDisposable::_sgs_interface,
+};
+_sgsInterface sgsOuzelUpdateCallback::_sgs_interface(sgsOuzelUpdateCallback__sgs_interface, sgsOuzelUpdateCallback__sgs_ifn);
 
 
 static int _sgs_method__sgsOuzelCursor__initFromFile( sgs_Context* callerCtx )
@@ -6186,6 +6337,12 @@ static int _sgs_method__sgsOuzel__createEventHandler( sgs_Context* callerCtx )
 	sgs_PushVar(callerCtx,sgsOuzel::createEventHandler( sgs_GetVar<int>()(callerCtx,0) )); return 1;
 }
 
+static int _sgs_method__sgsOuzel__createUpdateCallback( sgs_Context* callerCtx )
+{
+	sgs_FuncName( callerCtx, "sgsOuzel.createUpdateCallback" );
+	sgs_PushVar(callerCtx,sgsOuzel::createUpdateCallback( sgs_GetVar<int>()(callerCtx,0) )); return 1;
+}
+
 static int _sgs_method__sgsOuzel__createCursor( sgs_Context* callerCtx )
 {
 	sgs_FuncName( callerCtx, "sgsOuzel.createCursor" );
@@ -6426,6 +6583,7 @@ static sgs_RegFuncConst sgsOuzel__sgs_funcs[] =
 	{ "setLanguage", _sgs_method__sgsOuzel__setLanguage },
 	{ "getString", _sgs_method__sgsOuzel__getString },
 	{ "createEventHandler", _sgs_method__sgsOuzel__createEventHandler },
+	{ "createUpdateCallback", _sgs_method__sgsOuzel__createUpdateCallback },
 	{ "createCursor", _sgs_method__sgsOuzel__createCursor },
 	{ "createSprite", _sgs_method__sgsOuzel__createSprite },
 	{ "createShapeRenderer", _sgs_method__sgsOuzel__createShapeRenderer },

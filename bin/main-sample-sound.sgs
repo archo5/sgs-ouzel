@@ -5,13 +5,6 @@ class SoundSample : Sample
 	{
 		this.
 		{
-			eventHandler = ouzel.createEventHandler().
-			{
-				onGamepadEvent = bind( this, this.onGamepadEvent ),
-				onUIEvent = bind( this, this.onUIEvent ),
-				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
-			},
-			
 			scene = ouzel.createScene(),
 			guiCamera = ouzel.createCamera().
 			{

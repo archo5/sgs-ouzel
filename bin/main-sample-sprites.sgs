@@ -5,13 +5,6 @@ class SpritesSample : Sample
 	{
 		this.
 		{
-			eventHandler = ouzel.createEventHandler().
-			{
-				onGamepadEvent = bind( this, this.onGamepadEvent ),
-				onUIEvent = bind( this, this.onUIEvent ),
-				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
-			},
-			
 			scene = ouzel.createScene(),
 			layer = ouzel.createLayer(),
 			camera = ouzel.createCamera().
@@ -99,7 +92,6 @@ class SpritesSample : Sample
 		{
 			if( e.node === this.backButton )
 			{
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();
 			}
 			else if( e.node === this.hideButton )

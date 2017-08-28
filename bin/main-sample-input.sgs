@@ -5,15 +5,6 @@ class InputSample : Sample
 	{
 		this.
 		{
-			eventHandler = ouzel.createEventHandler().
-			{
-				onGamepadEvent = bind( this, this.onGamepadEvent ),
-				onUIEvent = bind( this, this.onUIEvent ),
-				onKeyboardEvent = bind( this, this.onKeyboardEvent ),
-				onMouseEvent = bind( this, this.onMouseEvent ),
-				onTouchEvent = bind( this, this.onTouchEvent ),
-			},
-			
 			scene = ouzel.createScene(),
 			layer = ouzel.createLayer(),
 			camera = ouzel.createCamera().
@@ -97,7 +88,6 @@ class InputSample : Sample
 				e.key == ouzel.input.KeyboardKey.MENU )
 			{
 				ouzel.input.cursorVisible = true;
-				_G.curScene.eventHandler.dispose();
 				_G.curScene = new MainMenu();
 			}
 			

@@ -199,20 +199,19 @@ struct sgsOuzelUIEvent : sgsObjectBase, UIEvent
 struct sgsOuzelEventHandler : sgsOuzelDisposable, EventHandler
 {
 	SGS_OBJECT_INHERIT( sgsOuzelDisposable );
-	SGS_UNSERIALIZE_FUNC( unserialize );
 	
 	typedef sgsHandle< sgsOuzelEventHandler > Handle;
 	Handle GetScriptHandle(){ return Handle( this ); }
 	sgsVariable GetScriptVar(){ return GetScriptHandle().get_variable(); }
 	
-	sgsOuzelEventHandler( int priority );
-	static int unserialize( SGS_CTX );
+	sgsOuzelEventHandler( int prio );
 	bool handleKeyboard( Event::Type type, const KeyboardEvent& event );
 	bool handleMouse( Event::Type type, const MouseEvent& event );
 	bool handleTouch( Event::Type type, const TouchEvent& event );
 	bool handleGamepad( Event::Type type, const GamepadEvent& event );
 	bool handleUI( Event::Type type, const UIEvent& event );
 	
+	SGS_PROPFN( READ SERIALIZE 0 ) int priority;
 	SGS_PROPERTY sgsVariable onKeyboardEvent;
 	SGS_PROPERTY sgsVariable onMouseEvent;
 	SGS_PROPERTY sgsVariable onTouchEvent;
@@ -224,6 +223,22 @@ struct sgsOuzelEventHandler : sgsOuzelDisposable, EventHandler
 	SGS_PROPFN( READ ) sgsOuzelTouchEvent::Handle lastTouchEvent;
 	SGS_PROPFN( READ ) sgsOuzelGamepadEvent::Handle lastGamepadEvent;
 	SGS_PROPFN( READ ) sgsOuzelUIEvent::Handle lastUIEvent;
+};
+
+struct sgsOuzelUpdateCallback : sgsOuzelDisposable, UpdateCallback
+{
+	SGS_OBJECT_INHERIT( sgsOuzelDisposable );
+	
+	typedef sgsHandle< sgsOuzelUpdateCallback > Handle;
+	Handle GetScriptHandle(){ return Handle( this ); }
+	sgsVariable GetScriptVar(){ return GetScriptHandle().get_variable(); }
+	
+	sgsOuzelUpdateCallback( int prio );
+	void update( float dt );
+	
+	SGS_PROPFN( READ WRITE ) SGS_ALIAS( float interval );
+	SGS_PROPFN( READ SERIALIZE 0 ) int priority;
+	SGS_PROPERTY sgsVariable onUpdate;
 };
 
 struct sgsOuzelCursor : sgsObjectBase, Cursor
@@ -808,6 +823,7 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD string getString( const string& str );
 	
 	SGS_STATICMETHOD sgsOuzelEventHandler::Handle createEventHandler( int priority );
+	SGS_STATICMETHOD sgsOuzelUpdateCallback::Handle createUpdateCallback( int priority );
 	SGS_STATICMETHOD sgsOuzelCursor::Handle createCursor();
 	
 	SGS_STATICMETHOD sgsOuzelSprite::Handle createSprite();

@@ -23,5 +23,5 @@ xcuserdata
 /bin/android/local.properties
 /bin/android/project.properties
 /bin/android/proguard-project.txt
-/dist/*
+/sgs-ouzel/*
 /sgsouzel_dist_*

@@ -8,18 +8,18 @@ import org.ouzelengine.OuzelLibJNIWrapper;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class View extends SurfaceView
+public class View extends SurfaceView implements SurfaceHolder.Callback
 {
     private final InputManager inputManager;
 
     public View(Context context)
     {
         super(context);
-
+        getHolder().addCallback(this);
         inputManager = new InputManager();
-
         setFocusableInTouchMode(true);
     }
 
@@ -40,5 +40,20 @@ public class View extends SurfaceView
         inputManager.onInputEvent(event);
         OuzelLibJNIWrapper.onKeyUp(keyCode);
         return super.onKeyUp(keyCode, event);
+    }
+
+    @Override public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+    {
+        OuzelLibJNIWrapper.onSurfaceChanged(holder.getSurface(), width, height);
+    }
+
+    @Override public void surfaceCreated(SurfaceHolder holder)
+    {
+        OuzelLibJNIWrapper.onSurfaceCreated(holder.getSurface());
+    }
+
+    @Override public void surfaceDestroyed(SurfaceHolder holder)
+    {
+        OuzelLibJNIWrapper.onSurfaceDestroyed();
     }
 }

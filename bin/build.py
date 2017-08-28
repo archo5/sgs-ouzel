@@ -6,8 +6,13 @@ import xml.etree.ElementTree as ET
 
 def safe_delete( dp ):
 	if os.path.exists( dp ):
-		shutil.rmtree( dp )
-	os.mkdir( dp )
+		for i in range(10):
+			try:
+				shutil.rmtree( dp )
+			except:
+				pass
+		if os.path.exists( dp ):
+			shutil.rmtree( dp )
 def path_under( testpath, parentpath ):
 	testpath = os.path.realpath( testpath )
 	parentpath = os.path.realpath( parentpath )
@@ -58,6 +63,7 @@ def copy_scripts( dst ):
 
 def build_windows():
 	safe_delete( TGTDIR )
+	os.mkdir( TGTDIR )
 	# binaries
 	shutil.copy(
 		DEVP( "sgsouzel-win32.exe" ),
@@ -105,12 +111,11 @@ class AndroidPaths:
 	def __init__( self ):
 		self.errors = False
 		
-		# TODO
-		os.environ[ "JAVA_HOME" ] = "C:/Program Files/Java/jdk1.8.0_101"
-		
 		print( "Checking Android build environment..." )
 		asn = "Android SDK"
 		self.sdk = self.envpath( asn, "ANDROID_SDK" )
+		if not self.sdk:
+			self.sdk = "ANDROID_SDK[not found]"
 		self.adb = self.exepath( "adb", asn, self.sdk, "platform-tools", "adb" )
 		self.android = self.exepath( "android", asn, self.sdk, "tools", "android" )
 		# TODO find build tools
@@ -118,6 +123,8 @@ class AndroidPaths:
 		
 		jhn = "Java"
 		self.javahome = self.envpath( jhn, "JAVA_HOME" )
+		if not self.javahome:
+			self.javahome = "JAVA_HOME[not found]"
 		self.keytool = self.exepath( "keytool", jhn, self.javahome, "bin", "keytool" )
 		self.jarsigner = self.exepath( "jarsigner", jhn, self.javahome, "bin", "jarsigner" )
 		

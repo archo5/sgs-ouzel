@@ -68,37 +68,37 @@ class MainMenu : Scene
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.gitHubButton )
+			if( e.actor === this.gitHubButton )
 			{
 				ouzel.openURL( "https://github.com/snake5/sgs-ouzel" );
 			}
-			else if( e.node === this.gitHubButton2 )
+			else if( e.actor === this.gitHubButton2 )
 			{
 				ouzel.openURL( "https://github.com/elnormous/ouzel" );
 			}
-			else if( e.node === this.spritesButton )
+			else if( e.actor === this.spritesButton )
 			{
 				_G.curScene = new SpritesSample();
 			}
-			else if( e.node === this.guiButton )
+			else if( e.actor === this.guiButton )
 			{
 				_G.curScene = new GUISample();
 			}
-			else if( e.node === this.renderTargetButton )
+			else if( e.actor === this.renderTargetButton )
 			{
 				_G.curScene = new RTSample();
 			}
-			else if( e.node === this.animationsButton )
+			else if( e.actor === this.animationsButton )
 			{
 				_G.curScene = new AnimationsSample();
 			}
-			else if( e.node === this.inputButton )
+			else if( e.actor === this.inputButton )
 			{
 				_G.curScene = new InputSample();
 			}
-			else if( e.node === this.soundButton )
+			else if( e.actor === this.soundButton )
 			{
 				_G.curScene = new SoundSample();
 			}

@@ -67,17 +67,17 @@ class SoundSample : Sample
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.test8BitButton )
+			if( e.actor === this.test8BitButton )
 				this.test8BitSound.play();
-			if( e.node === this.test24BitButton )
+			if( e.actor === this.test24BitButton )
 				this.test24BitSound.play();
-			if( e.node === this.jumpButton )
+			if( e.actor === this.jumpButton )
 				this.jumpSound.play();
-			if( e.node === this.ambientButton )
+			if( e.actor === this.ambientButton )
 				this.ambientSound.play();
-			if( e.node === this.musicButton )
+			if( e.actor === this.musicButton )
 				this.music.play();
 		}
 		return this!Sample.onUIEvent( type, e );

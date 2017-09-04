@@ -14,14 +14,14 @@ class AnimationsSample : Sample
 			},
 			
 			shapeDrawable = ouzel.createShapeRenderer(),
-			drawNode = ouzel.createNode().
+			drawActor = ouzel.createActor().
 			{
 				position = vec2(-300, 0),
 			},
 			shake = ouzel.createShake( 10, vec2(10, 20), 20 ),
 			
 			witchSprite = ouzel.createSprite(),
-			witch = ouzel.createNode().
+			witch = ouzel.createActor().
 			{
 				position = vec2(200, 0),
 			},
@@ -33,7 +33,7 @@ class AnimationsSample : Sample
 			witchSequence = ouzel.createSequence([ this.witchRepeat, this.witchParallel ]),
 			
 			ballSprite = ouzel.createSprite(),
-			ball = ouzel.createNode(),
+			ball = ouzel.createActor(),
 			ballDelay = ouzel.createAnimator( 1 ),
 			ballMove = ouzel.createMove( 2, vec2(0, -240), false ),
 			ballEase = ouzel.createEase( this.ballMove, ouzel.EaseType.OUT, ouzel.EaseFunc.BOUNCE ),
@@ -55,10 +55,10 @@ class AnimationsSample : Sample
 		
 		this.shapeDrawable.polygon( [vec2(15, 75), vec2(25, 75), vec2(25, 55)], ouzel.Color("#ff0000"), false );
 		
-		this.drawNode.addComponent( this.shapeDrawable );
-		this.drawNode.addComponent( this.shake );
+		this.drawActor.addComponent( this.shapeDrawable );
+		this.drawActor.addComponent( this.shake );
 		this.shake.start();
-		this.layer.addChild( this.drawNode );
+		this.layer.addChild( this.drawActor );
 		
 		this.witchSprite.initFromFile( "witch.png" );
 		this.witch.addComponent( this.witchSprite );

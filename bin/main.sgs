@@ -42,9 +42,9 @@ class Sample : Scene
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.backButton )
+			if( e.actor === this.backButton )
 			{
 				_G.curScene = new MainMenu();
 			}

@@ -182,8 +182,8 @@ struct sgsOuzelUIEvent : sgsObjectBase, UIEvent
 	
 	typedef sgsHandle< sgsOuzelUIEvent > Handle;
 	
-	sgsHandle< struct sgsOuzelNode > getNode();
-	SGS_PROPFN( READ getNode ) SGS_ALIAS( sgsHandle< struct sgsOuzelNode > node );
+	sgsHandle< struct sgsOuzelActor > getActor();
+	SGS_PROPFN( READ getActor ) SGS_ALIAS( sgsHandle< struct sgsOuzelActor > actor );
 	SGS_PROPFN( READ ) SGS_ALIAS( uint64_t touchId );
 	SGS_PROPFN( READ SOURCE difference ) SGS_ALIAS( Vector2 difference );
 	SGS_PROPFN( READ SOURCE difference.x ) SGS_ALIAS( float differenceX );
@@ -301,9 +301,9 @@ struct sgsOuzelComponent : sgsObjectBase
 	SGS_METHOD bool pointOn( const Vector2& pos ){ return Item()->pointOn( pos ); }
 	// TODO shapeOverlaps
 	SGS_PROPFN( READ Item()->isHidden WRITE Item()->setHidden ) SGS_ALIAS( bool hidden );
-	sgsHandle< struct sgsOuzelNode > getNode();
-	SGS_PROPFN( READ getNode ) SGS_ALIAS( sgsHandle< struct sgsOuzelNode > node );
-	SGS_METHOD void removeFromNode(){ Item()->removeFromNode(); }
+	sgsHandle< struct sgsOuzelActor > getActor();
+	SGS_PROPFN( READ getActor ) SGS_ALIAS( sgsHandle< struct sgsOuzelActor > actor );
+	SGS_METHOD void removeFromActor(){ Item()->removeFromActor(); }
 };
 
 struct sgsOuzelSprite : sgsOuzelComponent
@@ -401,8 +401,8 @@ struct sgsOuzelAnimator : sgsOuzelComponent
 	SGS_PROPFN( READ Item()->getCurrentTime ) SGS_ALIAS( float currentTime );
 	SGS_PROPFN( READ Item()->getProgress ) SGS_ALIAS( float progress );
 	
-	sgsHandle< struct sgsOuzelNode > getTargetNode();
-	SGS_PROPFN( READ getTargetNode ) SGS_ALIAS( sgsHandle< struct sgsOuzelNode > targetNode );
+	sgsHandle< struct sgsOuzelActor > getTargetActor();
+	SGS_PROPFN( READ getTargetActor ) SGS_ALIAS( sgsHandle< struct sgsOuzelActor > targetActor );
 	SGS_METHOD void addAnimator( sgsOuzelAnimator::Handle animator );
 	SGS_METHOD void removeAnimator( sgsOuzelAnimator::Handle animator );
 	SGS_METHOD void removeAllAnimators(){ Item()->removeAllAnimators(); }
@@ -465,20 +465,20 @@ struct sgsOuzelSequence : sgsOuzelAnimator
 	typedef sgsHandle< sgsOuzelSequence > Handle;
 };
 
-struct sgsOuzelNodeContainer : sgsObjectBase
+struct sgsOuzelActorContainer : sgsObjectBase
 {
 	SGS_OBJECT;
 	
-	typedef sgsHandle< sgsOuzelNodeContainer > Handle;
-	NodeContainer* obj = nullptr;
+	typedef sgsHandle< sgsOuzelActorContainer > Handle;
+	ActorContainer* obj = nullptr;
 	
-	~sgsOuzelNodeContainer();
-	SGS_METHOD void addChild( sgsHandle< struct sgsOuzelNode > node );
-	SGS_METHOD bool removeChild( sgsHandle< struct sgsOuzelNode > node );
-	SGS_METHOD bool moveChildToBack( sgsHandle< struct sgsOuzelNode > node );
-	SGS_METHOD bool moveChildToFront( sgsHandle< struct sgsOuzelNode > node );
+	~sgsOuzelActorContainer();
+	SGS_METHOD void addChild( sgsHandle< struct sgsOuzelActor > actor );
+	SGS_METHOD bool removeChild( sgsHandle< struct sgsOuzelActor > actor );
+	SGS_METHOD bool moveChildToBack( sgsHandle< struct sgsOuzelActor > actor );
+	SGS_METHOD bool moveChildToFront( sgsHandle< struct sgsOuzelActor > actor );
 	SGS_METHOD void removeAllChildren();
-	SGS_METHOD bool hasChild( sgsHandle< struct sgsOuzelNode > node, bool recursive /* = false */ );
+	SGS_METHOD bool hasChild( sgsHandle< struct sgsOuzelActor > actor, bool recursive /* = false */ );
 	SGS_METHOD sgsVariable getChildren();
 	
 	SGS_METHOD sgsHandle< struct sgsOuzelLayer > getLayer();
@@ -486,12 +486,12 @@ struct sgsOuzelNodeContainer : sgsObjectBase
 	SGS_NODUMP( layer );
 };
 
-struct sgsOuzelNode : sgsOuzelNodeContainer
+struct sgsOuzelActor : sgsOuzelActorContainer
 {
-	SGS_OBJECT_INHERIT( sgsOuzelNodeContainer );
+	SGS_OBJECT_INHERIT( sgsOuzelActorContainer );
 	
-	typedef sgsHandle< sgsOuzelNode > Handle;
-	Node* Item(){ return static_cast<Node*>( obj ); }
+	typedef sgsHandle< sgsOuzelActor > Handle;
+	Actor* Item(){ return static_cast<Actor*>( obj ); }
 	
 	SGS_PROPFN( READ Item()->getPosition WRITE Item()->setPosition ) SGS_ALIAS( Vector3 position );
 	SGS_PROPFN( READ Item()->getWorldPosition ) SGS_ALIAS( Vector3 worldPosition );
@@ -512,8 +512,8 @@ struct sgsOuzelNode : sgsOuzelNodeContainer
 	SGS_METHOD bool pointOn( const Vector2& pos ){ return Item()->pointOn( pos ); }
 	// TODO shapeOverlaps
 	
-	sgsOuzelNodeContainer::Handle getParent();
-	SGS_PROPFN( READ getParent ) SGS_ALIAS( sgsOuzelNodeContainer::Handle parent );
+	sgsOuzelActorContainer::Handle getParent();
+	SGS_PROPFN( READ getParent ) SGS_ALIAS( sgsOuzelActorContainer::Handle parent );
 	SGS_NODUMP( parent );
 	SGS_METHOD void removeFromParent();
 	
@@ -523,9 +523,9 @@ struct sgsOuzelNode : sgsOuzelNodeContainer
 	SGS_METHOD sgsVariable getComponents( uint32_t type /* = <none> */ );
 };
 
-struct sgsOuzelLayer : sgsOuzelNodeContainer
+struct sgsOuzelLayer : sgsOuzelActorContainer
 {
-	SGS_OBJECT_INHERIT( sgsOuzelNodeContainer );
+	SGS_OBJECT_INHERIT( sgsOuzelActorContainer );
 	
 	typedef sgsHandle< sgsOuzelLayer > Handle;
 	Layer* Item(){ return static_cast<Layer*>( obj ); }
@@ -538,9 +538,9 @@ struct sgsOuzelLayer : sgsOuzelNodeContainer
 	SGS_METHOD void removeFromScene(){ Item()->removeFromScene(); }
 };
 
-struct sgsOuzelCamera : sgsOuzelNode
+struct sgsOuzelCamera : sgsOuzelActor
 {
-	SGS_OBJECT_INHERIT( sgsOuzelNode );
+	SGS_OBJECT_INHERIT( sgsOuzelActor );
 	
 	typedef sgsHandle< sgsOuzelCamera > Handle;
 	Camera* Item(){ return static_cast<Camera*>( obj ); }
@@ -610,9 +610,9 @@ struct sgsOuzelSceneManager : sgsObjectBase
 
 // [scene] GUI
 
-struct sgsOuzelWidget : sgsOuzelNode
+struct sgsOuzelWidget : sgsOuzelActor
 {
-	SGS_OBJECT_INHERIT( sgsOuzelNode );
+	SGS_OBJECT_INHERIT( sgsOuzelActor );
 	
 	typedef sgsHandle< sgsOuzelWidget > Handle;
 	Widget* Item(){ return static_cast<Widget*>( obj ); }
@@ -842,7 +842,7 @@ struct sgsOuzel : sgsLiteObjectBase
 	
 	SGS_STATICMETHOD sgsOuzelScene::Handle createScene();
 	SGS_STATICMETHOD sgsOuzelLayer::Handle createLayer();
-	SGS_STATICMETHOD sgsOuzelNode::Handle createNode();
+	SGS_STATICMETHOD sgsOuzelActor::Handle createActor();
 	SGS_STATICMETHOD sgsOuzelCamera::Handle createCamera();
 	
 	SGS_STATICMETHOD sgsOuzelMenu::Handle createMenu();

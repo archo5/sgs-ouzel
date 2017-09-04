@@ -21,7 +21,7 @@ class SpritesSample : Sample
 		this.
 		{
 			characterSprite = ouzel.createSprite(),
-			character = ouzel.createNode().{ position = vec2( -300, 0 ) },
+			character = ouzel.createActor().{ position = vec2( -300, 0 ) },
 			move = ouzel.createMove( 4, vec2( 300, 0 ) ),
 		};
 		this.characterSprite.initFromFile( "run.json" );
@@ -35,22 +35,22 @@ class SpritesSample : Sample
 		this.
 		{
 			fireSprite = ouzel.createSprite().{ offset = vec2( 0, 20 ) },
-			fireNode = ouzel.createNode().{ position = vec2( -100, -140 ) },
+			fireActor = ouzel.createActor().{ position = vec2( -100, -140 ) },
 		};
 		this.fireSprite.initFromFile( "fire.json" );
 		this.fireSprite.play( true );
-		this.fireNode.addComponent( this.fireSprite );
-		this.layer.addChild( this.fireNode );
+		this.fireActor.addComponent( this.fireSprite );
+		this.layer.addChild( this.fireActor );
 		
 		// triangle
 		this.
 		{
 			triangleSprite = ouzel.createSprite(),
-			triangleNode = ouzel.createNode().{ position = vec2( 100, -140 ) },
+			triangleActor = ouzel.createActor().{ position = vec2( 100, -140 ) },
 		};
 		this.triangleSprite.initFromFile( "triangle.json" );
-		this.triangleNode.addComponent( this.triangleSprite );
-		this.layer.addChild( this.triangleNode );
+		this.triangleActor.addComponent( this.triangleSprite );
+		this.layer.addChild( this.triangleActor );
 		
 		// GUI
 		this.
@@ -88,17 +88,17 @@ class SpritesSample : Sample
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.backButton )
+			if( e.actor === this.backButton )
 			{
 				_G.curScene = new MainMenu();
 			}
-			else if( e.node === this.hideButton )
+			else if( e.actor === this.hideButton )
 			{
 				this.character.hidden = !this.character.hidden;
 			}
-			else if( e.node === this.wireframeButton )
+			else if( e.actor === this.wireframeButton )
 			{
 				this.camera.wireframe = !this.camera.wireframe;
 			}

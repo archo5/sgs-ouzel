@@ -26,10 +26,10 @@ class RTSample : Sample
 			},
 			
 			characterSprite = ouzel.createSprite(),
-			rtCharacter = ouzel.createNode(),
+			rtCharacter = ouzel.createActor(),
 			
 			rtSprite = ouzel.createSprite(),
-			rtNode = ouzel.createNode(),
+			rtActor = ouzel.createActor(),
 			
 			guiLayer = ouzel.createLayer(),
 			guiCamera = ouzel.createCamera().
@@ -60,8 +60,8 @@ class RTSample : Sample
 		this.rtLayer.addChild( this.rtCharacter );
 		
 		this.rtSprite.initFromTexture( this.renderTarget );
-		this.rtNode.addComponent( this.rtSprite );
-		this.layer.addChild( this.rtNode );
+		this.rtActor.addComponent( this.rtSprite );
+		this.layer.addChild( this.rtActor );
 		
 		this.guiLayer.addChild( this.guiCamera );
 		this.scene.addLayer( this.guiLayer );

@@ -82,9 +82,9 @@ int sgsOuzelColor::call( sgs_Context* callerCtx, sgs_VarObj* obj )
 }
 
 
-sgsHandle< struct sgsOuzelNode > sgsOuzelUIEvent::getNode()
+sgsHandle< struct sgsOuzelActor > sgsOuzelUIEvent::getActor()
 {
-	return GetObjHandle<sgsOuzelNode>( node );
+	return GetObjHandle<sgsOuzelActor>( actor );
 }
 
 sgsOuzelEventHandler::sgsOuzelEventHandler( int prio ) : EventHandler( prio ), priority( prio )
@@ -154,9 +154,9 @@ sgsOuzelComponent::~sgsOuzelComponent()
 	delete obj;
 }
 
-sgsHandle< struct sgsOuzelNode > sgsOuzelComponent::getNode()
+sgsHandle< struct sgsOuzelActor > sgsOuzelComponent::getActor()
 {
-	return GetObjHandle<sgsOuzelNode>( obj->getNode() );
+	return GetObjHandle<sgsOuzelActor>( obj->getActor() );
 }
 
 
@@ -226,9 +226,9 @@ bool sgsOuzelShapeRenderer::curve( const std::vector<Vector2>& controlPoints,
 }
 
 
-sgsHandle< struct sgsOuzelNode > sgsOuzelAnimator::getTargetNode()
+sgsHandle< struct sgsOuzelActor > sgsOuzelAnimator::getTargetActor()
 {
-	return GetObjHandle<sgsOuzelNode>( Item()->getTargetNode() );
+	return GetObjHandle<sgsOuzelActor>( Item()->getTargetActor() );
 }
 
 void sgsOuzelAnimator::addAnimator( sgsOuzelAnimator::Handle animator )
@@ -253,48 +253,48 @@ sgsOuzelAnimator::Handle sgsOuzelAnimator::getParent()
 }
 
 
-sgsOuzelNodeContainer::~sgsOuzelNodeContainer()
+sgsOuzelActorContainer::~sgsOuzelActorContainer()
 {
 	g_PtrToSgsObj.erase( obj );
 	delete obj;
 }
 
-void sgsOuzelNodeContainer::addChild( sgsHandle< struct sgsOuzelNode > node )
+void sgsOuzelActorContainer::addChild( sgsHandle< struct sgsOuzelActor > actor )
 {
-	obj->addChild( node ? node->Item() : nullptr );
+	obj->addChild( actor ? actor->Item() : nullptr );
 }
 
-bool sgsOuzelNodeContainer::removeChild( sgsHandle< struct sgsOuzelNode > node )
+bool sgsOuzelActorContainer::removeChild( sgsHandle< struct sgsOuzelActor > actor )
 {
-	return obj->removeChild( node ? node->Item() : nullptr );
+	return obj->removeChild( actor ? actor->Item() : nullptr );
 }
 
-bool sgsOuzelNodeContainer::moveChildToBack( sgsHandle< struct sgsOuzelNode > node )
+bool sgsOuzelActorContainer::moveChildToBack( sgsHandle< struct sgsOuzelActor > actor )
 {
-	return obj->moveChildToBack( node ? node->Item() : nullptr );
+	return obj->moveChildToBack( actor ? actor->Item() : nullptr );
 }
 
-bool sgsOuzelNodeContainer::moveChildToFront( sgsHandle< struct sgsOuzelNode > node )
+bool sgsOuzelActorContainer::moveChildToFront( sgsHandle< struct sgsOuzelActor > actor )
 {
-	return obj->moveChildToFront( node ? node->Item() : nullptr );
+	return obj->moveChildToFront( actor ? actor->Item() : nullptr );
 }
 
-void sgsOuzelNodeContainer::removeAllChildren()
+void sgsOuzelActorContainer::removeAllChildren()
 {
 	obj->removeAllChildren();
 }
 
-bool sgsOuzelNodeContainer::hasChild( sgsHandle< struct sgsOuzelNode > node, bool recursive /* = false */ )
+bool sgsOuzelActorContainer::hasChild( sgsHandle< struct sgsOuzelActor > actor, bool recursive /* = false */ )
 {
-	return obj->hasChild( node ? node->Item() : nullptr, recursive );
+	return obj->hasChild( actor ? actor->Item() : nullptr, recursive );
 }
 
-sgsVariable sgsOuzelNodeContainer::getChildren()
+sgsVariable sgsOuzelActorContainer::getChildren()
 {
 	auto& children = obj->getChildren();
-	for( Node* node : children )
+	for( Actor* actor : children )
 	{
-		sgs_PushVar( C, GetObjHandle<sgsOuzelNode>( node ) );
+		sgs_PushVar( C, GetObjHandle<sgsOuzelActor>( actor ) );
 	}
 	sgsVariable var;
 	var.create_array( C, children.size() );
@@ -302,17 +302,17 @@ sgsVariable sgsOuzelNodeContainer::getChildren()
 }
 
 
-sgsOuzelNodeContainer::Handle sgsOuzelNode::getParent()
+sgsOuzelActorContainer::Handle sgsOuzelActor::getParent()
 {
-	return GetObjHandle<sgsOuzelNodeContainer>( Item()->getParent() );
+	return GetObjHandle<sgsOuzelActorContainer>( Item()->getParent() );
 }
 
-void sgsOuzelNode::removeFromParent()
+void sgsOuzelActor::removeFromParent()
 {
 	Item()->removeFromParent();
 }
 
-void sgsOuzelNode::addComponent( sgsOuzelComponent::Handle component )
+void sgsOuzelActor::addComponent( sgsOuzelComponent::Handle component )
 {
 	if( component )
 		Item()->addComponent( component->Item() );
@@ -320,7 +320,7 @@ void sgsOuzelNode::addComponent( sgsOuzelComponent::Handle component )
 		sgs_Msg( C, SGS_WARNING, "component not specified" );
 }
 
-void sgsOuzelNode::removeComponent( sgsOuzelComponent::Handle component )
+void sgsOuzelActor::removeComponent( sgsOuzelComponent::Handle component )
 {
 	if( component )
 		Item()->removeComponent( component->Item() );
@@ -328,12 +328,12 @@ void sgsOuzelNode::removeComponent( sgsOuzelComponent::Handle component )
 		sgs_Msg( C, SGS_WARNING, "component not specified" );
 }
 
-void sgsOuzelNode::removeAllComponents()
+void sgsOuzelActor::removeAllComponents()
 {
 	Item()->removeAllComponents();
 }
 
-sgsVariable sgsOuzelNode::getComponents( uint32_t type /* = <none> */ )
+sgsVariable sgsOuzelActor::getComponents( uint32_t type /* = <none> */ )
 {
 	std::vector<Component*> storedComps;
 	const std::vector<Component*>* pcomps = &storedComps;
@@ -351,7 +351,7 @@ sgsVariable sgsOuzelNode::getComponents( uint32_t type /* = <none> */ )
 }
 
 
-sgsOuzelLayer::Handle sgsOuzelNodeContainer::getLayer()
+sgsOuzelLayer::Handle sgsOuzelActorContainer::getLayer()
 {
 	return GetObjHandle<sgsOuzelLayer>( obj->getLayer() );
 }
@@ -713,10 +713,10 @@ sgsOuzelLayer::Handle sgsOuzel::createLayer()
 	return h;
 }
 
-sgsOuzelNode::Handle sgsOuzel::createNode()
+sgsOuzelActor::Handle sgsOuzel::createActor()
 {
-	auto h = CreateObj<sgsOuzelNode>();
-	h->obj = new Node;
+	auto h = CreateObj<sgsOuzelActor>();
+	h->obj = new Actor;
 	g_PtrToSgsObj.insert({ h->obj, h.get() });
 	return h;
 }
@@ -856,15 +856,19 @@ static sgs_RegIntConst g_EventTypesRIC[] =
 	RICET( ORIENTATION_CHANGE )
 	RICET( LOW_MEMORY )
 	RICET( OPEN_FILE )
-	RICET( ENTER_NODE )
-	RICET( LEAVE_NODE )
-	RICET( PRESS_NODE )
-	RICET( RELEASE_NODE )
-	RICET( CLICK_NODE )
-	RICET( DRAG_NODE )
+	RICET( ACTOR_ENTER )
+	RICET( ACTOR_LEAVE )
+	RICET( ACTOR_PRESS )
+	RICET( ACTOR_RELEASE )
+	RICET( ACTOR_CLICK )
+	RICET( ACTOR_DRAG )
 	RICET( WIDGET_CHANGE )
-	RICET( RESET )
-	RICET( FINISH )
+	RICET( ANIMATION_START )
+	RICET( ANIMATION_RESET )
+	RICET( ANIMATION_FINISH )
+	RICET( SOUND_START )
+	RICET( SOUND_RESET )
+	RICET( SOUND_FINISH )
 	RICET( USER )
 	{ NULL, 0 },
 };

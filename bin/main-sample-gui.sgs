@@ -69,17 +69,17 @@ class GUISample : Sample
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.backButton )
+			if( e.actor === this.backButton )
 			{
 				_G.curScene = new MainMenu();
 			}
-			else if( e.node === this.button )
+			else if( e.actor === this.button )
 			{
 				this.checkBox.checked = !this.checkBox.checked;
 			}
-			else if( e.node === this.fullscreenButton )
+			else if( e.actor === this.fullscreenButton )
 			{
 				ouzel.window.fullscreen = !ouzel.window.fullscreen;
 			}

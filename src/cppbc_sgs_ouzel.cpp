@@ -823,7 +823,7 @@ int sgsOuzelUIEvent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj 
 	char* str;
 	if( sgs_ParseString( callerCtx, 0, &str, NULL ) )
 	{
-		if( !strcmp( str, "node" ) ){ sgs_PushVar( callerCtx, getNode() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "actor" ) ){ sgs_PushVar( callerCtx, getActor() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "touchId" ) ){ sgs_PushVar( callerCtx, touchId ); return SGS_SUCCESS; }
 		if( !strcmp( str, "difference" ) ){ sgs_PushVar( callerCtx, difference ); return SGS_SUCCESS; }
 		if( !strcmp( str, "differenceX" ) ){ sgs_PushVar( callerCtx, difference.x ); return SGS_SUCCESS; }
@@ -870,7 +870,7 @@ int sgsOuzelUIEvent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int
 	sgs_PushString( callerCtx, bfr );
 	if( depth > 0 )
 	{
-		{ sgs_PushStringLit( callerCtx, "\nnode = " ); sgs_DumpData( callerCtx, getNode(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nactor = " ); sgs_DumpData( callerCtx, getActor(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\ntouchId = " ); sgs_DumpData( callerCtx, touchId, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\ndifference = " ); sgs_DumpData( callerCtx, difference, depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\ndifferenceX = " ); sgs_DumpData( callerCtx, difference.x, depth ).push( callerCtx ); }
@@ -1593,13 +1593,13 @@ static int _sgs_method__sgsOuzelComponent__pointOn( sgs_Context* callerCtx )
 	sgs_PushVar(callerCtx,data->pointOn( sgs_GetVar<Vector2>()(callerCtx,0) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelComponent__removeFromNode( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelComponent__removeFromActor( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelComponent::_sgs_interface, (void**) &base, "sgsOuzelComponent.removeFromNode" ) ) return 0;
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelComponent::_sgs_interface, (void**) &base, "sgsOuzelComponent.removeFromActor" ) ) return 0;
 	sgsOuzelComponent* data = static_cast<sgsOuzelComponent*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	data->removeFromNode(  ); return 0;
+	data->removeFromActor(  ); return 0;
 }
 
 int sgsOuzelComponent::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
@@ -1644,7 +1644,7 @@ int sgsOuzelComponent::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* ob
 	{
 		if( !strcmp( str, "type" ) ){ sgs_PushVar( callerCtx, Item()->getType() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "hidden" ) ){ sgs_PushVar( callerCtx, Item()->isHidden() ); return SGS_SUCCESS; }
-		if( !strcmp( str, "node" ) ){ sgs_PushVar( callerCtx, getNode() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "actor" ) ){ sgs_PushVar( callerCtx, getActor() ); return SGS_SUCCESS; }
 	}
 	return SGS_ENOTFND;
 }
@@ -1689,7 +1689,7 @@ int sgsOuzelComponent::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, i
 	{
 		{ sgs_PushStringLit( callerCtx, "\ntype = " ); sgs_DumpData( callerCtx, Item()->getType(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nhidden = " ); sgs_DumpData( callerCtx, Item()->isHidden(), depth ).push( callerCtx ); }
-		{ sgs_PushStringLit( callerCtx, "\nnode = " ); sgs_DumpData( callerCtx, getNode(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\nactor = " ); sgs_DumpData( callerCtx, getActor(), depth ).push( callerCtx ); }
 		sgs_StringConcat( callerCtx, 6 );
 		sgs_PadString( callerCtx );
 		sgs_PushStringLit( callerCtx, "\n}" );
@@ -1709,7 +1709,7 @@ static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelComponent[] =
 static sgs_RegFuncConst sgsOuzelComponent__sgs_funcs[] =
 {
 	{ "pointOn", _sgs_method__sgsOuzelComponent__pointOn },
-	{ "removeFromNode", _sgs_method__sgsOuzelComponent__removeFromNode },
+	{ "removeFromActor", _sgs_method__sgsOuzelComponent__removeFromActor },
 	{ NULL, NULL },
 };
 
@@ -2413,7 +2413,7 @@ int sgsOuzelAnimator::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj
 		if( !strcmp( str, "length" ) ){ sgs_PushVar( callerCtx, Item()->getLength() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "currentTime" ) ){ sgs_PushVar( callerCtx, Item()->getCurrentTime() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "progress" ) ){ sgs_PushVar( callerCtx, Item()->getProgress() ); return SGS_SUCCESS; }
-		if( !strcmp( str, "targetNode" ) ){ sgs_PushVar( callerCtx, getTargetNode() ); return SGS_SUCCESS; }
+		if( !strcmp( str, "targetActor" ) ){ sgs_PushVar( callerCtx, getTargetActor() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "parent" ) ){ sgs_PushVar( callerCtx, getParent() ); return SGS_SUCCESS; }
 	}
 	return sgsOuzelComponent::_sgs_getindex( callerCtx, obj );
@@ -2459,7 +2459,7 @@ int sgsOuzelAnimator::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, in
 		{ sgs_PushStringLit( callerCtx, "\nlength = " ); sgs_DumpData( callerCtx, Item()->getLength(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\ncurrentTime = " ); sgs_DumpData( callerCtx, Item()->getCurrentTime(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nprogress = " ); sgs_DumpData( callerCtx, Item()->getProgress(), depth ).push( callerCtx ); }
-		{ sgs_PushStringLit( callerCtx, "\ntargetNode = " ); sgs_DumpData( callerCtx, getTargetNode(), depth ).push( callerCtx ); }
+		{ sgs_PushStringLit( callerCtx, "\ntargetActor = " ); sgs_DumpData( callerCtx, getTargetActor(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nparent = " ); sgs_DumpData( callerCtx, getParent(), depth ).push( callerCtx ); }
 		sgs_StringConcat( callerCtx, 16 );
 		sgs_PadString( callerCtx );
@@ -3631,113 +3631,113 @@ static sgs_ObjInterface sgsOuzelSequence__sgs_interface =
 _sgsInterface sgsOuzelSequence::_sgs_interface(sgsOuzelSequence__sgs_interface, sgsOuzelSequence__sgs_ifn);
 
 
-static int _sgs_method__sgsOuzelNodeContainer__addChild( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__addChild( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.addChild" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.addChild" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	data->addChild( sgs_GetVar<sgsHandle< struct sgsOuzelNode > >()(callerCtx,0) ); return 0;
+	data->addChild( sgs_GetVar<sgsHandle< struct sgsOuzelActor > >()(callerCtx,0) ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__removeChild( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__removeChild( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.removeChild" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.removeChild" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	sgs_PushVar(callerCtx,data->removeChild( sgs_GetVar<sgsHandle< struct sgsOuzelNode > >()(callerCtx,0) )); return 1;
+	sgs_PushVar(callerCtx,data->removeChild( sgs_GetVar<sgsHandle< struct sgsOuzelActor > >()(callerCtx,0) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__moveChildToBack( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__moveChildToBack( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.moveChildToBack" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.moveChildToBack" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	sgs_PushVar(callerCtx,data->moveChildToBack( sgs_GetVar<sgsHandle< struct sgsOuzelNode > >()(callerCtx,0) )); return 1;
+	sgs_PushVar(callerCtx,data->moveChildToBack( sgs_GetVar<sgsHandle< struct sgsOuzelActor > >()(callerCtx,0) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__moveChildToFront( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__moveChildToFront( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.moveChildToFront" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.moveChildToFront" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	sgs_PushVar(callerCtx,data->moveChildToFront( sgs_GetVar<sgsHandle< struct sgsOuzelNode > >()(callerCtx,0) )); return 1;
+	sgs_PushVar(callerCtx,data->moveChildToFront( sgs_GetVar<sgsHandle< struct sgsOuzelActor > >()(callerCtx,0) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__removeAllChildren( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__removeAllChildren( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.removeAllChildren" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.removeAllChildren" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	data->removeAllChildren(  ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__hasChild( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__hasChild( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.hasChild" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.hasChild" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
-	sgs_PushVar(callerCtx,data->hasChild( sgs_GetVar<sgsHandle< struct sgsOuzelNode > >()(callerCtx,0), sgs_GetVar<bool>()(callerCtx,1) )); return 1;
+	sgs_PushVar(callerCtx,data->hasChild( sgs_GetVar<sgsHandle< struct sgsOuzelActor > >()(callerCtx,0), sgs_GetVar<bool>()(callerCtx,1) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__getChildren( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__getChildren( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.getChildren" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.getChildren" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	sgs_PushVar(callerCtx,data->getChildren(  )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNodeContainer__getLayer( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActorContainer__getLayer( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNodeContainer::_sgs_interface, (void**) &base, "sgsOuzelNodeContainer.getLayer" ) ) return 0;
-	sgsOuzelNodeContainer* data = static_cast<sgsOuzelNodeContainer*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActorContainer::_sgs_interface, (void**) &base, "sgsOuzelActorContainer.getLayer" ) ) return 0;
+	sgsOuzelActorContainer* data = static_cast<sgsOuzelActorContainer*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	sgs_PushVar(callerCtx,data->getLayer(  )); return 1;
 }
 
-int sgsOuzelNodeContainer::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelNodeContainer::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelNodeContainer::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelNodeContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelNodeContainer::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNodeContainer::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelActorContainer::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelActorContainer::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelActorContainer*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelActorContainer::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActorContainer::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
 
-int sgsOuzelNodeContainer::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActorContainer::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	C = callerCtx;
-	this->~sgsOuzelNodeContainer();
+	this->~sgsOuzelActorContainer();
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNodeContainer::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActorContainer::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNodeContainer::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActorContainer::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	char* str;
@@ -3748,7 +3748,7 @@ int sgsOuzelNodeContainer::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj
 	return SGS_ENOTFND;
 }
 
-int sgsOuzelNodeContainer::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActorContainer::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	char* str;
@@ -3758,24 +3758,24 @@ int sgsOuzelNodeContainer::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj
 	return SGS_ENOTFND;
 }
 
-int sgsOuzelNodeContainer::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActorContainer::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	sgs_Variable key;
 	(void) key;
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	if( obj->iface == _sgs_interface )
 	{
-		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelNodeContainer" );
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelActorContainer" );
 	}
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNodeContainer::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+int sgsOuzelActorContainer::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	char bfr[ 85 ];
-	sprintf( bfr, "sgsOuzelNodeContainer (obj=%p, base=%p) %s",
-		static_cast< sgsOuzelNodeContainer* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+	char bfr[ 86 ];
+	sprintf( bfr, "sgsOuzelActorContainer (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelActorContainer* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
 		obj->data, depth > 0 ? "\n{" : " ..." );
 	sgs_PushString( callerCtx, bfr );
 	if( depth > 0 )
@@ -3788,137 +3788,137 @@ int sgsOuzelNodeContainer::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* ob
 	return SGS_SUCCESS;
 }
 
-int sgsUnserialize_sgsOuzelNodeContainer( SGS_CTX )
+int sgsUnserialize_sgsOuzelActorContainer( SGS_CTX )
 {
-	SGS_CREATECLASS( C, NULL, sgsOuzelNodeContainer, (  ) );
+	SGS_CREATECLASS( C, NULL, sgsOuzelActorContainer, (  ) );
 	return 1;
 }
-static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelNodeContainer[] =
-{ { "sgsUnserialize_sgsOuzelNodeContainer", sgsUnserialize_sgsOuzelNodeContainer } };
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelActorContainer[] =
+{ { "sgsUnserialize_sgsOuzelActorContainer", sgsUnserialize_sgsOuzelActorContainer } };
 
-static sgs_RegFuncConst sgsOuzelNodeContainer__sgs_funcs[] =
+static sgs_RegFuncConst sgsOuzelActorContainer__sgs_funcs[] =
 {
-	{ "addChild", _sgs_method__sgsOuzelNodeContainer__addChild },
-	{ "removeChild", _sgs_method__sgsOuzelNodeContainer__removeChild },
-	{ "moveChildToBack", _sgs_method__sgsOuzelNodeContainer__moveChildToBack },
-	{ "moveChildToFront", _sgs_method__sgsOuzelNodeContainer__moveChildToFront },
-	{ "removeAllChildren", _sgs_method__sgsOuzelNodeContainer__removeAllChildren },
-	{ "hasChild", _sgs_method__sgsOuzelNodeContainer__hasChild },
-	{ "getChildren", _sgs_method__sgsOuzelNodeContainer__getChildren },
-	{ "getLayer", _sgs_method__sgsOuzelNodeContainer__getLayer },
+	{ "addChild", _sgs_method__sgsOuzelActorContainer__addChild },
+	{ "removeChild", _sgs_method__sgsOuzelActorContainer__removeChild },
+	{ "moveChildToBack", _sgs_method__sgsOuzelActorContainer__moveChildToBack },
+	{ "moveChildToFront", _sgs_method__sgsOuzelActorContainer__moveChildToFront },
+	{ "removeAllChildren", _sgs_method__sgsOuzelActorContainer__removeAllChildren },
+	{ "hasChild", _sgs_method__sgsOuzelActorContainer__hasChild },
+	{ "getChildren", _sgs_method__sgsOuzelActorContainer__getChildren },
+	{ "getLayer", _sgs_method__sgsOuzelActorContainer__getLayer },
 	{ NULL, NULL },
 };
 
-static int sgsOuzelNodeContainer__sgs_ifn( SGS_CTX )
+static int sgsOuzelActorContainer__sgs_ifn( SGS_CTX )
 {
 	sgs_CreateDict( C, NULL, 0 );
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
-		sgsOuzelNodeContainer__sgs_funcs,
-		-1, "sgsOuzelNodeContainer." );
-	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelNodeContainer, 1 );
-	sgs_RegSymbol( C, "", "sgsOuzelNodeContainer", sgs_StackItem( C, -1 ) );
+		sgsOuzelActorContainer__sgs_funcs,
+		-1, "sgsOuzelActorContainer." );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelActorContainer, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelActorContainer", sgs_StackItem( C, -1 ) );
 	return 1;
 }
 
-static sgs_ObjInterface sgsOuzelNodeContainer__sgs_interface =
+static sgs_ObjInterface sgsOuzelActorContainer__sgs_interface =
 {
-	"sgsOuzelNodeContainer",
-	sgsOuzelNodeContainer::_sgslocal_destruct, sgsOuzelNodeContainer::_sgslocal_gcmark, sgsOuzelNodeContainer::_sgslocal_getindex, sgsOuzelNodeContainer::_sgslocal_setindex, NULL, sgsOuzelNodeContainer::_sgslocal_serialize, sgsOuzelNodeContainer::_sgslocal_dump, NULL, NULL, NULL, 
+	"sgsOuzelActorContainer",
+	sgsOuzelActorContainer::_sgslocal_destruct, sgsOuzelActorContainer::_sgslocal_gcmark, sgsOuzelActorContainer::_sgslocal_getindex, sgsOuzelActorContainer::_sgslocal_setindex, NULL, sgsOuzelActorContainer::_sgslocal_serialize, sgsOuzelActorContainer::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
 };
-_sgsInterface sgsOuzelNodeContainer::_sgs_interface(sgsOuzelNodeContainer__sgs_interface, sgsOuzelNodeContainer__sgs_ifn);
+_sgsInterface sgsOuzelActorContainer::_sgs_interface(sgsOuzelActorContainer__sgs_interface, sgsOuzelActorContainer__sgs_ifn);
 
 
-static int _sgs_method__sgsOuzelNode__pointOn( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__pointOn( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.pointOn" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.pointOn" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	sgs_PushVar(callerCtx,data->pointOn( sgs_GetVar<Vector2>()(callerCtx,0) )); return 1;
 }
 
-static int _sgs_method__sgsOuzelNode__removeFromParent( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__removeFromParent( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.removeFromParent" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.removeFromParent" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	data->removeFromParent(  ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNode__addComponent( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__addComponent( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.addComponent" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.addComponent" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	data->addComponent( sgs_GetVar<sgsOuzelComponent::Handle>()(callerCtx,0) ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNode__removeComponent( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__removeComponent( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.removeComponent" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.removeComponent" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	data->removeComponent( sgs_GetVar<sgsOuzelComponent::Handle>()(callerCtx,0) ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNode__removeAllComponents( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__removeAllComponents( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.removeAllComponents" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.removeAllComponents" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	data->removeAllComponents(  ); return 0;
 }
 
-static int _sgs_method__sgsOuzelNode__getComponents( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzelActor__getComponents( sgs_Context* callerCtx )
 {
 	sgsLiteObjectBase* base;
-	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelNode::_sgs_interface, (void**) &base, "sgsOuzelNode.getComponents" ) ) return 0;
-	sgsOuzelNode* data = static_cast<sgsOuzelNode*>( base );
+	if( !sgs_ParseMethodInh( callerCtx, sgsOuzelActor::_sgs_interface, (void**) &base, "sgsOuzelActor.getComponents" ) ) return 0;
+	sgsOuzelActor* data = static_cast<sgsOuzelActor*>( base );
 	_sgsTmpChanger<sgs_Context*> _tmpchg( data->C, callerCtx );
 	sgs_PushVar(callerCtx,data->getComponents( sgs_GetVar<uint32_t>()(callerCtx,0) )); return 1;
 }
 
-int sgsOuzelNode::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelNode::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
-int sgsOuzelNode::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelNode::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
-int sgsOuzelNode::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelNode::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
-int sgsOuzelNode::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelNode::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
-int sgsOuzelNode::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelNode::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
-int sgsOuzelNode::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelNode::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelNode*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
-int sgsOuzelNode::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
-int sgsOuzelNode::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgs_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelActor::_sgslocal_destruct( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_destruct( callerCtx, obj ); }
+int sgsOuzelActor::_sgs_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelActor::_sgslocal_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_gcmark( callerCtx, obj ); }
+int sgsOuzelActor::_sgs_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelActor::_sgslocal_getindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_getindex( callerCtx, obj ); }
+int sgsOuzelActor::_sgs_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelActor::_sgslocal_setindex( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_setindex( callerCtx, obj ); }
+int sgsOuzelActor::_sgs_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgslocal_convert( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgs_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return _sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelActor::_sgslocal_serialize( sgs_Context* callerCtx, sgs_VarObj* obj ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_serialize( callerCtx, obj ); }
+int sgsOuzelActor::_sgs_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return _sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelActor::_sgslocal_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return static_cast<sgsOuzelActor*>( static_cast<sgsLiteObjectBase*>( obj->data ) )->_sgsimpl_dump( callerCtx, obj, param ); }
+int sgsOuzelActor::_sgs_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgslocal_getnext( sgs_Context* callerCtx, sgs_VarObj* obj, int param ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgs_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgslocal_call( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgs_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
+int sgsOuzelActor::_sgslocal_expr( sgs_Context* callerCtx, sgs_VarObj* obj ){ return SGS_ENOTSUP; }
 
-int sgsOuzelNode::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActor::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	C = callerCtx;
-	this->~sgsOuzelNode();
+	this->~sgsOuzelActor();
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNode::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActor::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	sgsOuzelNodeContainer::_sgs_gcmark( callerCtx, obj );
+	sgsOuzelActorContainer::_sgs_gcmark( callerCtx, obj );
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNode::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActor::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	char* str;
@@ -3938,10 +3938,10 @@ int sgsOuzelNode::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "worldHidden" ) ){ sgs_PushVar( callerCtx, Item()->isWorldHidden() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "parent" ) ){ sgs_PushVar( callerCtx, getParent() ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNodeContainer::_sgs_getindex( callerCtx, obj );
+	return sgsOuzelActorContainer::_sgs_getindex( callerCtx, obj );
 }
 
-int sgsOuzelNode::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActor::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	char* str;
@@ -3957,17 +3957,17 @@ int sgsOuzelNode::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "cullDisabled" ) ){ Item()->setCullDisabled( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 		if( !strcmp( str, "hidden" ) ){ Item()->setHidden( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNodeContainer::_sgs_setindex( callerCtx, obj );
+	return sgsOuzelActorContainer::_sgs_setindex( callerCtx, obj );
 }
 
-int sgsOuzelNode::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
+int sgsOuzelActor::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	sgs_Variable key;
 	(void) key;
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
 	if( obj->iface == _sgs_interface )
 	{
-		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelNode" );
+		sgs_SerializeObject( callerCtx, 0, "sgsUnserialize_sgsOuzelActor" );
 	}
 	sgs_InitStringLit( callerCtx, &key, "position" );
 	sgs_PushVar( callerCtx, Item()->getPosition() );
@@ -4014,22 +4014,22 @@ int sgsOuzelNode::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
 	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
 	sgs_Pop( callerCtx, 1 );
 	sgs_Release( callerCtx, &key );
-	sgsOuzelNodeContainer::_sgsimpl_serialize( C, obj );
+	sgsOuzelActorContainer::_sgsimpl_serialize( C, obj );
 	return SGS_SUCCESS;
 }
 
-int sgsOuzelNode::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
+int sgsOuzelActor::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int depth )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	char bfr[ 76 ];
-	sprintf( bfr, "sgsOuzelNode (obj=%p, base=%p) %s",
-		static_cast< sgsOuzelNode* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
+	char bfr[ 77 ];
+	sprintf( bfr, "sgsOuzelActor (obj=%p, base=%p) %s",
+		static_cast< sgsOuzelActor* >( static_cast<sgsLiteObjectBase*>( obj->data ) ),
 		obj->data, depth > 0 ? "\n{" : " ..." );
 	sgs_PushString( callerCtx, bfr );
 	if( depth > 0 )
 	{
 		sgs_PushStringLit( callerCtx, "\n[inherited] " );
-		sgsOuzelNodeContainer::_sgs_dump( callerCtx, obj, depth );
+		sgsOuzelActorContainer::_sgs_dump( callerCtx, obj, depth );
 		{ sgs_PushStringLit( callerCtx, "\nposition = " ); sgs_DumpData( callerCtx, Item()->getPosition(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nworldPosition = " ); sgs_DumpData( callerCtx, Item()->getWorldPosition(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\norder = " ); sgs_DumpData( callerCtx, Item()->getOrder(), depth ).push( callerCtx ); }
@@ -4050,46 +4050,46 @@ int sgsOuzelNode::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int de
 	return SGS_SUCCESS;
 }
 
-int sgsUnserialize_sgsOuzelNode( SGS_CTX )
+int sgsUnserialize_sgsOuzelActor( SGS_CTX )
 {
-	SGS_CREATECLASS( C, NULL, sgsOuzelNode, (  ) );
+	SGS_CREATECLASS( C, NULL, sgsOuzelActor, (  ) );
 	return 1;
 }
-static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelNode[] =
-{ { "sgsUnserialize_sgsOuzelNode", sgsUnserialize_sgsOuzelNode } };
+static sgs_RegFuncConst sgsUnserializeRFC_sgsOuzelActor[] =
+{ { "sgsUnserialize_sgsOuzelActor", sgsUnserialize_sgsOuzelActor } };
 
-static sgs_RegFuncConst sgsOuzelNode__sgs_funcs[] =
+static sgs_RegFuncConst sgsOuzelActor__sgs_funcs[] =
 {
-	{ "pointOn", _sgs_method__sgsOuzelNode__pointOn },
-	{ "removeFromParent", _sgs_method__sgsOuzelNode__removeFromParent },
-	{ "addComponent", _sgs_method__sgsOuzelNode__addComponent },
-	{ "removeComponent", _sgs_method__sgsOuzelNode__removeComponent },
-	{ "removeAllComponents", _sgs_method__sgsOuzelNode__removeAllComponents },
-	{ "getComponents", _sgs_method__sgsOuzelNode__getComponents },
+	{ "pointOn", _sgs_method__sgsOuzelActor__pointOn },
+	{ "removeFromParent", _sgs_method__sgsOuzelActor__removeFromParent },
+	{ "addComponent", _sgs_method__sgsOuzelActor__addComponent },
+	{ "removeComponent", _sgs_method__sgsOuzelActor__removeComponent },
+	{ "removeAllComponents", _sgs_method__sgsOuzelActor__removeAllComponents },
+	{ "getComponents", _sgs_method__sgsOuzelActor__getComponents },
 	{ NULL, NULL },
 };
 
-static int sgsOuzelNode__sgs_ifn( SGS_CTX )
+static int sgsOuzelActor__sgs_ifn( SGS_CTX )
 {
 	sgs_CreateDict( C, NULL, 0 );
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
-		sgsOuzelNode__sgs_funcs,
-		-1, "sgsOuzelNode." );
-	sgsVariable mo = sgs_GetClassInterface< sgsOuzelNodeContainer >( C );
+		sgsOuzelActor__sgs_funcs,
+		-1, "sgsOuzelActor." );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelActorContainer >( C );
 	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
-	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelNode, 1 );
-	sgs_RegSymbol( C, "", "sgsOuzelNode", sgs_StackItem( C, -1 ) );
+	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelActor, 1 );
+	sgs_RegSymbol( C, "", "sgsOuzelActor", sgs_StackItem( C, -1 ) );
 	return 1;
 }
 
-static sgs_ObjInterface sgsOuzelNode__sgs_interface =
+static sgs_ObjInterface sgsOuzelActor__sgs_interface =
 {
-	"sgsOuzelNode",
-	sgsOuzelNode::_sgslocal_destruct, sgsOuzelNode::_sgslocal_gcmark, sgsOuzelNode::_sgslocal_getindex, sgsOuzelNode::_sgslocal_setindex, NULL, sgsOuzelNode::_sgslocal_serialize, sgsOuzelNode::_sgslocal_dump, NULL, NULL, NULL, 
+	"sgsOuzelActor",
+	sgsOuzelActor::_sgslocal_destruct, sgsOuzelActor::_sgslocal_gcmark, sgsOuzelActor::_sgslocal_getindex, sgsOuzelActor::_sgslocal_setindex, NULL, sgsOuzelActor::_sgslocal_serialize, sgsOuzelActor::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
-	sgsOuzelNodeContainer::_sgs_interface,
+	sgsOuzelActorContainer::_sgs_interface,
 };
-_sgsInterface sgsOuzelNode::_sgs_interface(sgsOuzelNode__sgs_interface, sgsOuzelNode__sgs_ifn);
+_sgsInterface sgsOuzelActor::_sgs_interface(sgsOuzelActor__sgs_interface, sgsOuzelActor__sgs_ifn);
 
 
 static int _sgs_method__sgsOuzelLayer__getCameras( sgs_Context* callerCtx )
@@ -4150,7 +4150,7 @@ int sgsOuzelLayer::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 int sgsOuzelLayer::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	sgsOuzelNodeContainer::_sgs_gcmark( callerCtx, obj );
+	sgsOuzelActorContainer::_sgs_gcmark( callerCtx, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4163,7 +4163,7 @@ int sgsOuzelLayer::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "order" ) ){ sgs_PushVar( callerCtx, Item()->getOrder() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "scene" ) ){ sgs_PushVar( callerCtx, getScene() ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNodeContainer::_sgs_getindex( callerCtx, obj );
+	return sgsOuzelActorContainer::_sgs_getindex( callerCtx, obj );
 }
 
 int sgsOuzelLayer::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4174,7 +4174,7 @@ int sgsOuzelLayer::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 	{
 		if( !strcmp( str, "order" ) ){ Item()->setOrder( sgs_GetVar<int32_t>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNodeContainer::_sgs_setindex( callerCtx, obj );
+	return sgsOuzelActorContainer::_sgs_setindex( callerCtx, obj );
 }
 
 int sgsOuzelLayer::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4191,7 +4191,7 @@ int sgsOuzelLayer::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
 	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
 	sgs_Pop( callerCtx, 1 );
 	sgs_Release( callerCtx, &key );
-	sgsOuzelNodeContainer::_sgsimpl_serialize( C, obj );
+	sgsOuzelActorContainer::_sgsimpl_serialize( C, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4206,7 +4206,7 @@ int sgsOuzelLayer::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int d
 	if( depth > 0 )
 	{
 		sgs_PushStringLit( callerCtx, "\n[inherited] " );
-		sgsOuzelNodeContainer::_sgs_dump( callerCtx, obj, depth );
+		sgsOuzelActorContainer::_sgs_dump( callerCtx, obj, depth );
 		{ sgs_PushStringLit( callerCtx, "\norder = " ); sgs_DumpData( callerCtx, Item()->getOrder(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nscene = " ); sgs_DumpData( callerCtx, getScene(), depth ).push( callerCtx ); }
 		sgs_StringConcat( callerCtx, 6 );
@@ -4239,7 +4239,7 @@ static int sgsOuzelLayer__sgs_ifn( SGS_CTX )
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
 		sgsOuzelLayer__sgs_funcs,
 		-1, "sgsOuzelLayer." );
-	sgsVariable mo = sgs_GetClassInterface< sgsOuzelNodeContainer >( C );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelActorContainer >( C );
 	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
 	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelLayer, 1 );
 	sgs_RegSymbol( C, "", "sgsOuzelLayer", sgs_StackItem( C, -1 ) );
@@ -4251,7 +4251,7 @@ static sgs_ObjInterface sgsOuzelLayer__sgs_interface =
 	"sgsOuzelLayer",
 	sgsOuzelLayer::_sgslocal_destruct, sgsOuzelLayer::_sgslocal_gcmark, sgsOuzelLayer::_sgslocal_getindex, sgsOuzelLayer::_sgslocal_setindex, NULL, sgsOuzelLayer::_sgslocal_serialize, sgsOuzelLayer::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
-	sgsOuzelNodeContainer::_sgs_interface,
+	sgsOuzelActorContainer::_sgs_interface,
 };
 _sgsInterface sgsOuzelLayer::_sgs_interface(sgsOuzelLayer__sgs_interface, sgsOuzelLayer__sgs_ifn);
 
@@ -4314,7 +4314,7 @@ int sgsOuzelCamera::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 int sgsOuzelCamera::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	sgsOuzelNode::_sgs_gcmark( callerCtx, obj );
+	sgsOuzelActor::_sgs_gcmark( callerCtx, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4340,7 +4340,7 @@ int sgsOuzelCamera::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "depthTest" ) ){ sgs_PushVar( callerCtx, Item()->getDepthTest() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "wireframe" ) ){ sgs_PushVar( callerCtx, Item()->getWireframe() ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNode::_sgs_getindex( callerCtx, obj );
+	return sgsOuzelActor::_sgs_getindex( callerCtx, obj );
 }
 
 int sgsOuzelCamera::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4361,7 +4361,7 @@ int sgsOuzelCamera::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "depthTest" ) ){ Item()->setDepthTest( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 		if( !strcmp( str, "wireframe" ) ){ Item()->setWireframe( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNode::_sgs_setindex( callerCtx, obj );
+	return sgsOuzelActor::_sgs_setindex( callerCtx, obj );
 }
 
 int sgsOuzelCamera::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4428,7 +4428,7 @@ int sgsOuzelCamera::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj 
 	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
 	sgs_Pop( callerCtx, 1 );
 	sgs_Release( callerCtx, &key );
-	sgsOuzelNode::_sgsimpl_serialize( C, obj );
+	sgsOuzelActor::_sgsimpl_serialize( C, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4443,7 +4443,7 @@ int sgsOuzelCamera::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int 
 	if( depth > 0 )
 	{
 		sgs_PushStringLit( callerCtx, "\n[inherited] " );
-		sgsOuzelNode::_sgs_dump( callerCtx, obj, depth );
+		sgsOuzelActor::_sgs_dump( callerCtx, obj, depth );
 		{ sgs_PushStringLit( callerCtx, "\ntype = " ); sgs_DumpData( callerCtx, getType(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nFOV = " ); sgs_DumpData( callerCtx, Item()->getFOV(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nnearPlane = " ); sgs_DumpData( callerCtx, Item()->getNearPlane(), depth ).push( callerCtx ); }
@@ -4489,7 +4489,7 @@ static int sgsOuzelCamera__sgs_ifn( SGS_CTX )
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
 		sgsOuzelCamera__sgs_funcs,
 		-1, "sgsOuzelCamera." );
-	sgsVariable mo = sgs_GetClassInterface< sgsOuzelNode >( C );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelActor >( C );
 	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
 	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelCamera, 1 );
 	sgs_RegSymbol( C, "", "sgsOuzelCamera", sgs_StackItem( C, -1 ) );
@@ -4501,7 +4501,7 @@ static sgs_ObjInterface sgsOuzelCamera__sgs_interface =
 	"sgsOuzelCamera",
 	sgsOuzelCamera::_sgslocal_destruct, sgsOuzelCamera::_sgslocal_gcmark, sgsOuzelCamera::_sgslocal_getindex, sgsOuzelCamera::_sgslocal_setindex, NULL, sgsOuzelCamera::_sgslocal_serialize, sgsOuzelCamera::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
-	sgsOuzelNode::_sgs_interface,
+	sgsOuzelActor::_sgs_interface,
 };
 _sgsInterface sgsOuzelCamera::_sgs_interface(sgsOuzelCamera__sgs_interface, sgsOuzelCamera__sgs_ifn);
 
@@ -4839,7 +4839,7 @@ int sgsOuzelWidget::_sgsimpl_destruct( sgs_Context* callerCtx, sgs_VarObj* obj )
 int sgsOuzelWidget::_sgsimpl_gcmark( sgs_Context* callerCtx, sgs_VarObj* obj )
 {
 	_sgsTmpChanger<sgs_Context*> _tmpchg( C, callerCtx );
-	sgsOuzelNode::_sgs_gcmark( callerCtx, obj );
+	sgsOuzelActor::_sgs_gcmark( callerCtx, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4853,7 +4853,7 @@ int sgsOuzelWidget::_sgsimpl_getindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 		if( !strcmp( str, "enabled" ) ){ sgs_PushVar( callerCtx, Item()->isEnabled() ); return SGS_SUCCESS; }
 		if( !strcmp( str, "selected" ) ){ sgs_PushVar( callerCtx, Item()->isSelected() ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNode::_sgs_getindex( callerCtx, obj );
+	return sgsOuzelActor::_sgs_getindex( callerCtx, obj );
 }
 
 int sgsOuzelWidget::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4864,7 +4864,7 @@ int sgsOuzelWidget::_sgsimpl_setindex( sgs_Context* callerCtx, sgs_VarObj* obj )
 	{
 		if( !strcmp( str, "enabled" ) ){ Item()->setEnabled( sgs_GetVar<bool>()( callerCtx, 1 ) ); return SGS_SUCCESS; }
 	}
-	return sgsOuzelNode::_sgs_setindex( callerCtx, obj );
+	return sgsOuzelActor::_sgs_setindex( callerCtx, obj );
 }
 
 int sgsOuzelWidget::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj )
@@ -4881,7 +4881,7 @@ int sgsOuzelWidget::_sgsimpl_serialize( sgs_Context* callerCtx, sgs_VarObj* obj 
 	sgs_SerializeObjIndex( callerCtx, key, sgs_StackItem( callerCtx, -1 ), 1 );
 	sgs_Pop( callerCtx, 1 );
 	sgs_Release( callerCtx, &key );
-	sgsOuzelNode::_sgsimpl_serialize( C, obj );
+	sgsOuzelActor::_sgsimpl_serialize( C, obj );
 	return SGS_SUCCESS;
 }
 
@@ -4896,7 +4896,7 @@ int sgsOuzelWidget::_sgsimpl_dump( sgs_Context* callerCtx, sgs_VarObj* obj, int 
 	if( depth > 0 )
 	{
 		sgs_PushStringLit( callerCtx, "\n[inherited] " );
-		sgsOuzelNode::_sgs_dump( callerCtx, obj, depth );
+		sgsOuzelActor::_sgs_dump( callerCtx, obj, depth );
 		{ sgs_PushStringLit( callerCtx, "\nmenu = " ); sgs_DumpData( callerCtx, getMenu(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nenabled = " ); sgs_DumpData( callerCtx, Item()->isEnabled(), depth ).push( callerCtx ); }
 		{ sgs_PushStringLit( callerCtx, "\nselected = " ); sgs_DumpData( callerCtx, Item()->isSelected(), depth ).push( callerCtx ); }
@@ -4927,7 +4927,7 @@ static int sgsOuzelWidget__sgs_ifn( SGS_CTX )
 	sgs_StoreFuncConsts( C, sgs_StackItem( C, -1 ),
 		sgsOuzelWidget__sgs_funcs,
 		-1, "sgsOuzelWidget." );
-	sgsVariable mo = sgs_GetClassInterface< sgsOuzelNode >( C );
+	sgsVariable mo = sgs_GetClassInterface< sgsOuzelActor >( C );
 	sgs_ObjSetMetaObj( C, sgs_GetObjectStruct( C, -1 ), mo.get_object_struct() );
 	sgs_RegFuncConsts( C, sgsUnserializeRFC_sgsOuzelWidget, 1 );
 	sgs_RegSymbol( C, "", "sgsOuzelWidget", sgs_StackItem( C, -1 ) );
@@ -4939,7 +4939,7 @@ static sgs_ObjInterface sgsOuzelWidget__sgs_interface =
 	"sgsOuzelWidget",
 	sgsOuzelWidget::_sgslocal_destruct, sgsOuzelWidget::_sgslocal_gcmark, sgsOuzelWidget::_sgslocal_getindex, sgsOuzelWidget::_sgslocal_setindex, NULL, sgsOuzelWidget::_sgslocal_serialize, sgsOuzelWidget::_sgslocal_dump, NULL, NULL, NULL, 
 	NULL,
-	sgsOuzelNode::_sgs_interface,
+	sgsOuzelActor::_sgs_interface,
 };
 _sgsInterface sgsOuzelWidget::_sgs_interface(sgsOuzelWidget__sgs_interface, sgsOuzelWidget__sgs_ifn);
 
@@ -6439,10 +6439,10 @@ static int _sgs_method__sgsOuzel__createLayer( sgs_Context* callerCtx )
 	sgs_PushVar(callerCtx,sgsOuzel::createLayer(  )); return 1;
 }
 
-static int _sgs_method__sgsOuzel__createNode( sgs_Context* callerCtx )
+static int _sgs_method__sgsOuzel__createActor( sgs_Context* callerCtx )
 {
-	sgs_FuncName( callerCtx, "sgsOuzel.createNode" );
-	sgs_PushVar(callerCtx,sgsOuzel::createNode(  )); return 1;
+	sgs_FuncName( callerCtx, "sgsOuzel.createActor" );
+	sgs_PushVar(callerCtx,sgsOuzel::createActor(  )); return 1;
 }
 
 static int _sgs_method__sgsOuzel__createCamera( sgs_Context* callerCtx )
@@ -6600,7 +6600,7 @@ static sgs_RegFuncConst sgsOuzel__sgs_funcs[] =
 	{ "createSequence", _sgs_method__sgsOuzel__createSequence },
 	{ "createScene", _sgs_method__sgsOuzel__createScene },
 	{ "createLayer", _sgs_method__sgsOuzel__createLayer },
-	{ "createNode", _sgs_method__sgsOuzel__createNode },
+	{ "createActor", _sgs_method__sgsOuzel__createActor },
 	{ "createCamera", _sgs_method__sgsOuzel__createCamera },
 	{ "createMenu", _sgs_method__sgsOuzel__createMenu },
 	{ "createLabel", _sgs_method__sgsOuzel__createLabel },

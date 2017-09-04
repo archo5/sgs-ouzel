@@ -14,7 +14,7 @@ class InputSample : Sample
 			},
 			
 			flameParticleSystem = ouzel.createParticleSystem( "flame.json" ),
-			flame = ouzel.createNode(),
+			flame = ouzel.createActor(),
 		};
 		
 		this.layer.addChild( this.camera );
@@ -139,13 +139,13 @@ class InputSample : Sample
 	}
 	function onUIEvent( type, e )
 	{
-		if( type == ouzel.EventType.CLICK_NODE )
+		if( type == ouzel.EventType.ACTOR_CLICK )
 		{
-			if( e.node === this.backButton )
+			if( e.actor === this.backButton )
 			{
 				ouzel.Input.cursorVisible = true;
 			}
-			if( e.node === this.hideButton )
+			if( e.actor === this.hideButton )
 			{
 				ouzel.Input.cursorVisible = !ouzel.Input.cursorVisible;
 			}

@@ -465,6 +465,19 @@ struct sgsOuzelSequence : sgsOuzelAnimator
 	typedef sgsHandle< sgsOuzelSequence > Handle;
 };
 
+struct sgsOuzelListener : sgsOuzelComponent
+{
+	SGS_OBJECT_INHERIT( sgsOuzelComponent );
+	typedef sgsHandle< sgsOuzelListener > Handle;
+	Listener* Item(){ return static_cast<Listener*>( obj ); }
+	
+	SGS_METHOD void add(){ sharedEngine->getAudio()->addListener( Item() ); }
+	SGS_METHOD void remove(){ sharedEngine->getAudio()->removeListener( Item() ); }
+	
+	SGS_PROPFN( READ Item()->getPosition WRITE Item()->setPosition ) SGS_ALIAS( Vector3 position );
+	// TODO rotation
+};
+
 struct sgsOuzelActorContainer : sgsObjectBase
 {
 	SGS_OBJECT;
@@ -675,18 +688,40 @@ struct sgsOuzelSound : sgsObjectBase, Sound
 	
 	typedef sgsHandle< sgsOuzelSound > Handle;
 	
-	SGS_METHOD bool initFromFile( const string& filename, bool relativePosition /* = false */ ){
-		return init( sharedEngine->getCache()->getSoundData( filename ), relativePosition ); }
+	SGS_METHOD bool initFromFile( const string& filename ){
+		return init( sharedEngine->getCache()->getSoundData( filename ) ); }
 	
-	SGS_METHOD SGS_ALIAS( void setPosition( const Vector3& newPosition ) );
-	SGS_METHOD SGS_ALIAS( void setPitch( float newPitch ) );
-	SGS_METHOD SGS_ALIAS( void setGain( float newGain ) );
+	SGS_PROPFN( READ getPosition WRITE setPosition ) SGS_ALIAS( Vector3 position );
+	SGS_PROPFN( READ getPitch WRITE setPitch ) SGS_ALIAS( float pitch );
+	SGS_PROPFN( READ getGain WRITE setGain ) SGS_ALIAS( float gain );
+	SGS_PROPFN( READ getRolloffFactor WRITE setRolloffFactor ) SGS_ALIAS( float rolloffFactor );
+	SGS_PROPFN( READ getMinDistance WRITE setMinDistance ) SGS_ALIAS( float minDistance );
+	SGS_PROPFN( READ getMaxDistance WRITE setMaxDistance ) SGS_ALIAS( float maxDistance );
+	sgsVariable sgsGetOutput();
+	void sgsSetOutput( sgsVariable output );
+	SGS_PROPFN( READ sgsGetOutput WRITE sgsSetOutput ) SGS_ALIAS( sgsVariable output );
 	
 	SGS_METHOD SGS_ALIAS( void play( bool repeatSound /* = false */ ) );
 	SGS_METHOD SGS_ALIAS( void pause() );
 	SGS_METHOD SGS_ALIAS( void stop() );
 	
+	SGS_PROPFN( READ isPlaying ) SGS_ALIAS( bool playing );
 	SGS_PROPFN( READ isRepeating ) SGS_ALIAS( bool repeating );
+};
+
+struct sgsOuzelMixer : sgsObjectBase, Mixer
+{
+	SGS_OBJECT;
+	
+	typedef sgsHandle< sgsOuzelMixer > Handle;
+	
+	~sgsOuzelMixer();
+	SGS_PROPFN( READ getPitch WRITE setPitch ) SGS_ALIAS( float pitch );
+	SGS_PROPFN( READ getGain WRITE setGain ) SGS_ALIAS( float gain );
+	SGS_PROPFN( READ getRolloffScale WRITE setRolloffScale ) SGS_ALIAS( float rolloffScale );
+	sgsVariable sgsGetOutput();
+	void sgsSetOutput( sgsVariable output );
+	SGS_PROPFN( READ sgsGetOutput WRITE sgsSetOutput ) SGS_ALIAS( sgsVariable output );
 };
 
 
@@ -839,6 +874,7 @@ struct sgsOuzel : sgsLiteObjectBase
 	SGS_STATICMETHOD sgsOuzelRepeat::Handle createRepeat( sgsOuzelAnimator::Handle animator, uint32_t aCount /* = 0 */ );
 	SGS_STATICMETHOD sgsOuzelParallel::Handle createParallel( sgsVariable animators );
 	SGS_STATICMETHOD sgsOuzelSequence::Handle createSequence( sgsVariable animators );
+	SGS_STATICMETHOD sgsOuzelListener::Handle createListener();
 	
 	SGS_STATICMETHOD sgsOuzelScene::Handle createScene();
 	SGS_STATICMETHOD sgsOuzelLayer::Handle createLayer();
@@ -874,6 +910,7 @@ struct sgsOuzel : sgsLiteObjectBase
 		const string& tickImage );
 	
 	SGS_STATICMETHOD sgsOuzelSound::Handle createSound();
+	SGS_STATICMETHOD sgsOuzelMixer::Handle createMixer();
 	
 	SGS_STATICMETHOD sgsOuzelTexture::Handle createTexture();
 };

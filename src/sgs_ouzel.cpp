@@ -430,6 +430,55 @@ void sgsOuzelMenu::selectWidget( sgsOuzelWidget::Handle widget )
 }
 
 
+
+static sgsVariable sgsGetAudioOutputVar( SoundOutput* output )
+{
+	auto* mixer = GetObj<sgsObjectBase>( static_cast<Mixer*>(output) );
+	if( mixer )
+		return sgsHandle<sgsObjectBase>( mixer ).get_variable();
+	auto* listener = GetObj<sgsObjectBase>( static_cast<Listener*>(output) );
+	if( listener )
+		return sgsHandle<sgsObjectBase>( listener ).get_variable();
+	return {};
+}
+
+static SoundOutput* sgsExtractAudioOutputPtr( sgsVariable output )
+{
+	if( output.is_object<sgsOuzelMixer>() )
+		return output.get_object_data<sgsOuzelMixer>();
+	if( output.is_object<sgsOuzelListener>() )
+		return output.get_object_data<sgsOuzelListener>()->Item();
+	return nullptr;
+}
+
+sgsVariable sgsOuzelSound::sgsGetOutput()
+{
+	sgsGetAudioOutputVar( getOutput() );
+}
+
+void sgsOuzelSound::sgsSetOutput( sgsVariable output )
+{
+	setOutput( sgsExtractAudioOutputPtr( output ) );
+}
+
+
+sgsOuzelMixer::~sgsOuzelMixer()
+{
+	g_PtrToSgsObj.erase( static_cast<Mixer*>(this) );
+}
+
+sgsVariable sgsOuzelMixer::sgsGetOutput()
+{
+	sgsGetAudioOutputVar( getOutput() );
+}
+
+void sgsOuzelMixer::sgsSetOutput( sgsVariable output )
+{
+	setOutput( sgsExtractAudioOutputPtr( output ) );
+}
+
+
+
 const char* PixelFormatNames[] =
 {
 	"DEFAULT",
@@ -699,6 +748,14 @@ sgsOuzelSequence::Handle sgsOuzel::createSequence( sgsVariable animators )
 	return h;
 }
 
+sgsOuzelListener::Handle sgsOuzel::createListener()
+{
+	auto h = CreateObj<sgsOuzelListener>();
+	h->obj = new Listener;
+	g_PtrToSgsObj.insert({ h->obj, h.get() });
+	return h;
+}
+
 
 sgsOuzelScene::Handle sgsOuzel::createScene()
 {
@@ -815,6 +872,13 @@ sgsOuzelCheckBox::Handle sgsOuzel::createCheckBox(
 sgsOuzelSound::Handle sgsOuzel::createSound()
 {
 	return CreateObj<sgsOuzelSound>();
+}
+
+sgsOuzelMixer::Handle sgsOuzel::createMixer()
+{
+	auto h = CreateObj<sgsOuzelMixer>();
+	g_PtrToSgsObj.insert({ static_cast<Mixer*>(&*h), h.get() });
+	return h;
 }
 
 

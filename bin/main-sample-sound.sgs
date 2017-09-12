@@ -39,12 +39,40 @@ class SoundSample : Sample
 				position = vec2( 0, -80 ),
 			},
 			
-			test8BitSound = ouzel.createSound(),
-			test24BitSound = ouzel.createSound(),
-			jumpSound = ouzel.createSound(),
-			ambientSound = ouzel.createSound(),
-			music = ouzel.createSound(),
+			listener = ouzel.createListener(),
+			soundMixer = ouzel.createMixer().
+			{
+				gain = 1.2,
+				output = this.listener,
+			},
+			test8BitSound = ouzel.createSound().
+			{
+				pitch = 2,
+				output = this.soundMixer,
+			},
+			test24BitSound = ouzel.createSound().
+			{
+				pitch = 0.5,
+				output = this.soundMixer,
+			},
+			jumpSound = ouzel.createSound().
+			{
+				position = vec3(8,0,10),
+				output = this.soundMixer,
+			},
+			ambientSound = ouzel.createSound().
+			{
+				output = this.soundMixer,
+			},
+			music = ouzel.createSound().
+			{
+				output = this.listener,
+			},
 		};
+		
+		printvar(this.listener);
+		printvar(metaobj_get(this.listener));
+		this.listener.add();
 		
 		this.test8BitSound.initFromFile( "8-bit.wav" );
 		this.test24BitSound.initFromFile( "24-bit.wav" );

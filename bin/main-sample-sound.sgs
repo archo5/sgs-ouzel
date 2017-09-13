@@ -70,8 +70,6 @@ class SoundSample : Sample
 			},
 		};
 		
-		printvar(this.listener);
-		printvar(metaobj_get(this.listener));
 		this.listener.add();
 		
 		this.test8BitSound.initFromFile( "8-bit.wav" );

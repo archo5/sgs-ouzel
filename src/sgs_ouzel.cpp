@@ -16,7 +16,7 @@ sgs_ObjInterface g_sgsobj_empty_handle[1] = {{ "empty_handle", NULL }};
 
 template< class T > sgsHandle<T> CreateObj()
 {
-	sgsVariable v;
+	sgsVariable v( g_sgsCtx );
 	SGS_CREATECLASS( g_sgsCtx, &v.var, T, () );
 	return v.get_handle<T>();
 }
@@ -1225,6 +1225,32 @@ SGSRESULT sgsOuzelFSFunc( void* userdata, SGS_CTX, int op, sgs_ScriptFSData* dat
 }
 
 
+void ouzelFree()
+{
+	Log( Log::Level::INFO ) << "[sgs-ouzel] Freeing SGScript";
+	
+	sgs_DestroyEngine( g_sgsCtx );
+	g_sgsCtx = NULL;
+}
+
+struct StopEventHandler : EventHandler
+{
+	StopEventHandler() : EventHandler(0)
+	{
+		systemHandler = bind( &StopEventHandler::OnSystem, this, placeholders::_1, placeholders::_2 );
+	}
+	bool OnSystem( Event::Type type, const SystemEvent& )
+	{
+		if( type == Event::Type::ENGINE_STOP )
+		{
+			ouzelFree();
+		}
+		return true;
+	}
+}
+g_StopEventHandler;
+
+
 void ouzelMain( const vector<string>& args )
 {
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Starting SGScript";
@@ -1324,4 +1350,6 @@ void ouzelMain( const vector<string>& args )
 	
 	Log( Log::Level::INFO ) << "[sgs-ouzel] Loading 'main'";
 	sgs_Include( g_sgsCtx, "main" );
+	
+	sharedEngine->getEventDispatcher()->addEventHandler( &g_StopEventHandler );
 }
